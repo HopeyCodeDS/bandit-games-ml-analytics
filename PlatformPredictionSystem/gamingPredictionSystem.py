@@ -182,6 +182,14 @@ def main():
     for feature, importance in win_results['feature_importance'].items():
         print(f"{feature}: {importance:.4f}")
 
+    # Generate player insights
+    print("\nPlayer Insights:")
+    insights = predictor.generate_player_insights()
+    print("\nGame Statistics:")
+    print(f"Average Games per Player: {insights['game_statistics']['avg_games_per_player']:.2f}")
+    print(f"Average Win Ratio: {insights['game_statistics']['avg_win_ratio']:.2f}")
+    print(f"Average Time per Game: {insights['game_statistics']['avg_time_per_game']:.2f} minutes")
+
 
 if __name__ == "__main__":
     main()
