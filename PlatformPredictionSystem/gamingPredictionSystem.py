@@ -102,6 +102,36 @@ class GamingPredictionSystem:
             'churn_probabilities': y_prob
         }
 
+    def predict_win_probability(self):
+        """
+        Predict win probability for players
+
+        Returns:
+            dict: Win probability prediction metrics and visualization
+        """
+        X, _, y_win_ratio = self.prepare_features()
+
+        # Split data
+        X_train, X_test, y_train, y_test = train_test_split(X, y_win_ratio, test_size=0.2, random_state=42)
+
+        # Train model
+        win_model = RandomForestRegressor(n_estimators=100, random_state=42)
+        win_model.fit(X_train, y_train)
+
+        # Make predictions
+        y_pred = win_model.predict(X_test)
+
+        # Get feature importance
+        feature_importance = dict(zip(X.columns, win_model.feature_importances_))
+        top_features = dict(sorted(feature_importance.items(), key=lambda x: x[1], reverse=True)[:5])
+
+        return {
+            'mse': mean_squared_error(y_test, y_pred),
+            'rmse': np.sqrt(mean_squared_error(y_test, y_pred)),
+            'feature_importance': top_features,
+            'predicted_win_ratios': y_pred
+        }
+
 
 def main():
     # Initialize prediction system
@@ -116,6 +146,15 @@ def main():
     print("\nTop Features for Churn Prediction:")
     for feature, importance in churn_results['feature_importance'].items():
         print(f"{feature}: {importance:.4f}")
+
+    # Generate win probability predictions
+    print("\nWin Probability Prediction Results:")
+    win_results = predictor.predict_win_probability()
+    print(f"Root Mean Square Error: {win_results['rmse']:.4f}")
+    print("\nTop Features for Win Prediction:")
+    for feature, importance in win_results['feature_importance'].items():
+        print(f"{feature}: {importance:.4f}")
+
 
 if __name__ == "__main__":
     main()

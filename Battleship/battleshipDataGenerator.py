@@ -26,12 +26,12 @@ class BattleshipDataGenerator:
                 'age': random.randint(18, 65),
                 'gender': random.choice(['Male', 'Female', 'Other']),
                 'location': self.fake.country(),
-                'total_games': total_games,
+                'total_games_played': total_games,
                 'wins': wins,
                 'losses': total_games - wins,
-                'total_time_played': total_games * random.randint(15, 45),  # minutes
+                'total_time_played_minutes': total_games * random.randint(15, 45),  # minutes
                 'total_moves': total_games * random.randint(20, 100),
-                'win_ratio': wins / total_games if total_games > 0 else 0
+                # 'win_ratio': wins / total_games if total_games > 0 else 0
             }
             data.append(player)
 
