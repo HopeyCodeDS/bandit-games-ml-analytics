@@ -139,6 +139,7 @@ class GamingPredictionSystem:
         Returns:
             dict: Player performance insights and statistics
         """
+
         insights = {
             'player_demographics': {
                 'age_distribution': self.data['age'].describe(),
