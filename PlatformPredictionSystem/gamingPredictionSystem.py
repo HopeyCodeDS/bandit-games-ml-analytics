@@ -132,6 +132,32 @@ class GamingPredictionSystem:
             'predicted_win_ratios': y_pred
         }
 
+    def generate_player_insights(self):
+        """
+        Generate comprehensive player insights and visualizations
+
+        Returns:
+            dict: Player performance insights and statistics
+        """
+        insights = {
+            'player_demographics': {
+                'age_distribution': self.data['age'].describe(),
+                'gender_distribution': self.data['gender'].value_counts(),
+                'location_distribution': self.data['location'].value_counts()
+            },
+            'game_statistics': {
+                'avg_games_per_player': self.data['total_games_played'].mean(),
+                'avg_win_ratio': self.data['win_ratio'].mean(),
+                'avg_time_per_game': self.data['avg_game_duration'].mean()
+            },
+            'performance_metrics': {
+                'top_players': self.data.nlargest(10, 'win_ratio')[['player_id', 'win_ratio', 'total_games_played']],
+                'most_active': self.data.nlargest(10, 'total_games_played')[
+                    ['player_id', 'total_games_played', 'win_ratio']]
+            }
+        }
+        return insights
+
 
 def main():
     # Initialize prediction system
