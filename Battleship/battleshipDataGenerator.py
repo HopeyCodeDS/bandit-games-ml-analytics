@@ -24,7 +24,7 @@ class BattleshipDataGenerator:
                 'player_id': self.fake.uuid4(),
                 'username': self.fake.user_name(),
                 'age': random.randint(18, 65),
-                'gender': random.choice(['Male', 'Female', 'Other']),
+                'gender': random.choice(['Male', 'Female']),
                 'location': self.fake.country(),
                 'total_games_played': total_games,
                 'wins': wins,
