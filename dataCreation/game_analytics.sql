@@ -81,53 +81,53 @@ CREATE TABLE player_game_stats (
     UNIQUE KEY unique_player_game (player_id, game_id)
 );
 
-# -- Achievements table
-# CREATE TABLE achievements (
-#     achievement_id BINARY(16) PRIMARY KEY,
-#     game_id BINARY(16),
-#     achievement_name VARCHAR(100) NOT NULL,
-#     game_name VARCHAR(100) NOT NULL,
-#     description TEXT,
-#     criteria TEXT,
-#     points INT DEFAULT 0,
-#     FOREIGN KEY (game_id) REFERENCES games(game_id)
-# );
+# # -- Achievements table
+# # CREATE TABLE achievements (
+# #     achievement_id BINARY(16) PRIMARY KEY,
+# #     game_id BINARY(16),
+# #     achievement_name VARCHAR(100) NOT NULL,
+# #     game_name VARCHAR(100) NOT NULL,
+# #     description TEXT,
+# #     criteria TEXT,
+# #     points INT DEFAULT 0,
+# #     FOREIGN KEY (game_id) REFERENCES games(game_id)
+# # );
+# #
+# # -- Player Achievements
+# # CREATE TABLE player_achievements (
+# #     player_id BINARY(16),
+# #     achievement_id BINARY(16),
+# #     unlocked_at TIMESTAMP,
+# #     PRIMARY KEY (player_id, achievement_id),
+# #     FOREIGN KEY (player_id) REFERENCES players(player_id),
+# #     FOREIGN KEY (achievement_id) REFERENCES achievements(achievement_id)
+# # );
+# #
+# # -- Friends system
+# # CREATE TABLE friendships (
+# #     friendship_id BINARY(16) PRIMARY KEY,
+# #     requester_id BINARY(16),
+# #     addressee_id BINARY(16),
+# #     status ENUM('PENDING', 'ACCEPTED', 'REJECTED', 'BLOCKED') DEFAULT 'PENDING',
+# #     created_at TIMESTAMP,
+# #     updated_at TIMESTAMP,
+# #     FOREIGN KEY (requester_id) REFERENCES players(player_id),
+# #     FOREIGN KEY (addressee_id) REFERENCES players(player_id),
+# #     UNIQUE KEY unique_friendship (requester_id, addressee_id)
+# # );
 #
-# -- Player Achievements
-# CREATE TABLE player_achievements (
-#     player_id BINARY(16),
-#     achievement_id BINARY(16),
-#     unlocked_at TIMESTAMP,
-#     PRIMARY KEY (player_id, achievement_id),
-#     FOREIGN KEY (player_id) REFERENCES players(player_id),
-#     FOREIGN KEY (achievement_id) REFERENCES achievements(achievement_id)
-# );
 #
-# -- Friends system
-# CREATE TABLE friendships (
-#     friendship_id BINARY(16) PRIMARY KEY,
-#     requester_id BINARY(16),
-#     addressee_id BINARY(16),
-#     status ENUM('PENDING', 'ACCEPTED', 'REJECTED', 'BLOCKED') DEFAULT 'PENDING',
-#     created_at TIMESTAMP,
-#     updated_at TIMESTAMP,
-#     FOREIGN KEY (requester_id) REFERENCES players(player_id),
-#     FOREIGN KEY (addressee_id) REFERENCES players(player_id),
-#     UNIQUE KEY unique_friendship (requester_id, addressee_id)
-# );
-
-
--- Indexes for better query performance
-CREATE INDEX idx_matches_game_id ON matches(game_id);
-CREATE INDEX idx_matches_players ON matches(player1_id, player2_id);
-CREATE INDEX idx_player_stats_game ON player_game_stats(game_id);
-CREATE INDEX idx_player_stats_player ON player_game_stats(player_id);
-# CREATE INDEX idx_achievements_game ON achievements(game_id);
-# CREATE INDEX idx_friendships_players ON friendships(requester_id, addressee_id);
-# CREATE INDEX idx_player_game_rating ON player_game_stats(game_id, rating DESC);
-
-
-
+# -- Indexes for better query performance
+# CREATE INDEX idx_matches_game_id ON matches(game_id);
+# CREATE INDEX idx_matches_players ON matches(player1_id, player2_id);
+# CREATE INDEX idx_player_stats_game ON player_game_stats(game_id);
+# CREATE INDEX idx_player_stats_player ON player_game_stats(player_id);
+# # CREATE INDEX idx_achievements_game ON achievements(game_id);
+# # CREATE INDEX idx_friendships_players ON friendships(requester_id, addressee_id);
+# # CREATE INDEX idx_player_game_rating ON player_game_stats(game_id, rating DESC);
+#
+#
+#
 -- Audit Tables and Triggers for Data Changes --
 
 -- Audit tables for players and games
@@ -158,7 +158,13 @@ CREATE TABLE games_audit (
     changed_by VARCHAR(100)
 );
 
--- Audit table for player_game_stats
+
+DROP TRIGGER IF EXISTS player_game_stats_after_insert;
+DROP TRIGGER IF EXISTS player_game_stats_after_update;
+DROP TRIGGER IF EXISTS player_game_stats_after_delete;
+DROP TABLE IF EXISTS player_game_stats_audit;
+
+# Audit table for player_game_stats
 CREATE TABLE player_game_stats_audit (
     audit_id BINARY(16) PRIMARY KEY,
     stat_id BINARY(16),
@@ -168,8 +174,8 @@ CREATE TABLE player_game_stats_audit (
     total_games_played INT,
     result ENUM('WIN', 'LOSS', 'DRAW', 'ABANDONED'),
     total_moves INT,
-    hits INT,
-    misses INT,
+    total_hits INT,           -- Changed from hits to total_hits
+    total_misses INT,         -- Changed from misses to total_misses
     total_time_played_minutes INT,
     highest_score INT,
     win_ratio DECIMAL(5,2),
@@ -315,6 +321,7 @@ BEGIN
         changed_by = USER();
 END//
 
+-- Create UPDATE trigger
 CREATE TRIGGER player_game_stats_after_update
 AFTER UPDATE ON player_game_stats
 FOR EACH ROW
@@ -340,6 +347,8 @@ BEGIN
         changed_by = USER();
 END//
 
+
+-- Create DELETE trigger
 CREATE TRIGGER player_game_stats_after_delete
 AFTER DELETE ON player_game_stats
 FOR EACH ROW
@@ -423,403 +432,367 @@ INSERT INTO games (game_id, name, description, rules, max_players, is_active) VA
 'One player thinks of a word, others guess letters. Each wrong guess adds a part to the hangman. Game ends when word is guessed or hangman is complete.',
 2, TRUE);
 
--- Now, create a procedure to generate 1000 unique players
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 DELIMITER //
 
+-- Player Generation (500 players)
 CREATE PROCEDURE generate_players()
 BEGIN
-    DECLARE i INT DEFAULT 0;
-    DECLARE username_suffix VARCHAR(10);
-    DECLARE email_domain VARCHAR(100);
-    DECLARE random_age INT;
-    DECLARE random_gender VARCHAR(20);
-    DECLARE random_country VARCHAR(100);
+   DECLARE i INT DEFAULT 0;
+   DECLARE username_suffix VARCHAR(10);
+   DECLARE email_suffix VARCHAR(10);
+   DECLARE email_domain VARCHAR(100);
+   DECLARE random_age INT;
+   DECLARE random_gender VARCHAR(20);
+   DECLARE random_country VARCHAR(100);
 
-    -- Array of common email domains
-    SET email_domain = ELT(FLOOR(1 + RAND() * 5),
-        '@gmail.com', '@yahoo.com', '@hotmail.com', '@outlook.com', '@icloud.com');
+   WHILE i < 500 DO
+       SET username_suffix = LPAD(i, 5, '0');
+       SET email_suffix = LPAD(i, 5, '0');
+       SET email_domain = ELT(FLOOR(1 + RAND() * 5),
+           '@gmail.com', '@yahoo.com', '@hotmail.com', '@outlook.com', '@icloud.com');
+       SET random_age = FLOOR(13 + RAND() * 67);
+       SET random_gender = ELT(FLOOR(1 + RAND() * 4),
+           'MALE', 'FEMALE', 'NON-BINARY', 'OTHER');
+       SET random_country = ELT(FLOOR(1 + RAND() * 30),
+           'USA', 'Canada', 'UK', 'Australia', 'Germany', 'France', 'Spain',
+           'Italy', 'Japan', 'South Korea', 'Brazil', 'Mexico', 'India',
+           'Russia', 'China', 'Netherlands', 'Sweden', 'Norway', 'Denmark',
+           'Finland', 'Ireland', 'New Zealand', 'Singapore', 'Malaysia',
+           'Philippines', 'Thailand', 'Vietnam', 'Indonesia', 'South Africa', 'Nigeria');
 
-    -- Generate 1000 players
-    WHILE i < 1000 DO
-        SET username_suffix = LPAD(FLOOR(RAND() * 99999), 5, '0');
-        SET random_age = FLOOR(13 + RAND() * 67); -- Ages 13 to 80
-        SET random_gender = ELT(FLOOR(1 + RAND() * 4),
-            'MALE', 'FEMALE', 'NON-BINARY', 'OTHER');
-        SET random_country = ELT(FLOOR(1 + RAND() * 30),
-            'USA', 'Canada', 'UK', 'Australia', 'Germany', 'France', 'Spain',
-            'Italy', 'Japan', 'South Korea', 'Brazil', 'Mexico', 'India',
-            'Russia', 'China', 'Netherlands', 'Sweden', 'Norway', 'Denmark',
-            'Finland', 'Ireland', 'New Zealand', 'Singapore', 'Malaysia',
-            'Philippines', 'Thailand', 'Vietnam', 'Indonesia', 'South Africa', 'Nigeria');
+       CASE FLOOR(1 + RAND() * 4)
+           WHEN 1 THEN
+               INSERT INTO players (player_id, username, email, age, gender, country, last_login)
+               VALUES (
+                   UUID_TO_BIN(UUID()),
+                   CONCAT(
+                       ELT(FLOOR(1 + RAND() * 5), 'Pro', 'Elite', 'Epic', 'Master', 'Ultra'),
+                       ELT(FLOOR(1 + RAND() * 5), 'Gamer', 'Player', 'Champion', 'Warrior', 'Legend'),
+                       '_', username_suffix
+                   ),
+                   CONCAT('player', email_suffix, email_domain),
+                   random_age,
+                   random_gender,
+                   random_country,
+                   DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 30) DAY)
+               );
+           WHEN 2 THEN
+               INSERT INTO players (player_id, username, email, age, gender, country, last_login)
+               VALUES (
+                   UUID_TO_BIN(UUID()),
+                   CONCAT(
+                       ELT(FLOOR(1 + RAND() * 5), 'Night', 'Dark', 'Storm', 'Fire', 'Ice'),
+                       ELT(FLOOR(1 + RAND() * 5), 'Wolf', 'Dragon', 'Phoenix', 'Hawk', 'Knight'),
+                       username_suffix
+                   ),
+                   CONCAT('gamer', email_suffix, email_domain),
+                   random_age,
+                   random_gender,
+                   random_country,
+                   DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 30) DAY)
+               );
+           WHEN 3 THEN
+               INSERT INTO players (player_id, username, email, age, gender, country, last_login)
+               VALUES (
+                   UUID_TO_BIN(UUID()),
+                   CONCAT(
+                       ELT(FLOOR(1 + RAND() * 8), 'Chess', 'Battle', 'Dots', 'Connect', 'Memory', 'Tic', 'Box', 'Game'),
+                       ELT(FLOOR(1 + RAND() * 5), 'Master', 'King', 'Queen', 'Lord', 'Boss'),
+                       username_suffix
+                   ),
+                   CONCAT('gaming', email_suffix, email_domain),
+                   random_age,
+                   random_gender,
+                   random_country,
+                   DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 30) DAY)
+               );
+           ELSE
+               INSERT INTO players (player_id, username, email, age, gender, country, last_login)
+               VALUES (
+                   UUID_TO_BIN(UUID()),
+                   CONCAT(
+                       ELT(FLOOR(1 + RAND() * 5), 'Player', 'Gamer', 'User', 'Challenger', 'Champion'),
+                       username_suffix
+                   ),
+                   CONCAT('user', email_suffix, email_domain),
+                   random_age,
+                   random_gender,
+                   random_country,
+                   DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 30) DAY)
+               );
+       END CASE;
 
-        -- Generate player names based on patterns
-        CASE FLOOR(1 + RAND() * 4)
-            WHEN 1 THEN
-                -- GamerType_Numbers (e.g., ProGamer_12345)
-                INSERT INTO players (player_id, username, email, age, gender, country, last_login)
-                VALUES (
-                    UUID_TO_BIN(UUID()),
-                    CONCAT(
-                        ELT(FLOOR(1 + RAND() * 5), 'Pro', 'Elite', 'Epic', 'Master', 'Ultra'),
-                        ELT(FLOOR(1 + RAND() * 5), 'Gamer', 'Player', 'Champion', 'Warrior', 'Legend'),
-                        '_', username_suffix
-                    ),
-                    CONCAT('player', username_suffix, email_domain),
-                    random_age,
-                    random_gender,
-                    random_country,
-                    DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 30) DAY)
-                );
-            WHEN 2 THEN
-                -- Cool word combinations (e.g., NightWolf12345)
-                INSERT INTO players (player_id, username, email, age, gender, country, last_login)
-                VALUES (
-                    UUID_TO_BIN(UUID()),
-                    CONCAT(
-                        ELT(FLOOR(1 + RAND() * 5), 'Night', 'Dark', 'Storm', 'Fire', 'Ice'),
-                        ELT(FLOOR(1 + RAND() * 5), 'Wolf', 'Dragon', 'Phoenix', 'Hawk', 'Knight'),
-                        username_suffix
-                    ),
-                    CONCAT('gamer', username_suffix, email_domain),
-                    random_age,
-                    random_gender,
-                    random_country,
-                    DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 30) DAY)
-                );
-            WHEN 3 THEN
-                -- Game-specific names (e.g., ChessMaster12345)
-                INSERT INTO players (player_id, username, email, age, gender, country, last_login)
-                VALUES (
-                    UUID_TO_BIN(UUID()),
-                    CONCAT(
-                        ELT(FLOOR(1 + RAND() * 8), 'Chess', 'Battle', 'Dots', 'Connect', 'Memory', 'Tic', 'Box', 'Game'),
-                        ELT(FLOOR(1 + RAND() * 5), 'Master', 'King', 'Queen', 'Lord', 'Boss'),
-                        username_suffix
-                    ),
-                    CONCAT('gaming', username_suffix, email_domain),
-                    random_age,
-                    random_gender,
-                    random_country,
-                    DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 30) DAY)
-                );
-            ELSE
-                -- Simple format (e.g., Player12345)
-                INSERT INTO players (player_id, username, email, age, gender, country, last_login)
-                VALUES (
-                    UUID_TO_BIN(UUID()),
-                    CONCAT(
-                        ELT(FLOOR(1 + RAND() * 5), 'Player', 'Gamer', 'User', 'Challenger', 'Champion'),
-                        username_suffix
-                    ),
-                    CONCAT('user', username_suffix, email_domain),
-                    random_age,
-                    random_gender,
-                    random_country,
-                    DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 30) DAY)
-                );
-        END CASE;
-
-        SET i = i + 1;
-    END WHILE;
+       SET i = i + 1;
+   END WHILE;
 END //
-
 DELIMITER ;
 
--- Execute the procedure to generate players
 CALL generate_players();
-
--- Clean up
 DROP PROCEDURE IF EXISTS generate_players;
 
-# -------------------------------------------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------------------------
 
--- First, let's create temporary tables to store game and player IDs for easier reference
-CREATE TEMPORARY TABLE temp_game_ids (
-    game_id BINARY(16),
-    game_name VARCHAR(100)
-);
-
-CREATE TEMPORARY TABLE temp_player_ids (
-    player_id BINARY(16)
-);
-
--- Populate temporary tables
-INSERT INTO temp_game_ids
-SELECT game_id, name FROM games;
-
-INSERT INTO temp_player_ids
-SELECT player_id FROM players;
+-- Match Generation (targeting 10000+ matches)
 
 DELIMITER //
 
 CREATE PROCEDURE generate_matches()
 BEGIN
-    DECLARE i INT DEFAULT 0;
-    DECLARE battleship_id BINARY(16);
-    DECLARE total_matches INT DEFAULT 3000;
-    DECLARE battleship_matches INT DEFAULT 1200; -- 40% of matches are Battleship
-    DECLARE current_game_id BINARY(16);
-    DECLARE current_game_name VARCHAR(100);
-    DECLARE player1_id BINARY(16);
-    DECLARE player2_id BINARY(16);
-    DECLARE match_duration INT;
-    DECLARE start_datetime TIMESTAMP;
-    DECLARE game_moves INT;
-    DECLARE winner_id BINARY(16);
-    DECLARE game_outcome ENUM('WIN', 'LOSS', 'DRAW', 'ABANDONED');
+    CREATE TEMPORARY TABLE temp_player_game_prefs (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        player_id BINARY(16),
+        game_id BINARY(16),
+        game_name VARCHAR(100),
+        target_games INT DEFAULT 0,
+        games_played INT DEFAULT 0
+    );
 
-    -- Get Battleship game_id
-    SELECT game_id INTO battleship_id
-    FROM temp_game_ids
-    WHERE game_name = 'Battleship';
+    -- Populate preferences
+    INSERT INTO temp_player_game_prefs (player_id, game_id, game_name, target_games)
+    SELECT
+        p.player_id,
+        g.game_id,
+        g.name,
+        CASE
+            WHEN g.name = 'Battleship' THEN
+                CASE
+                    WHEN RAND() < 0.3 THEN 30 + FLOOR(RAND() * 21)
+                    WHEN RAND() < 0.5 THEN 20 + FLOOR(RAND() * 11)
+                    ELSE 10 + FLOOR(RAND() * 11)
+                END
+            WHEN RAND() < 0.6 THEN
+                CASE g.name
+                    WHEN 'Chess' THEN 15 + FLOOR(RAND() * 16)
+                    WHEN 'Checkers' THEN 12 + FLOOR(RAND() * 14)
+                    ELSE 8 + FLOOR(RAND() * 13)
+                END
+            ELSE 0
+        END
+    FROM players p
+    CROSS JOIN games g;
 
-    -- Generate matches
-    WHILE i < total_matches DO
-        -- Select random players
-        SELECT player_id INTO player1_id
-        FROM temp_player_ids
-        ORDER BY RAND()
-        LIMIT 1;
+    -- Match generation loop
+    WHILE (SELECT COUNT(*) FROM matches) < 10000 DO
+        SET @player1_id = NULL;
+        SET @player2_id = NULL;
+        SET @game_id = NULL;
+        SET @game_name = NULL;
 
-        SELECT player_id INTO player2_id
-        FROM temp_player_ids
-        WHERE player_id != player1_id
-        ORDER BY RAND()
-        LIMIT 1;
+        -- Select first player and game
+        SELECT player_id, game_id, game_name
+        INTO @player1_id, @game_id, @game_name
+        FROM temp_player_game_prefs
+        WHERE games_played < target_games
+        ORDER BY RAND() LIMIT 1;
 
-        -- Select game (weighted towards Battleship)
-        IF i < battleship_matches THEN
-            SET current_game_id = battleship_id;
-            SET current_game_name = 'Battleship';
-        ELSE
-            SELECT game_id, game_name INTO current_game_id, current_game_name
-            FROM temp_game_ids
-            WHERE game_name != 'Battleship'
-            ORDER BY RAND()
-            LIMIT 1;
+        -- Select second player
+        SELECT player_id INTO @player2_id
+        FROM temp_player_game_prefs
+        WHERE game_id = @game_id
+        AND player_id != @player1_id
+        AND games_played < target_games
+        ORDER BY RAND() LIMIT 1;
+
+        -- Insert match if both players found
+        IF @player1_id IS NOT NULL AND @player2_id IS NOT NULL THEN
+            INSERT INTO matches (
+                match_id, game_id, player1_id, player2_id, winner_id,
+                start_time, end_time, duration_minutes, moves_count,
+                player1_hits, player1_misses, player2_hits, player2_misses,
+                game_state, game_result
+            )
+            VALUES (
+                UUID_TO_BIN(UUID()),
+                @game_id,
+                @player1_id,
+                @player2_id,
+                IF(RAND() < 0.2, NULL, IF(RAND() < 0.5, @player1_id, @player2_id)),
+                DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * (2 * 365)) DAY),
+                NULL,
+                CASE @game_name
+                    WHEN 'Battleship' THEN 15 + FLOOR(RAND() * 30)
+                    WHEN 'Chess' THEN 20 + FLOOR(RAND() * 40)
+                    WHEN 'Checkers' THEN 10 + FLOOR(RAND() * 20)
+                    WHEN 'Connect Four' THEN 5 + FLOOR(RAND() * 10)
+                    WHEN 'Memory Match' THEN 5 + FLOOR(RAND() * 15)
+                    WHEN 'Tic Tac Toe' THEN 2 + FLOOR(RAND() * 5)
+                    WHEN 'Dots and Boxes' THEN 10 + FLOOR(RAND() * 20)
+                    ELSE 10 + FLOOR(RAND() * 20)
+                END,
+                CASE @game_name
+                    WHEN 'Battleship' THEN 35 + FLOOR(RAND() * 45)
+                    WHEN 'Chess' THEN 30 + FLOOR(RAND() * 40)
+                    ELSE 15 + FLOOR(RAND() * 25)
+                END,
+                IF(@game_name = 'Battleship', FLOOR(RAND() * 17), 0),
+                IF(@game_name = 'Battleship', FLOOR(RAND() * 40), 0),
+                IF(@game_name = 'Battleship', FLOOR(RAND() * 17), 0),
+                IF(@game_name = 'Battleship', FLOOR(RAND() * 40), 0),
+                JSON_OBJECT('final_state', 'completed'),
+                CASE
+                    WHEN RAND() < 0.2 THEN 'ABANDONED'
+                    WHEN RAND() < 0.1 AND @game_name IN ('Chess', 'Tic Tac Toe', 'Connect Four') THEN 'DRAW'
+                    ELSE 'WIN'
+                END
+            );
+
+            -- Update end_time
+            UPDATE matches
+            SET end_time = DATE_ADD(start_time, INTERVAL duration_minutes MINUTE)
+            WHERE end_time IS NULL;
+
+            -- Update games played
+            UPDATE temp_player_game_prefs
+            SET games_played = games_played + 1
+            WHERE player_id IN (@player1_id, @player2_id)
+            AND game_id = @game_id;
         END IF;
-
-        -- Generate historical timestamp (between 4 years ago and now)
-        SET start_datetime = TIMESTAMP(
-            DATE_SUB(NOW(),
-            INTERVAL FLOOR(RAND() * (4 * 365) + 1) DAY -
-            INTERVAL FLOOR(RAND() * 24) HOUR -
-            INTERVAL FLOOR(RAND() * 60) MINUTE
-        ));
-
-        -- Set game-specific parameters
-        CASE current_game_name
-            WHEN 'Battleship' THEN
-                SET match_duration = 15 + FLOOR(RAND() * 30); -- 15-45 minutes
-                SET game_moves = 35 + FLOOR(RAND() * 45); -- 35-80 moves
-            WHEN 'Chess' THEN
-                SET match_duration = 20 + FLOOR(RAND() * 40); -- 20-60 minutes
-                SET game_moves = 30 + FLOOR(RAND() * 40); -- 30-70 moves
-            WHEN 'Checkers' THEN
-                SET match_duration = 10 + FLOOR(RAND() * 20); -- 10-30 minutes
-                SET game_moves = 20 + FLOOR(RAND() * 30); -- 20-50 moves
-            WHEN 'Connect Four' THEN
-                SET match_duration = 5 + FLOOR(RAND() * 10); -- 5-15 minutes
-                SET game_moves = 15 + FLOOR(RAND() * 25); -- 15-40 moves
-            WHEN 'Memory Match' THEN
-                SET match_duration = 5 + FLOOR(RAND() * 15); -- 5-20 minutes
-                SET game_moves = 20 + FLOOR(RAND() * 30); -- 20-50 moves
-            WHEN 'Tic Tac Toe' THEN
-                SET match_duration = 2 + FLOOR(RAND() * 5); -- 2-7 minutes
-                SET game_moves = 5 + FLOOR(RAND() * 4); -- 5-9 moves
-            WHEN 'Dots and Boxes' THEN
-                SET match_duration = 10 + FLOOR(RAND() * 20); -- 10-30 minutes
-                SET game_moves = 25 + FLOOR(RAND() * 35); -- 25-60 moves
-            ELSE
-                SET match_duration = 10 + FLOOR(RAND() * 20); -- 10-30 minutes
-                SET game_moves = 15 + FLOOR(RAND() * 25); -- 15-40 moves
-        END CASE;
-
-        -- Determine game outcome (80% completed games, 20% abandoned)
-        IF RAND() < 0.2 THEN
-            SET game_outcome = 'ABANDONED';
-            SET winner_id = NULL;
-            -- Reduce duration for abandoned games
-            SET match_duration = match_duration * (RAND() * 0.5);
-        ELSE
-            IF RAND() < 0.1 AND current_game_name IN ('Chess', 'Tic Tac Toe', 'Connect Four') THEN
-                SET game_outcome = 'DRAW';
-                SET winner_id = NULL;
-            ELSE
-                SET game_outcome = 'WIN';
-                SET winner_id = IF(RAND() < 0.5, player1_id, player2_id);
-            END IF;
-        END IF;
-
-        -- Insert match data
-        INSERT INTO matches (
-            match_id, game_id, player1_id, player2_id, winner_id,
-            start_time, end_time, duration_minutes, moves_count,
-            player1_hits, player1_misses, player2_hits, player2_misses,
-            game_state, game_result
-        )
-        VALUES (
-            UUID_TO_BIN(UUID()),
-            current_game_id,
-            player1_id,
-            player2_id,
-            winner_id,
-            start_datetime,
-            DATE_ADD(start_datetime, INTERVAL match_duration MINUTE),
-            match_duration,
-            game_moves,
-            -- Hits and misses only for Battleship
-            CASE WHEN current_game_name = 'Battleship'
-                THEN FLOOR(RAND() * 17) ELSE 0 END,
-            CASE WHEN current_game_name = 'Battleship'
-                THEN FLOOR(RAND() * 40) ELSE 0 END,
-            CASE WHEN current_game_name = 'Battleship'
-                THEN FLOOR(RAND() * 17) ELSE 0 END,
-            CASE WHEN current_game_name = 'Battleship'
-                THEN FLOOR(RAND() * 40) ELSE 0 END,
-            JSON_OBJECT(
-                'final_state', 'completed',
-                'last_move', CONCAT('move_', game_moves)
-            ),
-            game_outcome
-        );
-
-        SET i = i + 1;
     END WHILE;
+
+    DROP TEMPORARY TABLE IF EXISTS temp_player_game_prefs;
 END //
 
 DELIMITER ;
 
--- Execute the procedure
 CALL generate_matches();
-
--- Clean up
 DROP PROCEDURE IF EXISTS generate_matches;
-DROP TEMPORARY TABLE IF EXISTS temp_game_ids;
-DROP TEMPORARY TABLE IF EXISTS temp_player_ids;
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- Create player_game_stats
 
 DELIMITER //
 
 CREATE PROCEDURE generate_player_game_stats()
 BEGIN
-    -- Create temporary table to store the latest match dates per player and game
-    CREATE TEMPORARY TABLE temp_last_played AS
-    SELECT
-        COALESCE(player1_id, player2_id) as player_id,
-        game_id,
-        MAX(end_time) as last_played
-    FROM matches
-    WHERE end_time IS NOT NULL
-    GROUP BY COALESCE(player1_id, player2_id), game_id;
-
-    -- Insert player game statistics
     INSERT INTO player_game_stats (
         stat_id, player_id, game_id, total_games_played,
         result, total_moves, total_hits, total_misses,
         total_time_played_minutes, highest_score, win_ratio,
         rating, churned, player_level, last_played
     )
-    WITH player_game_metrics AS (
+    SELECT
+        UUID_TO_BIN(UUID()),
+        player_id,
+        game_id,
+        games_played,
+        result,
+        moves,
+        hits,
+        misses,
+        play_time,
+        score,
+        win_pct,
+        rating,
+        churn_status,
+        level,
+        last_game
+    FROM (
         SELECT
             p.player_id,
-            m.game_id,
+            g.game_id,
             COUNT(m.match_id) as games_played,
-            -- Calculate wins
-            COUNT(CASE WHEN m.winner_id = p.player_id THEN 1 END) as wins,
-            -- Calculate most common result
-            (
-                SELECT result
-                FROM (
-                    SELECT
-                        CASE
-                            WHEN m2.winner_id = p.player_id THEN 'WIN'
-                            WHEN m2.winner_id IS NULL AND m2.game_result = 'DRAW' THEN 'DRAW'
-                            WHEN m2.game_result = 'ABANDONED' THEN 'ABANDONED'
-                            ELSE 'LOSS'
-                        END as result,
-                        COUNT(*) as cnt
-                    FROM matches m2
-                    WHERE (m2.player1_id = p.player_id OR m2.player2_id = p.player_id)
-                    AND m2.game_id = m.game_id
-                    GROUP BY result
-                    ORDER BY cnt DESC
-                    LIMIT 1
-                ) t
-            ) as most_common_result,
-            -- Sum all moves
-            SUM(moves_count) as total_moves,
-            -- Sum hits and misses (for Battleship)
-            SUM(CASE WHEN m.player1_id = p.player_id THEN player1_hits ELSE player2_hits END) as total_hits,
-            SUM(CASE WHEN m.player1_id = p.player_id THEN player1_misses ELSE player2_misses END) as total_misses,
-            -- Calculate total time played
-            SUM(duration_minutes) as total_time,
-            -- Get maximum score (using moves_count as a proxy for score)
-            MAX(moves_count) as max_score,
-            -- Calculate win ratio
+            CASE
+                WHEN SUM(CASE WHEN m.winner_id = p.player_id THEN 1 END) > SUM(CASE WHEN m.winner_id != p.player_id AND m.winner_id IS NOT NULL THEN 1 END) THEN 'WIN'
+                WHEN SUM(CASE WHEN m.game_result = 'ABANDONED' THEN 1 END) > SUM(CASE WHEN m.game_result != 'ABANDONED' THEN 1 END) THEN 'ABANDONED'
+                WHEN SUM(CASE WHEN m.game_result = 'DRAW' THEN 1 END) > SUM(CASE WHEN m.game_result != 'DRAW' THEN 1 END) THEN 'DRAW'
+                ELSE 'LOSS'
+            END as result,
+            SUM(moves_count) as moves,
+            SUM(CASE WHEN m.player1_id = p.player_id THEN m.player1_hits ELSE m.player2_hits END) as hits,
+            SUM(CASE WHEN m.player1_id = p.player_id THEN m.player1_misses ELSE m.player2_misses END) as misses,
+            SUM(duration_minutes) as play_time,
+            MAX(moves_count) as score,
             (COUNT(CASE WHEN m.winner_id = p.player_id THEN 1 END) * 100.0 /
-                COUNT(CASE WHEN m.game_result != 'ABANDONED' THEN 1 END)) as win_percentage,
-            -- Get last played date
-            MAX(m.end_time) as last_game_date
+                NULLIF(COUNT(CASE WHEN m.game_result != 'ABANDONED' AND m.end_time IS NOT NULL THEN 1 END), 0)) as win_pct,
+            CASE
+                WHEN (COUNT(CASE WHEN m.winner_id = p.player_id THEN 1 END) * 100.0 /
+                    NULLIF(COUNT(CASE WHEN m.game_result != 'ABANDONED' AND m.end_time IS NOT NULL THEN 1 END), 0)) >= 60
+                    AND COUNT(m.match_id) >= 20 THEN 5
+                WHEN (COUNT(CASE WHEN m.winner_id = p.player_id THEN 1 END) * 100.0 /
+                    NULLIF(COUNT(CASE WHEN m.game_result != 'ABANDONED' AND m.end_time IS NOT NULL THEN 1 END), 0)) >= 50
+                    AND COUNT(m.match_id) >= 15 THEN 4
+                WHEN (COUNT(CASE WHEN m.winner_id = p.player_id THEN 1 END) * 100.0 /
+                    NULLIF(COUNT(CASE WHEN m.game_result != 'ABANDONED' AND m.end_time IS NOT NULL THEN 1 END), 0)) >= 40
+                    AND COUNT(m.match_id) >= 10 THEN 3
+                WHEN (COUNT(CASE WHEN m.winner_id = p.player_id THEN 1 END) * 100.0 /
+                    NULLIF(COUNT(CASE WHEN m.game_result != 'ABANDONED' AND m.end_time IS NOT NULL THEN 1 END), 0)) >= 25
+                    AND COUNT(m.match_id) >= 5 THEN 2
+                ELSE 1
+            END as rating,
+            CASE
+                WHEN (SELECT COUNT(*)
+                      FROM matches m2
+                      WHERE (m2.player1_id = p.player_id OR m2.player2_id = p.player_id)
+                      AND m2.end_time >= DATE_SUB(NOW(), INTERVAL 30 DAY)) < 3
+                THEN 'YES'
+                ELSE 'NO'
+            END as churn_status,
+            CASE
+                WHEN COUNT(m.match_id) >= 10 AND
+                     ((COUNT(CASE WHEN m.winner_id = p.player_id THEN 1 END) * 100.0 /
+                     NULLIF(COUNT(CASE WHEN m.game_result != 'ABANDONED' AND m.end_time IS NOT NULL THEN 1 END), 0)) >= 50 OR  -- Reduced from 60
+                     SUM(CASE WHEN m.player1_id = p.player_id THEN m.player1_hits ELSE m.player2_hits END) >= 100) AND  -- Added hits criteria
+                     SUM(duration_minutes) >= 300 THEN 'Expert'
+                WHEN COUNT(m.match_id) >= 8 AND
+                    ((COUNT(CASE WHEN m.winner_id = p.player_id THEN 1 END) * 100.0 /
+                     NULLIF(COUNT(CASE WHEN m.game_result != 'ABANDONED' AND m.end_time IS NOT NULL THEN 1 END), 0)) >= 35 OR  -- Reduced from 45
+                     SUM(CASE WHEN m.player1_id = p.player_id THEN m.player1_hits ELSE m.player2_hits END) >= 50) AND   -- Added hits criteria
+                     SUM(duration_minutes) >= 150 THEN 'Intermediate'
+                ELSE 'Novice'
+            END as level,
+            MAX(CASE WHEN m.end_time IS NOT NULL THEN m.end_time ELSE NOW() END) as last_game
         FROM
             players p
             CROSS JOIN games g
-            LEFT JOIN matches m ON (m.player1_id = p.player_id OR m.player2_id = p.player_id)
+            INNER JOIN matches m ON (m.player1_id = p.player_id OR m.player2_id = p.player_id)
                 AND m.game_id = g.game_id
+        WHERE m.end_time IS NOT NULL
         GROUP BY
-            p.player_id, m.game_id
+            p.player_id, g.game_id
         HAVING
-            games_played > 0
-    )
-    SELECT
-        UUID_TO_BIN(UUID()) as stat_id,
-        pgm.player_id,
-        pgm.game_id,
-        pgm.games_played as total_games_played,
-        pgm.most_common_result as result,
-        pgm.total_moves,
-        pgm.total_hits,
-        pgm.total_misses,
-        pgm.total_time as total_time_played_minutes,
-        pgm.max_score as highest_score,
-        pgm.win_percentage as win_ratio,
-        -- Calculate rating based on win ratio and games played
-        CASE
-            WHEN pgm.win_percentage >= 70 AND pgm.games_played >= 20 THEN 5
-            WHEN pgm.win_percentage >= 60 AND pgm.games_played >= 15 THEN 4
-            WHEN pgm.win_percentage >= 50 AND pgm.games_played >= 10 THEN 3
-            WHEN pgm.win_percentage >= 40 AND pgm.games_played >= 5 THEN 2
-            ELSE 1
-        END as rating,
-        -- Determine churn status (if haven't played in last 60 days)
-        CASE
-            WHEN DATEDIFF(NOW(), pgm.last_game_date) > 60 THEN 'YES'
-            ELSE 'NO'
-        END as churned,
-        -- Determine player level based on games played, win ratio, and time invested
-        CASE
-            WHEN pgm.games_played >= 30 AND pgm.win_percentage >= 70
-                AND pgm.total_time >= 1000 THEN 'Expert'
-            WHEN pgm.games_played >= 15 AND pgm.win_percentage >= 50
-                AND pgm.total_time >= 500 THEN 'Intermediate'
-            ELSE 'Novice'
-        END as player_level,
-        pgm.last_game_date as last_played
-    FROM
-        player_game_metrics pgm
-    WHERE
-        pgm.games_played > 0;
-
-    -- Clean up
-    DROP TEMPORARY TABLE IF EXISTS temp_last_played;
+            COUNT(m.match_id) > 0
+    ) stats;
 END //
 
 DELIMITER ;
 
--- Execute the procedure
 CALL generate_player_game_stats();
-
--- Clean up
 DROP PROCEDURE IF EXISTS generate_player_game_stats;
 
+#
+# DESCRIBE player_game_stats;
+#
+# SELECT COLUMN_NAME
+# FROM INFORMATION_SCHEMA.COLUMNS
+# WHERE TABLE_SCHEMA = 'game_analytics'
+# AND TABLE_NAME = 'player_game_stats'
+# ORDER BY ORDINAL_POSITION;
+#
+#
+#
+#
+# INSERT INTO player_game_stats (
+#     stat_id,
+#     player_id,
+#     game_id,
+#     total_games_played
+# )
+# SELECT
+#     UUID_TO_BIN(UUID()),
+#     p.player_id,
+#     g.game_id,
+#     COUNT(m.match_id) as total_games_played
+# FROM
+#     players p
+#     CROSS JOIN games g
+#     INNER JOIN matches m ON (m.player1_id = p.player_id OR m.player2_id = p.player_id)
+#         AND m.game_id = g.game_id
+# WHERE m.end_time IS NOT NULL
+# GROUP BY
+#     p.player_id, g.game_id
+# LIMIT 1;
+#
+# DESCRIBE player_game_stats_audit;
