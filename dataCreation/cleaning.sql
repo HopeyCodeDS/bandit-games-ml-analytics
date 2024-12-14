@@ -9,12 +9,27 @@ TRUNCATE TABLE games;
 SET FOREIGN_KEY_CHECKS = 1;
 
 SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE matches;
+TRUNCATE TABLE match_history;
 SET FOREIGN_KEY_CHECKS = 1;
 
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE player_game_stats;
 SET FOREIGN_KEY_CHECKS = 1;
+
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE players_audit;
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE games_audit;
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+# SET FOREIGN_KEY_CHECKS = 0;
+# TRUNCATE TABLE matches_audit;
+# SET FOREIGN_KEY_CHECKS = 1;
+
 
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE player_game_stats_audit;
@@ -55,3 +70,45 @@ select g.game_id,g.name,count(*)
 from games g
 left join game_analytics.player_game_stats pgs on g.game_id = pgs.game_id
 group by g.game_id ;
+
+
+
+
+# DROP TABLES;
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE players;
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE match_history;
+SET FOREIGN_KEY_CHECKS = 1;
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE games;
+SET FOREIGN_KEY_CHECKS = 1;
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE player_game_stats;
+SET FOREIGN_KEY_CHECKS = 1;
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE games_audit;
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE players_audit;
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+# SET FOREIGN_KEY_CHECKS = 0;
+# DROP TABLE matches_audit;
+# SET FOREIGN_KEY_CHECKS = 1;
+
+
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE player_game_stats_audit;
+SET FOREIGN_KEY_CHECKS = 1;
