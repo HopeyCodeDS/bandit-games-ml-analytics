@@ -41,4 +41,3 @@ WITH player_stats AS (
 SELECT *
 FROM player_stats;
 
-# SHOW VARIABLES LIKE 'secure_file_priv';
