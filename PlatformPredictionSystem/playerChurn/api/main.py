@@ -2,17 +2,17 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import numpy as np
 import pandas as pd
-from joblib import load
+import pickle
 from fastapi.middleware.cors import CORSMiddleware
+from datetime import datetime, timedelta
 
-# Load the trained model, scaler, and encoded column structure
-model = load('../model/xgb_model.joblib')
-scaler = load('../model/scaler.joblib')
-encoded_columns = np.load('../model/encoded_columns.npy', allow_pickle=True)
+# Load model and scaler
+with open('../model/churn_model.pkl', 'rb') as f:
+    model = pickle.load(f)
+with open('../model/churn_scaler.pkl', 'rb') as f:
+    scaler = pickle.load(f)
 
-# Convert encoded_columns to list of strings if they aren't already
-encoded_columns = [str(col) for col in encoded_columns]
-
+# Create FastAPI app
 app = FastAPI()
 
 origins = [
@@ -28,86 +28,72 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 class PlayerData(BaseModel):
-    age: int
-    gender: int
+    total_time_played_minutes: int
     total_games_played: int
     total_wins: int
-    total_losses: int
-    win_ratio: float
-    total_moves: float
-    highest_score: int
-    rating: int
-    country: str
-    game_name: str
+    total_moves: int
+    age: int
+    last_played: datetime
 
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "total_time_played_minutes": 500,
+                "total_games_played": 50,
+                "total_wins": 25,
+                "total_moves": 1000,
+                "age": 25,
+                "last_played": "2024-03-14T12:00:00"
+            }
+        }
 
 @app.get("/")
 def root():
     return {"message": "Welcome to the ML Model API for Player Churn Prediction!"}
 
-
-@app.post("/predict/")
-def predict(data: PlayerData):
+@app.post("/predict/churn")
+async def predict_churn(player_data: PlayerData):
     try:
-        # Convert incoming data to a dictionary
-        input_dict = data.dict()
+        # Calculate engineered features
+        avg_session_duration = player_data.total_time_played_minutes / player_data.total_games_played
+        win_rate = player_data.total_wins / player_data.total_games_played
+        avg_moves_per_game = player_data.total_moves / player_data.total_games_played
 
-        # Create initial DataFrame
-        input_df = pd.DataFrame([input_dict])
+        # Create feature array matching the model's expected features
+        features = pd.DataFrame([{
+            'avg_session_duration': avg_session_duration,
+            'win_rate': win_rate,
+            'avg_moves_per_game': avg_moves_per_game,
+            'total_games_played': player_data.total_games_played,
+            'age': player_data.age
+        }])
 
-        # Debug print
-        print("Initial DataFrame columns:", input_df.columns.tolist())
-        print("Initial DataFrame shape:", input_df.shape)
-
-        # Perform one-hot encoding
-        input_df = pd.get_dummies(input_df, columns=['country', 'game_name'])
-
-        # Debug print
-        print("After one-hot encoding columns:", input_df.columns.tolist())
-        print("After one-hot encoding shape:", input_df.shape)
-        print("Expected encoded columns:", encoded_columns)
-
-        # Create a DataFrame with all expected columns initialized to 0
-        final_df = pd.DataFrame(0, index=input_df.index, columns=encoded_columns)
-
-        # Copy values from input_df to final_df for columns that exist
-        for col in input_df.columns:
-            if col in encoded_columns:
-                final_df[col] = input_df[col]
-
-        # Debug print
-        print("Final DataFrame columns:", final_df.columns.tolist())
-        print("Final DataFrame shape:", final_df.shape)
-        print("Scaler expected features:", scaler.feature_names_in_.tolist())
-
-        # Ensure column order matches scaler's expected order
-        final_df = final_df[scaler.feature_names_in_]
-
-        # Scale the features
-        scaled_data = scaler.transform(final_df)
+        # Scale features
+        scaled_features = scaler.transform(features)
 
         # Make prediction
-        prediction = model.predict(scaled_data)
+        churn_prob = model.predict_proba(scaled_features)[0][1]
 
         return {
-            "prediction": "Churn" if prediction[0] == 1 else "No Churn",
-            "status": "success",
-            "debug_info": {
-                "input_columns": input_df.columns.tolist(),
-                "final_columns": final_df.columns.tolist(),
-                "expected_columns": encoded_columns
+            "churn_probability": float(churn_prob),
+            "prediction_timestamp": datetime.now().isoformat(),
+            "features_used": {
+                "avg_session_duration": float(avg_session_duration),
+                "win_rate": float(win_rate),
+                "avg_moves_per_game": float(avg_moves_per_game),
+                "total_games_played": player_data.total_games_played,
+                "age": player_data.age
             }
         }
-
-    except Exception as e:
-        print(f"Error details: {str(e)}")  # This will show in your server logs
+    except ZeroDivisionError:
         raise HTTPException(
-            status_code=500,
-            detail={
-                "error": "Prediction error",
-                "message": str(e),
-                "type": str(type(e).__name__)
-            }
+            status_code=400,
+            detail="Invalid data: Cannot calculate rates with zero games played"
         )
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
