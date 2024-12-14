@@ -75,7 +75,9 @@ CREATE TABLE player_game_stats (
     total_losses INT NOT NULL DEFAULT 0,
     total_moves INT NOT NULL DEFAULT 0,
     total_time_played_minutes INT NOT NULL DEFAULT 0,
-    result VARCHAR(20),
+    win_ratio DECIMAL(5,2) NOT NULL DEFAULT 0.00,
+    rating TINYINT CHECK (rating >= 1 AND rating <= 5),
+    last_played TIMESTAMP,
     FOREIGN KEY (player_id) REFERENCES players(player_id),
     FOREIGN KEY (game_id) REFERENCES games(game_id),
     UNIQUE KEY unique_player_game (player_id, game_id)

@@ -361,6 +361,10 @@ END //
 -- Procedure to generate player game statistics
 CREATE PROCEDURE generate_player_game_stats()
 BEGIN
+    -- Clear existing stats
+    TRUNCATE TABLE player_game_stats;
+
+    -- Insert stats only for players who actually played matches
     INSERT INTO player_game_stats (
         stat_id,
         player_id,
@@ -375,7 +379,9 @@ BEGIN
         total_losses,
         total_moves,
         total_time_played_minutes,
-        result
+        win_ratio,
+        rating,
+        last_played
     )
     SELECT
         UUID_TO_BIN(UUID()),
@@ -392,20 +398,43 @@ BEGIN
         SUM(CASE WHEN m.player1_id = p.player_id THEN m.player1_moves ELSE m.player2_moves END) as total_moves,
         SUM(m.duration_minutes) as total_time_played_minutes,
         CASE
-            WHEN COUNT(DISTINCT m.match_id) = 0 THEN NULL
-            WHEN SUM(CASE WHEN m.winner_id = p.player_id THEN 1 ELSE 0 END) >
-                 SUM(CASE WHEN m.winner_id IS NOT NULL AND m.winner_id != p.player_id THEN 1 ELSE 0 END)
-            THEN 'win'
-            WHEN SUM(CASE WHEN m.winner_id = p.player_id THEN 1 ELSE 0 END) <
-                 SUM(CASE WHEN m.winner_id IS NOT NULL AND m.winner_id != p.player_id THEN 1 ELSE 0 END)
-            THEN 'loss'
-            ELSE 'draw'
-        END as result
+            WHEN COUNT(DISTINCT m.match_id) = 0 THEN 0.00
+            ELSE ROUND(
+                SUM(CASE WHEN m.winner_id = p.player_id THEN 1 ELSE 0 END) * 100.0 /
+                NULLIF(COUNT(DISTINCT m.match_id), 0),
+                2
+            )
+        END as win_ratio,
+        -- Rating calculation based on multiple factors
+        CASE
+            WHEN COUNT(DISTINCT m.match_id) < 5 THEN 1  -- New players
+            ELSE
+                GREATEST(1, LEAST(5,  -- Ensure rating is between 1 and 5
+                    FLOOR(
+                        (
+                            -- Win ratio contribution (50% weight)
+                            (SUM(CASE WHEN m.winner_id = p.player_id THEN 1 ELSE 0 END) * 100.0 /
+                             NULLIF(COUNT(DISTINCT m.match_id), 0) * 0.5) +
+                            -- Games played contribution (30% weight)
+                            (CASE
+                                WHEN COUNT(DISTINCT m.match_id) >= 50 THEN 100
+                                ELSE COUNT(DISTINCT m.match_id) * 2
+                             END * 0.3) +
+                            -- Time played contribution (20% weight)
+                            (CASE
+                                WHEN SUM(m.duration_minutes) >= 1000 THEN 100
+                                ELSE SUM(m.duration_minutes) / 10
+                             END * 0.2)
+                        ) / 20  -- Divide by 20 to get a 1-5 scale
+                    )
+                ))
+        END as rating,
+        -- Last played time
+        MAX(m.end_time) as last_played
     FROM
         players p
-        CROSS JOIN games g
-        LEFT JOIN match_history m ON (m.player1_id = p.player_id OR m.player2_id = p.player_id)
-            AND m.game_id = g.game_id
+        INNER JOIN match_history m ON (m.player1_id = p.player_id OR m.player2_id = p.player_id)
+        INNER JOIN games g ON m.game_id = g.game_id
     GROUP BY
         p.player_id,
         CONCAT(p.firstname, ' ', p.lastname),
@@ -413,7 +442,9 @@ BEGIN
         p.gender,
         p.country,
         g.game_id,
-        g.name;
+        g.name
+    HAVING
+        COUNT(DISTINCT m.match_id) > 0;
 END //
 
 DELIMITER ;

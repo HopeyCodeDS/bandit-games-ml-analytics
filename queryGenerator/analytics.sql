@@ -57,6 +57,86 @@ FROM player_game_stats
 GROUP BY game_name
 ORDER BY active_players DESC;
 
+-- Player skill level distribution
+WITH PlayerStats AS (
+    SELECT
+        p.player_id,
+        p.gender,
+        p.country,
+        COUNT(DISTINCT m.game_name) as games_played,
+        COUNT(*) as total_matches,
+        SUM(CASE WHEN m.winner_id = p.player_id THEN 1 ELSE 0 END) as wins,
+        ROUND(SUM(CASE WHEN m.winner_id = p.player_id THEN 1 ELSE 0 END) * 100.0 /
+              COUNT(*), 2) as win_rate
+    FROM players p
+    JOIN match_history m ON (p.player_id = m.player1_id OR p.player_id = m.player2_id)
+    GROUP BY p.player_id, p.gender, p.country
+)
+SELECT
+    CASE
+        WHEN win_rate >= 55 THEN 'Expert'
+        WHEN win_rate >= 45 THEN 'Intermediate'
+        ELSE 'Beginner'
+    END as skill_level,
+    COUNT(*) as player_count,
+    ROUND(AVG(win_rate), 2) as avg_win_rate,
+    ROUND(AVG(total_matches), 2) as avg_matches_played,
+    ROUND(AVG(games_played), 2) as avg_different_games
+FROM PlayerStats
+GROUP BY
+    CASE
+        WHEN win_rate >= 55 THEN 'Expert'
+        WHEN win_rate >= 45 THEN 'Intermediate'
+        ELSE 'Beginner'
+    END
+ORDER BY avg_win_rate DESC;
+
+-- Analysis of player matching patterns
+SELECT
+    p1.country as player1_country,
+    p2.country as player2_country,
+    COUNT(*) as match_count,
+    ROUND(AVG(m.duration_minutes), 2) as avg_duration,
+    COUNT(DISTINCT m.game_name) as unique_games
+FROM match_history m
+JOIN players p1 ON m.player1_id = p1.player_id
+JOIN players p2 ON m.player2_id = p2.player_id
+GROUP BY p1.country, p2.country
+HAVING match_count > 100
+ORDER BY match_count DESC;
+
+-- Analyzing game complexity through moves and duration
+SELECT
+    game_name,
+    ROUND(AVG(player1_moves + player2_moves), 2) as avg_total_moves,
+    ROUND(AVG(duration_minutes), 2) as avg_duration,
+    ROUND(AVG((player1_moves + player2_moves) / duration_minutes), 2) as moves_per_minute,
+    COUNT(*) as total_matches
+FROM match_history
+GROUP BY game_name
+ORDER BY moves_per_minute DESC;
+
+-- Analyzing players who play multiple games
+WITH PlayerGameCounts AS (
+    SELECT
+        p.player_id,
+        p.gender,
+        p.country,
+        COUNT(DISTINCT pgs.game_name) as games_played,
+        GROUP_CONCAT(DISTINCT pgs.game_name) as game_list
+    FROM players p
+    JOIN player_game_stats pgs ON p.player_id = pgs.player_id
+    GROUP BY p.player_id, p.gender, p.country
+)
+SELECT
+    games_played as number_of_games,
+    COUNT(*) as player_count,
+    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM players), 2) as percentage_of_players
+FROM PlayerGameCounts
+GROUP BY games_played
+ORDER BY games_played;
+
+
 # ---------------------------------------------------------
 
 select game_name, count(*)
