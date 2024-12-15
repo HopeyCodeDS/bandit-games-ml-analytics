@@ -2,3 +2,5 @@
 .idea/
 RAG/.venvRAG
 RAG/.env
+*.pyc
+__pycache__/
