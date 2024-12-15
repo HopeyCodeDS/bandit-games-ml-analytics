@@ -12,6 +12,9 @@ with open('../model/churn_model.pkl', 'rb') as f:
 with open('../model/churn_scaler.pkl', 'rb') as f:
     scaler = pickle.load(f)
 
+# Define the engagement score threshold from model training
+ENGAGEMENT_THRESHOLD = 180.3772307692308
+
 # Create FastAPI app
 app = FastAPI()
 
@@ -20,6 +23,7 @@ origins = [
     "http://localhost:8080",
     "http://localhost:3000",
 ]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -27,6 +31,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 class PlayerData(BaseModel):
     total_time_played_minutes: int
@@ -48,9 +53,11 @@ class PlayerData(BaseModel):
             }
         }
 
+
 @app.get("/")
 def root():
     return {"message": "Welcome to the ML Model API for Player Churn Prediction!"}
+
 
 @app.post("/predict/churn")
 async def predict_churn(player_data: PlayerData):
@@ -59,6 +66,11 @@ async def predict_churn(player_data: PlayerData):
         avg_session_duration = player_data.total_time_played_minutes / player_data.total_games_played
         win_rate = player_data.total_wins / player_data.total_games_played
         avg_moves_per_game = player_data.total_moves / player_data.total_games_played
+
+        # Calculate engagement score (same weights as in training)
+        engagement_score = (player_data.total_time_played_minutes * 0.4 +
+                            player_data.total_games_played * 0.3 +
+                            win_rate * 0.3)
 
         # Create feature array matching the model's expected features
         features = pd.DataFrame([{
@@ -72,11 +84,18 @@ async def predict_churn(player_data: PlayerData):
         # Scale features
         scaled_features = scaler.transform(features)
 
-        # Make prediction
+        # Get model prediction
         churn_prob = model.predict_proba(scaled_features)[0][1]
+
+        # Determine churn status based on engagement score threshold
+        is_churned = engagement_score < ENGAGEMENT_THRESHOLD
 
         return {
             "churn_probability": float(churn_prob),
+            "is_churned": bool(is_churned),
+            "churn_status": "Churned" if is_churned else "Not Churned",
+            "engagement_score": float(engagement_score),
+            "engagement_threshold": float(ENGAGEMENT_THRESHOLD),
             "prediction_timestamp": datetime.now().isoformat(),
             "features_used": {
                 "avg_session_duration": float(avg_session_duration),
@@ -86,6 +105,7 @@ async def predict_churn(player_data: PlayerData):
                 "age": player_data.age
             }
         }
+
     except ZeroDivisionError:
         raise HTTPException(
             status_code=400,
@@ -94,6 +114,8 @@ async def predict_churn(player_data: PlayerData):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)
