@@ -1,0 +1,35 @@
+### Variables
+@baseUrl = http://localhost:8000
+@playerUuid = d16771fa-ba60-11ef-9d4e-00155d326b4e
+
+### Test root endpoint
+GET {{baseUrl}}/
+
+### Test database connection
+#GET {{baseUrl}}/test/db
+
+### Get all players (with pagination)
+GET {{baseUrl}}/stats/players?skip=0&limit=10
+Accept: application/json
+
+### Get stats for a specific player
+GET {{baseUrl}}/stats/player/{{playerUuid}}
+Accept: application/json
+
+### Get stats for a specific game
+GET {{baseUrl}}/stats/game/d0ac190e-ba60-11ef-9d4e-00155d326b4e
+Accept: application/json
+
+### Get summary statistics
+GET {{baseUrl}}/stats/summary
+Accept: application/json
+
+# You can add more test cases below:
+
+### Get players with different pagination
+GET {{baseUrl}}/stats/players?skip=10&limit=5
+Accept: application/json
+
+### Get invalid game ID (should return 404)
+GET {{baseUrl}}/stats/game/999999
+Accept: application/json

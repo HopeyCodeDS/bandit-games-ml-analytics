@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  db:
+    build: .
+    container_name: game_analytics_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: game_analytics
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./game_analytics_backup.sql:/docker-entrypoint-initdb.d/game_analytics_backup.sql
+    networks:
+      - game_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  game_network:
+    driver: bridge
