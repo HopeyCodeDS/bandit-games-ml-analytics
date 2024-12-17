@@ -33,7 +33,7 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure this appropriately for production
+    allow_origins=["http://localhost:3000"],  # Configure this appropriately for production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -79,17 +79,17 @@ async def root():
         "message": "Player Statistics API",
         "version": "1.0.1",
         "endpoints": [
-            "/stats/players",
-            "/stats/player/{player_id}",
-            "/stats/game/{game_id}",
-            "/stats/summary",
-            "/stats/most-played-games?limit=5",
-            "/stats/top-players/{game_id}?limit=3"
+            "/api/stats/players",
+            "/api/stats/player/{player_id}",
+            "/api/stats/game/{game_id}",
+            "/api/stats/summary",
+            "/api/stats/most-played-games?limit=5",
+            "/api/stats/top-players/{game_id}?limit=3"
         ]
     }
 
 
-@app.get("/stats/players", response_model=List[PlayerStats])
+@app.get("/api/stats/players", response_model=List[PlayerStats])
 async def get_all_player_stats(
         skip: int = Query(0, ge=0, description="Number of records to skip for pagination"),
         limit: int = Query(20, ge=1, le=100, description="Maximum number of records to return"),
@@ -134,7 +134,7 @@ async def get_all_player_stats(
         raise HTTPException(status_code=500, detail="Error retrieving player statistics")
 
 
-@app.get("/stats/player/{player_id}", response_model=List[PlayerStats])
+@app.get("/api/stats/player/{player_id}", response_model=List[PlayerStats])
 async def get_player_stats(
         player_id: UUID,
         db: Session = Depends(get_db)
@@ -180,7 +180,7 @@ async def get_player_stats(
         raise HTTPException(status_code=500, detail="Error retrieving player statistics")
 
 
-@app.get("/stats/game/{game_id}", response_model=List[PlayerStats])
+@app.get("/api/stats/game/{game_id}", response_model=List[PlayerStats])
 async def get_game_stats(
         game_id: UUID,
         db: Session = Depends(get_db)
@@ -226,7 +226,7 @@ async def get_game_stats(
         print(f"Error: {str(e)}")
         raise HTTPException(status_code=500, detail="Error retrieving game statistics")
 
-@app.get("/stats/most-played-games")
+@app.get("/api/stats/most-played-games")
 async def get_most_played_games(
     limit: int = Query(10, ge=1, le=50, description="Number of games to return"),
     db: Session = Depends(get_db)
@@ -260,7 +260,7 @@ async def get_most_played_games(
         print(f"Error: {str(e)}")
         raise HTTPException(status_code=500, detail="Error retrieving most played games")
 
-@app.get("/stats/top-players/{game_id}")
+@app.get("/api/stats/top-players/{game_id}")
 async def get_top_players_by_game(
     game_id: UUID,
     limit: int = Query(3, ge=1, le=10, description="Number of top players to return"),
@@ -303,7 +303,7 @@ async def get_top_players_by_game(
 
 
 
-@app.get("/stats/summary")
+@app.get("/api/stats/summary")
 async def get_stats_summary(db: Session = Depends(get_db)):
     """
     Get summary statistics across all games and players.
