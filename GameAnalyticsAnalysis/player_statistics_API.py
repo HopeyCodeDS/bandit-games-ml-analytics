@@ -16,18 +16,18 @@ load_dotenv()
 DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_HOST = os.getenv('DB_HOST', 'localhost')
-DB_PORT = os.getenv('DB_PORT', '3306')
+DB_PORT = os.getenv('DB_PORT', '3307')
 DB_NAME = 'game_analytics'
 
 # Create SQLAlchemy engine
 DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?charset=utf8mb4"
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 
 # Initialize FastAPI app
 app = FastAPI(
     title="Player Statistics API",
     description="API for retrieving player game statistics for dashboard",
-    version="1.0.0"
+    version="1.0.1"
 )
 
 # Add CORS middleware
@@ -77,7 +77,7 @@ def get_db():
 async def root():
     return {
         "message": "Player Statistics API",
-        "version": "1.0.0",
+        "version": "1.0.1",
         "endpoints": [
             "/stats/players",
             "/stats/player/{player_id}",
@@ -89,8 +89,8 @@ async def root():
 
 @app.get("/stats/players", response_model=List[PlayerStats])
 async def get_all_player_stats(
-        skip: int = Query(0, ge=0),
-        limit: int = Query(100, ge=1, le=1000),
+        skip: int = Query(0, ge=0, description="Number of records to skip for pagination"),
+        limit: int = Query(20, ge=1, le=100, description="Maximum number of records to return"),
         db: Session = Depends(get_db)
 ):
     """
@@ -128,7 +128,8 @@ async def get_all_player_stats(
 
         return stats
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error retrieving player statistics")
 
 
 @app.get("/stats/player/{player_id}", response_model=List[PlayerStats])
@@ -173,12 +174,13 @@ async def get_player_stats(
 
         return stats
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error retrieving player statistics")
 
 
 @app.get("/stats/game/{game_id}", response_model=List[PlayerStats])
 async def get_game_stats(
-        game_id: int,
+        game_id: UUID,
         db: Session = Depends(get_db)
 ):
     """
@@ -204,11 +206,11 @@ async def get_game_stats(
                 rating,
                 last_played
             FROM player_game_stats
-            WHERE game_id = :game_id
+            WHERE game_id = UUID_TO_BIN(:game_id)
             ORDER BY rating DESC, win_ratio DESC
         """)
 
-        result = db.execute(query, {"game_id": game_id})
+        result = db.execute(query, {"game_id": str(game_id)})
         stats = [dict(zip(result.keys(), row)) for row in result.fetchall()]
 
         if not stats:
@@ -219,7 +221,8 @@ async def get_game_stats(
 
         return stats
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error retrieving game statistics")
 
 
 @app.get("/stats/summary")
@@ -260,7 +263,8 @@ async def get_stats_summary(db: Session = Depends(get_db)):
 
         return summary
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error retrieving summary statistics")
 
 
 if __name__ == "__main__":
