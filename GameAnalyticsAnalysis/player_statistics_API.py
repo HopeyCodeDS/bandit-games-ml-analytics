@@ -82,7 +82,9 @@ async def root():
             "/stats/players",
             "/stats/player/{player_id}",
             "/stats/game/{game_id}",
-            "/stats/summary"
+            "/stats/summary",
+            "/stats/most-played-games?limit=5",
+            "/stats/top-players/{game_id}?limit=3"
         ]
     }
 
@@ -223,6 +225,82 @@ async def get_game_stats(
     except Exception as e:
         print(f"Error: {str(e)}")
         raise HTTPException(status_code=500, detail="Error retrieving game statistics")
+
+@app.get("/stats/most-played-games")
+async def get_most_played_games(
+    limit: int = Query(10, ge=1, le=50, description="Number of games to return"),
+    db: Session = Depends(get_db)
+):
+    """
+    Get the most played games ranked by total matches played across all players.
+    """
+    try:
+        query = text("""
+            SELECT 
+                BIN_TO_UUID(game_id) as game_id,
+                game_name,
+                COUNT(DISTINCT player_id) as unique_players,
+                SUM(total_games_played) as total_matches,
+                AVG(rating) as average_rating,
+                MAX(last_played) as last_played
+            FROM player_game_stats
+            GROUP BY game_id, game_name
+            ORDER BY total_matches DESC
+            LIMIT :limit
+        """)
+
+        result = db.execute(query, {"limit": limit})
+        games = [dict(zip(result.keys(), row)) for row in result.fetchall()]
+
+        if not games:
+            raise HTTPException(status_code=404, detail="No games found")
+
+        return games
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error retrieving most played games")
+
+@app.get("/stats/top-players/{game_id}")
+async def get_top_players_by_game(
+    game_id: UUID,
+    limit: int = Query(3, ge=1, le=10, description="Number of top players to return"),
+    db: Session = Depends(get_db)
+):
+    """
+    Get the top players for a specific game, ranked by rating and win ratio.
+    """
+    try:
+        query = text("""
+            SELECT 
+                BIN_TO_UUID(player_id) as player_id,
+                player_name,
+                country,
+                total_games_played,
+                total_wins,
+                total_losses,
+                win_ratio,
+                rating,
+                last_played
+            FROM player_game_stats
+            WHERE game_id = UUID_TO_BIN(:game_id)
+            ORDER BY rating DESC, win_ratio DESC
+            LIMIT :limit
+        """)
+
+        result = db.execute(query, {"game_id": str(game_id), "limit": limit})
+        players = [dict(zip(result.keys(), row)) for row in result.fetchall()]
+
+        if not players:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No players found for game {game_id}"
+            )
+
+        return players
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error retrieving top players")
+
 
 
 @app.get("/stats/summary")
