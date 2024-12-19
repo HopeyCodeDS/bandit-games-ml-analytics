@@ -1,0 +1,100 @@
+1. Win Probability Test Data:
+    - High Win Probability scenario:
+{
+    "total_games_played": 200,
+    "total_wins": 160,
+    "total_losses": 40,
+    "total_moves": 4000,
+    "total_time_played_minutes": 6000,
+    "rating": 5,
+    "age": 28,
+    "gender_encoded": 1,
+    "country_encoded": 0
+}
+>>> (80% win rate, high experience, high rating)
+
+    - Low Win Probability scenario:
+ {
+    "total_games_played": 50,
+    "total_wins": 10,
+    "total_losses": 40,
+    "total_moves": 800,
+    "total_time_played_minutes": 1000,
+    "rating": 2,
+    "age": 22,
+    "gender_encoded": 1,
+    "country_encoded": 0
+}
+>>> (20% win rate, low experience, low rating)
+
+2. Game Engagement Test Data
+    - High Engagement scenario:
+{
+    "total_games_played": 300,
+    "total_wins": 180,
+    "total_losses": 120,
+    "total_moves": 9000,
+    "win_ratio": 60.0,
+    "rating": 4,
+    "age": 25,
+    "gender_encoded": 1,
+    "country_encoded": 0
+}
+>>> (High number of games, consistent win ratio, lots of moves)
+
+    - Low Engagements scenario:
+{
+    "total_games_played": 30,
+    "total_wins": 12,
+    "total_losses": 18,
+    "total_moves": 450,
+    "win_ratio": 40.0,
+    "rating": 2,
+    "age": 30,
+    "gender_encoded": 1,
+    "country_encoded": 0
+}
+>>> (Few games, low moves, mediocre win ratio)
+
+3. Player Classifications:
+    - Expert Player scenario:
+{
+    "total_games_played": 500,
+    "total_wins": 350,
+    "total_losses": 150,
+    "total_moves": 12000,
+    "total_time_played_minutes": 15000,
+    "win_ratio": 70.0,
+    "age": 27,
+    "gender_encoded": 1,
+    "country_encoded": 0
+}
+>>> (High win ratio, many games, efficient moves)
+
+    - Intermediate Player scenario:
+{
+    "total_games_played": 150,
+    "total_wins": 75,
+    "total_losses": 75,
+    "total_moves": 3000,
+    "total_time_played_minutes": 4500,
+    "win_ratio": 50.0,
+    "age": 25,
+    "gender_encoded": 1,
+    "country_encoded": 0
+}
+>>> (Balanced win/loss, moderate experience)
+
+    - Novice Player scenario:
+{
+    "total_games_played": 30,
+    "total_wins": 8,
+    "total_losses": 22,
+    "total_moves": 750,
+    "total_time_played_minutes": 900,
+    "win_ratio": 26.7,
+    "age": 24,
+    "gender_encoded": 1,
+    "country_encoded": 0
+}
+>>> (Low win ratio, few games, less efficient with moves)
