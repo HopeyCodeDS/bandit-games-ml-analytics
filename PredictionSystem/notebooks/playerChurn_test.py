@@ -4,13 +4,13 @@ import pandas as pd
 
 def load_churn_model():
     """Load the saved churn prediction model and preprocessing objects"""
-    with open('best_churn_model.pkl', 'rb') as f:
+    with open('../models/best_churn_model.pkl', 'rb') as f:
         model = pickle.load(f)
 
-    with open('churn_scaler.pkl', 'rb') as f:
+    with open('../models/churn_scaler.pkl', 'rb') as f:
         scaler = pickle.load(f)
 
-    with open('encoders.pkl', 'rb') as f:
+    with open('../models/encoders.pkl', 'rb') as f:
         encoders = pickle.load(f)
 
     return model, scaler, encoders
