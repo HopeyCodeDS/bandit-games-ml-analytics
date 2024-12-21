@@ -174,42 +174,42 @@ BEGIN
             LEAVE player_loop;
         END IF;
 
-        -- Assign game preferences (higher numbers mean more likely to play)
-        SET @battleship_pref = RAND() * 100;    -- Most popular (35%)
-        SET @chess_pref = RAND() * 80;          -- Second most popular (25%)
-        SET @connect_four_pref = RAND() * 60;   -- (15%)
-        SET @tic_tac_toe_pref = RAND() * 40;    -- (10%)
-        SET @dots_boxes_pref = RAND() * 30;     -- (7%)
-        SET @go_pref = RAND() * 20;             -- (5%)
-        SET @reversi_pref = RAND() * 15;        -- (3%)
+        -- Assign game preferences (adjusted for more matches)
+        SET @battleship_pref = RAND() * 100;
+        SET @chess_pref = RAND() * 100;
+        SET @connect_four_pref = RAND() * 100;
+        SET @tic_tac_toe_pref = RAND() * 100;
+        SET @dots_boxes_pref = RAND() * 100;
+        SET @go_pref = RAND() * 100;
+        SET @reversi_pref = RAND() * 100;
 
-        -- Generate matches based on preferences
-        IF @battleship_pref > 30 THEN
-            CALL generate_game_matches(curr_player_id, @battleship_id, 20 + FLOOR(RAND() * 180));
+        -- Generate matches with increased numbers and lower thresholds
+        IF @battleship_pref > 40 THEN  -- 60% chance
+            CALL generate_game_matches(curr_player_id, @battleship_id, 30 + FLOOR(RAND() * 70));
         END IF;
 
-        IF @chess_pref > 40 THEN
-            CALL generate_game_matches(curr_player_id, @chess_id, 15 + FLOOR(RAND() * 85));
+        IF @chess_pref > 45 THEN  -- 55% chance
+            CALL generate_game_matches(curr_player_id, @chess_id, 25 + FLOOR(RAND() * 55));
         END IF;
 
-        IF @connect_four_pref > 50 THEN
-            CALL generate_game_matches(curr_player_id, @connect_four_id, 10 + FLOOR(RAND() * 40));
+        IF @connect_four_pref > 50 THEN  -- 50% chance
+            CALL generate_game_matches(curr_player_id, @connect_four_id, 20 + FLOOR(RAND() * 40));
         END IF;
 
-        IF @tic_tac_toe_pref > 60 THEN
-            CALL generate_game_matches(curr_player_id, @tic_tac_toe_id, 5 + FLOOR(RAND() * 25));
+        IF @tic_tac_toe_pref > 55 THEN  -- 45% chance
+            CALL generate_game_matches(curr_player_id, @tic_tac_toe_id, 15 + FLOOR(RAND() * 35));
         END IF;
 
-        IF @dots_boxes_pref > 70 THEN
-            CALL generate_game_matches(curr_player_id, @dots_boxes_id, 3 + FLOOR(RAND() * 17));
+        IF @dots_boxes_pref > 60 THEN  -- 40% chance
+            CALL generate_game_matches(curr_player_id, @dots_boxes_id, 10 + FLOOR(RAND() * 30));
         END IF;
 
-        IF @go_pref > 80 THEN
-            CALL generate_game_matches(curr_player_id, @go_id, 2 + FLOOR(RAND() * 13));
+        IF @go_pref > 70 THEN  -- 30% chance
+            CALL generate_game_matches(curr_player_id, @go_id, 8 + FLOOR(RAND() * 22));
         END IF;
 
-        IF @reversi_pref > 85 THEN
-            CALL generate_game_matches(curr_player_id, @reversi_id, 1 + FLOOR(RAND() * 9));
+        IF @reversi_pref > 80 THEN  -- 20% chance
+            CALL generate_game_matches(curr_player_id, @reversi_id, 5 + FLOOR(RAND() * 15));
         END IF;
 
     END LOOP;
@@ -350,69 +350,65 @@ BEGIN
         player_level,
         win_probability
     )
-    SELECT DISTINCT  -- Ensure uniqueness
-        UUID_TO_BIN(UUID()) AS stat_id,
-        temp.player_id,
-        temp.game_id,
-        temp.total_games_played,
-        temp.total_wins,
-        temp.total_losses,
-        temp.total_draws,
-        temp.total_moves,
-        temp.total_time_played_minutes,
-        temp.last_played,
-        -- Churn computation
-        CASE
-            WHEN DATEDIFF(CURRENT_TIMESTAMP, temp.last_played) > 30 THEN TRUE
-            WHEN temp.total_games_played < 5 AND DATEDIFF(CURRENT_TIMESTAMP, temp.last_played) > 14 THEN TRUE
-            ELSE FALSE
-        END AS is_churned,
-        -- Simplified engagement level based on average game duration and frequency
-        GREATEST(0, LEAST(100,
-            (temp.total_time_played_minutes / NULLIF(temp.total_games_played, 1)) *
-            (temp.total_games_played / DATEDIFF(CURRENT_TIMESTAMP, temp.first_played))
-        )) AS engagement_level,
+        SELECT DISTINCT -- Ensure uniqueness
+    UUID_TO_BIN(UUID()) AS stat_id,
+    p.player_id,
+    g.game_id,
+    COUNT(DISTINCT m.match_id) AS total_games_played,
+    SUM(CASE WHEN m.winner_id = p.player_id THEN 1 ELSE 0 END) AS total_wins,
+    SUM(CASE WHEN m.winner_id IS NOT NULL AND m.winner_id != p.player_id THEN 1 ELSE 0 END) AS total_losses,
+    SUM(CASE WHEN m.winner_id IS NULL THEN 1 ELSE 0 END) AS total_draws,
+    COALESCE(SUM(mm.moves_count), 0) AS total_moves,
+    COALESCE(SUM(m.duration_minutes), 0) AS total_time_played_minutes,
+    MAX(m.end_time) AS last_played,
+    -- Calculate win ratio and churn
+    CASE
+        WHEN COUNT(DISTINCT m.match_id) < 10 OR
+             (SUM(CASE WHEN m.winner_id = p.player_id THEN 1 ELSE 0 END) /
+              NULLIF(COUNT(DISTINCT m.match_id), 0)) < 0.2
+        THEN TRUE
+        ELSE FALSE
+    END AS is_churned,
+    -- Simplified engagement level based on play patterns
+    GREATEST(0, LEAST(100,
+        COALESCE(
+            (SUM(m.duration_minutes) / NULLIF(COUNT(DISTINCT m.match_id), 0)) *
+            (COUNT(DISTINCT m.match_id) / GREATEST(1, DATEDIFF(CURRENT_TIMESTAMP, MIN(m.start_time)))),
+            0
+        )
+    )) AS engagement_level,
         -- Player level
         CASE
-            WHEN temp.total_games_played < 10 THEN 'novice'
-            WHEN (temp.total_wins * 100.0 / NULLIF(temp.total_games_played, 0)) > 60
-                AND temp.total_games_played >= 50 THEN 'expert'
+            WHEN COUNT(DISTINCT m.match_id) < 10 THEN 'novice'
+            WHEN (SUM(CASE WHEN m.winner_id = p.player_id THEN 1 ELSE 0 END) * 100.0 /
+                  NULLIF(COUNT(DISTINCT m.match_id), 0)) > 65
+                AND COUNT(DISTINCT m.match_id) >= 50 THEN 'expert'
             ELSE 'intermediate'
         END AS player_level,
         -- Win probability
-        GREATEST(0.1, LEAST(0.9, COALESCE(temp.win_rate, 0.5))) AS win_probability
-    FROM (
-        SELECT DISTINCT  -- Ensure uniqueness at the source
-            p.player_id,
-            g.game_id,
-            COUNT(DISTINCT m.match_id) AS total_games_played,
-            SUM(CASE WHEN m.winner_id = p.player_id THEN 1 ELSE 0 END) AS total_wins,
-            SUM(CASE WHEN m.winner_id IS NOT NULL AND m.winner_id != p.player_id THEN 1 ELSE 0 END) AS total_losses,
-            SUM(CASE WHEN m.winner_id IS NULL THEN 1 ELSE 0 END) AS total_draws,
-            SUM(mm.moves_count) AS total_moves,
-            SUM(m.duration_minutes) AS total_time_played_minutes,
-            MAX(m.end_time) AS last_played,
-            AVG(
-                CASE
+        GREATEST(0.1, LEAST(0.9,
+            COALESCE(
+                AVG(CASE
                     WHEN m.winner_id = p.player_id THEN 1
                     WHEN m.winner_id IS NULL THEN 0.5
                     ELSE 0
-                END
-            ) AS win_rate
-        FROM
-            players AS p
-            CROSS JOIN games AS g
-            LEFT JOIN match_history AS m ON (m.player1_id = p.player_id OR m.player2_id = p.player_id)
-                AND m.game_id = g.game_id
-            LEFT JOIN match_moves AS mm ON mm.match_id = m.match_id AND mm.player_id = p.player_id
-        GROUP BY
-            p.player_id,
-            g.game_id
-        HAVING
-            COUNT(DISTINCT m.match_id) > 0
-    ) AS temp;
+                END),
+                0.5
+            )
+        )) AS win_probability
+    FROM
+        players p
+        CROSS JOIN games g
+        LEFT JOIN match_history m ON (m.player1_id = p.player_id OR m.player2_id = p.player_id)
+            AND m.game_id = g.game_id
+        LEFT JOIN match_moves mm ON mm.match_id = m.match_id AND mm.player_id = p.player_id
+    GROUP BY
+        p.player_id,
+        g.game_id
+    HAVING
+        COUNT(DISTINCT m.match_id) > 0;
 
-    -- Insert ratings with realistic distribution
+    -- Insert ratings
     INSERT INTO player_ratings (
         rating_id,
         player_id,
@@ -420,7 +416,7 @@ BEGIN
         rating,
         rating_date
     )
-    SELECT DISTINCT  -- Ensure uniqueness
+    SELECT
         UUID_TO_BIN(UUID()),
         s.player_id,
         s.game_id,
