@@ -205,11 +205,11 @@ def preprocess_classification_data(data: pd.DataFrame) -> pd.DataFrame:
 async def predict_churn(request: ChurnPredictionRequest):
     try:
         input_data = pd.DataFrame([request.dict()])
-        scaled_data = preprocess_input(input_data, churn_scaler, churn_encoder, churn_model.feature_names_in_)
-        prediction = churn_model.predict(scaled_data)[0]
-        probability = churn_model.predict_proba(scaled_data)[0][1]
+        process_data = preprocess_churn_data(input_data)
+        prediction = churn_model.predict(process_data)[0]
+        probability = churn_model.predict_proba(process_data)[0][1]
         return PredictionResponse(
-            prediction={"churn": bool(prediction)},
+            prediction={"prediction": f"Churn Prediction: {'Yes' if prediction else 'No'}"},
             confidence=probability,
             metadata={"model_version": "v1.0", "timestamp": datetime.now().isoformat()}
         )
@@ -266,29 +266,13 @@ async def predict_engagement(request: EngagementPredictionRequest):
         raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
 
 @app.post("/predict/classification", response_model=PredictionResponse)
-async def predict_classification(request: ClassificationRequest):
-    try:
-        input_data = pd.DataFrame([request.dict()])
-        scaled_data = preprocess_input(input_data, classification_scaler, classification_encoder, classification_model.feature_names_in_)
-        prediction = classification_model.predict(scaled_data)[0]
-        probability = classification_model.predict_proba(scaled_data).max(axis=1)[0]
-        return PredictionResponse(
-            prediction={"classification": str(prediction)},
-            confidence=probability,
-            metadata={"model_version": "v1.0", "timestamp": datetime.now().isoformat()}
-        )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
-
-
-@app.post("/predict/classification", response_model=PredictionResponse)
 async def predict_player_level(request: ClassificationRequest):
     try:
         input_data = pd.DataFrame([request.dict()])
         processed_data = preprocess_classification_data(input_data)
 
         prediction = classification_model.predict(processed_data)[0]
-        predicted_level = classification_encoders['level_encoder'].inverse_transform([prediction])[0]
+        predicted_level = classification_encoder['level_encoder'].inverse_transform([prediction])[0]
 
         confidence = None
         if hasattr(classification_model, 'predict_proba'):
