@@ -10,7 +10,7 @@ from sklearn.svm import SVR
 import pickle
 
 # Load the data
-df = pd.read_csv('player_game_statistics.csv')
+df = pd.read_csv('player_game_statistics_old.csv')
 
 # Prepare features
 le_gender = LabelEncoder()
