@@ -141,6 +141,23 @@ def preprocess_churn_data(data: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(X_scaled, columns=features)
 
 
+def preprocess_engagement_data(data: pd.DataFrame) -> pd.DataFrame:
+    """Preprocess input data for engagement prediction"""
+    data_processed = data.copy()
+
+    # Encode categorical variables
+    data_processed['game_encoded'] = engagement_encoder['game_encoder'].transform(data_processed['game_name'])
+    data_processed['gender_encoded'] = engagement_encoder['gender_encoder'].transform(data_processed['gender'])
+    data_processed['country_encoded'] = engagement_encoder['country_encoder'].transform(data_processed['country'])
+
+    # Select features
+    features = ['total_games_played', 'win_ratio', 'gender_encoded', 'country_encoded', 'age', 'game_encoded']
+    X = data_processed[features]
+    X_scaled = engagement_scaler.transform(X)
+
+    return pd.DataFrame(X_scaled, columns=features)
+
+
 # Endpoints
 @app.post("/predict/churn", response_model=PredictionResponse)
 async def predict_churn(request: ChurnPredictionRequest):
