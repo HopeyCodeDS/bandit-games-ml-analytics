@@ -12,38 +12,36 @@ app = FastAPI(title="Player Analytics API",
 # Load all models, scalers, and additional components
 try:
     # Churn model components
-    with open('models/best_churn_model.pkl', 'rb') as f:
+    with open('models/churn_model.pkl', 'rb') as f:
         churn_model = pickle.load(f)
-    with open('churn_scaler.pkl', 'rb') as f:
+    with open('models/churn_scaler.pkl', 'rb') as f:
         churn_scaler = pickle.load(f)
-    with open('churn_thresholds.pkl', 'rb') as f:
-        churn_thresholds = pickle.load(f)
+    with open('models/churn_encoders.pkl', 'rb') as f:
+        churn_encoder = pickle.load(f)
 
     # Win probability model
-    with open('win_model.pkl', 'rb') as f:
+    with open('models/win_probability_model.pkl', 'rb') as f:
         win_model = pickle.load(f)
-    with open('win_scaler.pkl', 'rb') as f:
+    with open('models/win_probability_scaler.pkl', 'rb') as f:
         win_scaler = pickle.load(f)
+    with open('models/win_probability_encoders.pkl', 'rb') as f:
+        win_encoder = pickle.load(f)
 
     # Engagement model
-    with open('engagement_model.pkl', 'rb') as f:
+    with open('models/engagement_model.pkl', 'rb') as f:
         engagement_model = pickle.load(f)
-    with open('engagement_scaler.pkl', 'rb') as f:
+    with open('models/engagement_scaler.pkl', 'rb') as f:
         engagement_scaler = pickle.load(f)
+    with open('models/engagement_encoders.pkl', 'rb') as f:
+        engagement_encoder = pickle.load(f)
 
     # Classification model and components
-    with open('classification_model.pkl', 'rb') as f:
+    with open('models/player_classification_model.pkl', 'rb') as f:
         classification_model = pickle.load(f)
-    with open('classification_scaler.pkl', 'rb') as f:
+    with open('models/player_classification_scaler.pkl', 'rb') as f:
         classification_scaler = pickle.load(f)
-    with open('classification_label_encoder.pkl', 'rb') as f:
-        classification_le = pickle.load(f)
-
-    # Load encoders for categorical variables
-    with open('gender_encoder.pkl', 'rb') as f:
-        gender_encoder = pickle.load(f)
-    with open('country_encoder.pkl', 'rb') as f:
-        country_encoder = pickle.load(f)
+    with open('models/player_classification_encoders.pkl', 'rb') as f:
+        classification_encoder = pickle.load(f)
 
 except Exception as e:
     print(f"Error loading models and components: {str(e)}")
