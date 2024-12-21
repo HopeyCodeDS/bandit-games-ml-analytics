@@ -75,7 +75,7 @@ class ChurnPredictionRequest(BaseModel):
     age: int = Field(..., ge=0, description="Player's age")
 
 
-class WinPredictionRequest(BaseModel):
+class WinProbabilityRequest(BaseModel):
     total_games_played: int = Field(..., gt=0)
     total_wins: int = Field(..., ge=0)
     total_losses: int = Field(..., ge=0)
@@ -141,6 +141,25 @@ def preprocess_churn_data(data: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(X_scaled, columns=features)
 
 
+def preprocess_win_probability_data(data: pd.DataFrame) -> pd.DataFrame:
+    """Preprocess input data for win probability prediction"""
+    data_processed = data.copy()
+
+    # Encode categorical variables
+    data_processed['gender_encoded'] = win_encoder['gender_encoder'].transform(data_processed['gender'])
+    data_processed['country_encoded'] = win_encoder['country_encoder'].transform(data_processed['country'])
+    data_processed['game_encoded'] = win_encoder['game_encoder'].transform(data_processed['game_name'])
+    data_processed['player_level_encoded'] = win_encoder['level_encoder'].transform(data_processed['player_level'])
+
+    # Select features
+    features = ['total_games_played', 'total_moves', 'total_wins', 'total_losses',
+                'player_level_encoded', 'gender_encoded', 'country_encoded', 'age', 'game_encoded']
+    X = data_processed[features]
+    X_scaled = win_scaler.transform(X)
+
+    return pd.DataFrame(X_scaled, columns=features)
+
+
 def preprocess_engagement_data(data: pd.DataFrame) -> pd.DataFrame:
     """Preprocess input data for engagement prediction"""
     data_processed = data.copy()
@@ -181,7 +200,7 @@ def preprocess_classification_data(data: pd.DataFrame) -> pd.DataFrame:
 
     return pd.DataFrame(X_scaled, columns=features)
 
-# Endpoints
+# API Endpoints
 @app.post("/predict/churn", response_model=PredictionResponse)
 async def predict_churn(request: ChurnPredictionRequest):
     try:
@@ -199,20 +218,28 @@ async def predict_churn(request: ChurnPredictionRequest):
 
 
 @app.post("/predict/win_probability", response_model=PredictionResponse)
-async def predict_win_probability(request: WinPredictionRequest):
+async def predict_win_probability(request: WinProbabilityRequest):
     try:
         input_data = pd.DataFrame([request.dict()])
-        scaled_data = preprocess_input(input_data, win_scaler, win_encoder, win_model.feature_names_in_)
-        prediction = win_model.predict(scaled_data)[0]
-        probability = win_model.predict_proba(scaled_data)[0][1]
+        processed_data = preprocess_win_probability_data(input_data)
+
+        prediction = win_model.predict(processed_data)[0]
+        prediction = np.clip(prediction, 0, 1)
+
+        confidence = None
+        if hasattr(win_model, 'predict_proba'):
+            confidence = float(win_model.predict_proba(processed_data).max(axis=1)[0])
+
         return PredictionResponse(
-            prediction={"win_probability": float(probability)},
-            confidence=probability,
-            metadata={"model_version": "v1.0", "timestamp": datetime.now().isoformat()}
+            prediction={"win_probability": float(prediction)},
+            confidence=confidence,
+            metadata={
+                "model_version": "v1.0",
+                "timestamp": datetime.now().isoformat()
+            }
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
-
 
 @app.post("/predict/engagement", response_model=PredictionResponse)
 async def predict_engagement(request: EngagementPredictionRequest):
@@ -221,7 +248,7 @@ async def predict_engagement(request: EngagementPredictionRequest):
         scaled_data = preprocess_input(input_data, engagement_scaler, engagement_encoder, engagement_model.feature_names_in_)
         prediction = engagement_model.predict(scaled_data)[0]
         return PredictionResponse(
-            prediction={"engagement_score": float(prediction)},
+            prediction={"engagement_time": float(prediction)},
             metadata={"model_version": "v1.0", "timestamp": datetime.now().isoformat()}
         )
     except Exception as e:
