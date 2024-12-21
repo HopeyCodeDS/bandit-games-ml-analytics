@@ -241,19 +241,29 @@ async def predict_win_probability(request: WinProbabilityRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
 
+
 @app.post("/predict/engagement", response_model=PredictionResponse)
 async def predict_engagement(request: EngagementPredictionRequest):
     try:
         input_data = pd.DataFrame([request.dict()])
-        scaled_data = preprocess_input(input_data, engagement_scaler, engagement_encoder, engagement_model.feature_names_in_)
-        prediction = engagement_model.predict(scaled_data)[0]
+        processed_data = preprocess_engagement_data(input_data)
+
+        prediction = engagement_model.predict(processed_data)[0]
+
+        confidence = None
+        if hasattr(engagement_model, 'predict_proba'):
+            confidence = float(engagement_model.predict_proba(processed_data).max(axis=1)[0])
+
         return PredictionResponse(
-            prediction={"engagement_time": float(prediction)},
-            metadata={"model_version": "v1.0", "timestamp": datetime.now().isoformat()}
+            prediction={"predicted_engagement_minutes": float(prediction)},
+            confidence=confidence,
+            metadata={
+                "model_version": "v1.0",
+                "timestamp": datetime.now().isoformat()
+            }
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
-
 
 @app.post("/predict/classification", response_model=PredictionResponse)
 async def predict_classification(request: ClassificationRequest):
@@ -270,6 +280,41 @@ async def predict_classification(request: ClassificationRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
 
+
+@app.post("/predict/classification", response_model=PredictionResponse)
+async def predict_player_level(request: ClassificationRequest):
+    try:
+        input_data = pd.DataFrame([request.dict()])
+        processed_data = preprocess_classification_data(input_data)
+
+        prediction = classification_model.predict(processed_data)[0]
+        predicted_level = classification_encoders['level_encoder'].inverse_transform([prediction])[0]
+
+        confidence = None
+        if hasattr(classification_model, 'predict_proba'):
+            confidence = float(classification_model.predict_proba(processed_data).max(axis=1)[0])
+
+        win_rate = (input_data['total_wins'].iloc[0] / input_data['total_games_played'].iloc[0]) * 100
+
+        return PredictionResponse(
+            prediction={
+                "predicted_level": str(predicted_level),
+                "stats": {
+                    "games_played": int(input_data['total_games_played'].iloc[0]),
+                    "wins": int(input_data['total_wins'].iloc[0]),
+                    "losses": int(input_data['total_losses'].iloc[0]),
+                    "win_rate": float(round(win_rate, 2)),
+                    "total_playtime_minutes": int(input_data['total_time_played_minutes'].iloc[0])
+                }
+            },
+            confidence=confidence,
+            metadata={
+                "model_version": "v1.0",
+                "timestamp": datetime.now().isoformat()
+            }
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn
