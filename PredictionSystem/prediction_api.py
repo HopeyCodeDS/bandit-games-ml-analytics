@@ -5,9 +5,24 @@ import pandas as pd
 import numpy as np
 from typing import Dict, Optional
 from datetime import datetime
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Player Analytics API",
               description="API for predicting player churn, win probability, engagement, and skill classification")
+
+origins = [
+    "http://localhost.tiangolo.com",
+    "http://localhost",
+    "http://localhost:8080",
+    "http://localhost:3000",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Load models, scalers, and encoders
 try:
@@ -153,6 +168,21 @@ async def predict_engagement(request: EngagementPredictionRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
 
+
+@app.post("/predict/classification", response_model=PredictionResponse)
+async def predict_classification(request: ClassificationRequest):
+    try:
+        input_data = pd.DataFrame([request.dict()])
+        scaled_data = preprocess_input(input_data, classification_scaler, classification_encoder, classification_model.feature_names_in_)
+        prediction = classification_model.predict(scaled_data)[0]
+        probability = classification_model.predict_proba(scaled_data).max(axis=1)[0]
+        return PredictionResponse(
+            prediction={"classification": str(prediction)},
+            confidence=probability,
+            metadata={"model_version": "v1.0", "timestamp": datetime.now().isoformat()}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
 
 
 if __name__ == "__main__":
