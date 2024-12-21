@@ -122,6 +122,25 @@ def preprocess_input(data: pd.DataFrame, scaler, encoders: Dict[str, object], co
     return pd.DataFrame(scaler.transform(data), columns=columns)
 
 
+# Preprocessing functions
+def preprocess_churn_data(data: pd.DataFrame) -> pd.DataFrame:
+    """Preprocess input data for churn prediction"""
+    data_processed = data.copy()
+
+    # Encode categorical variables
+    data_processed['gender_encoded'] = churn_encoder['gender_encoder'].transform(data_processed['gender'])
+    data_processed['country_encoded'] = churn_encoder['country_encoder'].transform(data_processed['country'])
+    data_processed['game_encoded'] = churn_encoder['game_encoder'].transform(data_processed['game_name'])
+
+    # Select features
+    features = ['total_games_played', 'win_ratio', 'total_time_played_minutes', 'total_moves',
+                'gender_encoded', 'country_encoded', 'game_encoded', 'age']
+    X = data_processed[features]
+    X_scaled = churn_scaler.transform(X)
+
+    return pd.DataFrame(X_scaled, columns=features)
+
+
 # Endpoints
 @app.post("/predict/churn", response_model=PredictionResponse)
 async def predict_churn(request: ChurnPredictionRequest):
