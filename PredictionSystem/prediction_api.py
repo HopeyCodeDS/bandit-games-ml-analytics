@@ -158,6 +158,29 @@ def preprocess_engagement_data(data: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(X_scaled, columns=features)
 
 
+def preprocess_classification_data(data: pd.DataFrame) -> pd.DataFrame:
+    """Preprocess input data for player classification"""
+    data_processed = data.copy()
+
+    # Calculate win ratio
+    data_processed['win_ratio'] = (data_processed['total_wins'] /
+                                   data_processed['total_games_played'] * 100)
+
+    # Encode categorical variables
+    data_processed['gender_encoded'] = classification_encoder['gender_encoder'].transform(data_processed['gender'])
+    data_processed['country_encoded'] = classification_encoder['country_encoder'].transform(data_processed['country'])
+    data_processed['game_encoded'] = classification_encoder['game_encoder'].transform(data_processed['game_name'])
+
+    # Select features
+    features = ['total_games_played', 'total_moves', 'total_wins', 'total_losses',
+                'win_ratio', 'total_time_played_minutes', 'gender_encoded',
+                'country_encoded', 'age', 'game_encoded']
+
+    X = data_processed[features]
+    X_scaled = classification_scaler.transform(X)
+
+    return pd.DataFrame(X_scaled, columns=features)
+
 # Endpoints
 @app.post("/predict/churn", response_model=PredictionResponse)
 async def predict_churn(request: ChurnPredictionRequest):
