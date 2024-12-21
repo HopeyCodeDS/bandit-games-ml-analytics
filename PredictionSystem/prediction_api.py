@@ -140,6 +140,18 @@ async def predict_win_probability(request: WinPredictionRequest):
         raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
 
 
+@app.post("/predict/engagement", response_model=PredictionResponse)
+async def predict_engagement(request: EngagementPredictionRequest):
+    try:
+        input_data = pd.DataFrame([request.dict()])
+        scaled_data = preprocess_input(input_data, engagement_scaler, engagement_encoder, engagement_model.feature_names_in_)
+        prediction = engagement_model.predict(scaled_data)[0]
+        return PredictionResponse(
+            prediction={"engagement_score": float(prediction)},
+            metadata={"model_version": "v1.0", "timestamp": datetime.now().isoformat()}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
 
 
 
