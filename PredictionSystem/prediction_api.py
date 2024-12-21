@@ -9,7 +9,7 @@ from datetime import datetime
 app = FastAPI(title="Player Analytics API",
               description="API for predicting player churn, win probability, engagement, and skill classification")
 
-# Load all models, scalers, and additional components
+# Load models, scalers, and encoders
 try:
     # Churn model components
     with open('models/churn_model.pkl', 'rb') as f:
@@ -48,18 +48,16 @@ except Exception as e:
     raise RuntimeError(f"Failed to load required models and components: {str(e)}")
 
 
+# Define request models
 class ChurnPredictionRequest(BaseModel):
     total_games_played: int = Field(..., gt=0, description="Total number of games played")
-    total_wins: int = Field(..., ge=0, description="Total number of wins")
-    total_losses: int = Field(..., ge=0, description="Total number of losses")
-    total_moves: int = Field(..., gt=0, description="Total number of moves made")
+    win_ratio: float = Field(..., ge=0, le=100, description="Win ratio as a percentage")
     total_time_played_minutes: int = Field(..., gt=0, description="Total time played in minutes")
-    win_ratio: float = Field(..., ge=0, le=100, description="Win ratio as percentage")
-    rating: int = Field(..., ge=1, le=5, description="Player rating (1-5)")
-    age: int = Field(..., ge=0, description="Player age")
-    gender_encoded: int = Field(..., description="Encoded gender value")
-    country_encoded: int = Field(..., description="Encoded country value")
-    days_since_last_play: int = Field(..., ge=0, description="Days since last played")
+    total_moves: int = Field(..., gt=0, description="Total number of moves made")
+    gender: str = Field(..., description="Gender of the player")
+    country: str = Field(..., description="Country of the player")
+    game_name: str = Field(..., description="Name of the game")
+    age: int = Field(..., ge=0, description="Player's age")
 
 
 class WinPredictionRequest(BaseModel):
@@ -67,166 +65,82 @@ class WinPredictionRequest(BaseModel):
     total_wins: int = Field(..., ge=0)
     total_losses: int = Field(..., ge=0)
     total_moves: int = Field(..., gt=0)
-    total_time_played_minutes: int = Field(..., gt=0)
-    rating: int = Field(..., ge=1, le=5)
+    player_level: str = Field(..., description="Player's skill level")
+    gender: str = Field(..., description="Gender of the player")
+    country: str = Field(..., description="Country of the player")
+    game_name: str = Field(..., description="Name of the game")
     age: int = Field(..., ge=0)
-    gender_encoded: int
-    country_encoded: int
 
 
 class EngagementPredictionRequest(BaseModel):
+    game_name: str = Field(..., description="Name of the game")
     total_games_played: int = Field(..., gt=0)
-    total_wins: int = Field(..., ge=0)
-    total_losses: int = Field(..., ge=0)
-    total_moves: int = Field(..., gt=0)
     win_ratio: float = Field(..., ge=0, le=100)
-    rating: int = Field(..., ge=1, le=5)
+    gender: str = Field(..., description="Gender of the player")
+    country: str = Field(..., description="Country of the player")
     age: int = Field(..., ge=0)
-    gender_encoded: int
-    country_encoded: int
 
 
 class ClassificationRequest(BaseModel):
     total_games_played: int = Field(..., gt=0)
+    total_moves: int = Field(..., gt=0)
     total_wins: int = Field(..., ge=0)
     total_losses: int = Field(..., ge=0)
-    total_moves: int = Field(..., gt=0)
     total_time_played_minutes: int = Field(..., gt=0)
-    win_ratio: float = Field(..., ge=0, le=100)
+    gender: str = Field(..., description="Gender of the player")
+    country: str = Field(..., description="Country of the player")
+    game_name: str = Field(..., description="Name of the game")
     age: int = Field(..., ge=0)
-    gender_encoded: int
-    country_encoded: int
 
 
+# Response model
 class PredictionResponse(BaseModel):
     prediction: Dict
     confidence: Optional[float] = None
     metadata: Dict
 
-@app.post("/predict/churn")
-async def predict_churn(data: ChurnPredictionRequest):
+# Utility function for encoding and scaling
+def preprocess_input(data: pd.DataFrame, scaler, encoders: Dict[str, object], columns: list) -> pd.DataFrame:
+    for col, encoder in encoders.items():
+        if col in data:
+            data[col] = encoder.transform(data[col])
+    return pd.DataFrame(scaler.transform(data), columns=columns)
+
+
+# Endpoints
+@app.post("/predict/churn", response_model=PredictionResponse)
+async def predict_churn(request: ChurnPredictionRequest):
     try:
-        # Convert input data to DataFrame
-        input_data = pd.DataFrame([data.dict()])
-
-        # Scale the features
-        scaled_data = churn_scaler.transform(input_data)
-
-        # Make prediction
-        prediction = churn_model.predict(scaled_data)[0]  # Get first element
+        input_data = pd.DataFrame([request.dict()])
+        scaled_data = preprocess_input(input_data, churn_scaler, churn_encoder, churn_model.feature_names_in_)
+        prediction = churn_model.predict(scaled_data)[0]
         probability = churn_model.predict_proba(scaled_data)[0][1]
-
-        return {
-            "churn_predicted": bool(prediction),  # Convert np.bool_ to Python bool
-            "churn_probability": float(probability)  # Convert np.float64 to Python float
-        }
+        return PredictionResponse(
+            prediction={"churn": bool(prediction)},
+            confidence=probability,
+            metadata={"model_version": "v1.0", "timestamp": datetime.now().isoformat()}
+        )
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
 
 
-@app.post("/predict/win")
-async def predict_win(data: WinPredictionRequest):
+@app.post("/predict/win_probability", response_model=PredictionResponse)
+async def predict_win_probability(request: WinPredictionRequest):
     try:
-        input_data = pd.DataFrame([data.dict()])
-        scaled_data = win_scaler.transform(input_data)
+        input_data = pd.DataFrame([request.dict()])
+        scaled_data = preprocess_input(input_data, win_scaler, win_encoder, win_model.feature_names_in_)
         prediction = win_model.predict(scaled_data)[0]
-
-        return {
-            "win_probability": float(prediction)  # Convert np.float64 to Python float
-        }
+        probability = win_model.predict_proba(scaled_data)[0][1]
+        return PredictionResponse(
+            prediction={"win_probability": float(probability)},
+            confidence=probability,
+            metadata={"model_version": "v1.0", "timestamp": datetime.now().isoformat()}
+        )
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
 
 
-@app.post("/predict/engagement")
-async def predict_engagement(data: EngagementPredictionRequest):
-    try:
-        input_data = pd.DataFrame([data.dict()])
-        scaled_data = engagement_scaler.transform(input_data)
-        prediction = engagement_model.predict(scaled_data)[0]
 
-        return {
-            "predicted_engagement_minutes": float(prediction)  # Convert np.float64 to Python float
-        }
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-
-@app.post("/predict/classification")
-async def predict_classification(data: ClassificationRequest):
-    try:
-        input_data = pd.DataFrame([data.dict()])
-        scaled_data = classification_scaler.transform(input_data)
-        prediction = classification_model.predict(scaled_data)[0]
-        predicted_class = classification_le.inverse_transform([prediction])[0]
-
-        return {
-            "player_class": str(predicted_class)  # Ensure string type
-        }
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-# Enhanced test data endpoints with more information
-@app.get("/test-data/churn")
-async def get_churn_test_data():
-    return {
-        "total_games_played": 100,
-        "total_wins": 55,
-        "total_losses": 45,
-        "total_moves": 2000,
-        "total_time_played_minutes": 3000,
-        "win_ratio": 55.0,
-        "rating": 4,
-        "age": 25,
-        "gender_encoded": 1,
-        "country_encoded": 0,
-        "days_since_last_play": 15
-    }
-
-
-@app.get("/test-data/win")
-async def get_win_test_data():
-    return {
-        "total_games_played": 100,
-        "total_wins": 55,
-        "total_losses": 45,
-        "total_moves": 2000,
-        "total_time_played_minutes": 3000,
-        "rating": 4,
-        "age": 25,
-        "gender_encoded": 1,
-        "country_encoded": 0
-    }
-
-
-@app.get("/test-data/engagement")
-async def get_engagement_test_data():
-    return {
-        "total_games_played": 100,
-        "total_wins": 55,
-        "total_losses": 45,
-        "total_moves": 2000,
-        "win_ratio": 55.0,
-        "rating": 4,
-        "age": 25,
-        "gender_encoded": 1,
-        "country_encoded": 0
-    }
-
-
-@app.get("/test-data/classification")
-async def get_classification_test_data():
-    return {
-        "total_games_played": 100,
-        "total_wins": 55,
-        "total_losses": 45,
-        "total_moves": 2000,
-        "total_time_played_minutes": 3000,
-        "win_ratio": 55.0,
-        "age": 25,
-        "gender_encoded": 1,
-        "country_encoded": 0
-    }
 
 
 if __name__ == "__main__":
