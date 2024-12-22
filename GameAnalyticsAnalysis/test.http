@@ -1,6 +1,9 @@
 ### Variables
-@baseUrl = http://localhost:8000
+@baseUrl = http://localhost:8001
 @playerUuid = d16771fa-ba60-11ef-9d4e-00155d326b4e
+@player_name = Amir Davis
+@game_name = battleship
+@country = USA
 
 ### Test root endpoint
 GET {{baseUrl}}/
@@ -9,20 +12,25 @@ GET {{baseUrl}}/
 #GET {{baseUrl}}/test/db
 
 ### Get all players (with pagination)
-GET {{baseUrl}}/stats/players?skip=0&limit=10
+GET {{baseUrl}}/api/stats/players?skip=0&limit=20
 Accept: application/json
 
 ### Get stats for a specific player
-GET {{baseUrl}}/stats/player/{{playerUuid}}
+GET {{baseUrl}}/api/stats/player/{{player_name}}
 Accept: application/json
 
 ### Get stats for a specific game
-GET {{baseUrl}}/stats/game/d0ac190e-ba60-11ef-9d4e-00155d326b4e
+GET {{baseUrl}}/api/stats/game/{{game_name}}
 Accept: application/json
 
-### Get summary statistics
-GET {{baseUrl}}/stats/summary
+### Get stats for most played game
+GET {{baseUrl}}/api/stats/most-played-games
 Accept: application/json
+
+### Get stats for top players per game
+GET {{baseUrl}}/api/stats/top-players/{{game_name}}
+Accept: application/json
+
 
 # You can add more test cases below:
 
