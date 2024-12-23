@@ -148,6 +148,31 @@ def get_win_probability(data: pd.DataFrame) -> dict:
     }
 
 
+def get_engagement_prediction(data: pd.DataFrame) -> dict:
+    """Get engagement prediction using only required features"""
+    # Calculate win ratio if needed
+    if 'win_ratio' not in data.columns:
+        data['win_ratio'] = (data['total_wins'] / data['total_games_played']) * 100
+
+    engagement_data = prepare_features(data, ENGAGEMENT_FEATURES)
+
+    # Encode categorical variables
+    engagement_data['game_encoded'] = engagement_encoder['game_encoder'].transform(engagement_data['game_name'])
+    engagement_data['gender_encoded'] = engagement_encoder['gender_encoder'].transform(engagement_data['gender'])
+    engagement_data['country_encoded'] = engagement_encoder['country_encoder'].transform(engagement_data['country'])
+
+    # Prepare final features for scaling
+    final_features = ['total_games_played', 'win_ratio', 'gender_encoded', 'country_encoded', 'age', 'game_encoded']
+    X = engagement_data[final_features]
+    X_scaled = engagement_scaler.transform(X)
+
+    prediction = float(engagement_model.predict(X_scaled)[0])
+
+    return {
+        "predicted_minutes": round(prediction, 2),
+        "advice": get_engagement_advice(prediction, data['total_games_played'].iloc[0])
+    }
+
 
 
 def get_churn_advice(churn_prob: float, win_rate: float, games_played: int) -> str:
