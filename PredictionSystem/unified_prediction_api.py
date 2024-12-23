@@ -1,9 +1,11 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
+import pandas as pd
 import numpy as np
+import pickle
 from datetime import datetime
+from typing import Dict, Optional
 from fastapi.middleware.cors import CORSMiddleware
-from preprocessing import *
 
 app = FastAPI(title="Player Analytics API",
               description="Unified API for comprehensive player predictions and analytics")
@@ -260,55 +262,16 @@ async def get_player_predictions(request: PlayerPredictionRequest):
         # Create input DataFrame
         input_data = pd.DataFrame([request.dict()])
 
-        # Calculate win ratio
-        win_ratio = (input_data['total_wins'].iloc[0] / input_data['total_games_played'].iloc[0]) * 100
-        input_data['win_ratio'] = win_ratio
+        # Calculate win ratio once for all models that need it
+        input_data['win_ratio'] = (input_data['total_wins'] / input_data['total_games_played']) * 100
 
         # Make all predictions
-        # 1. Churn Prediction
-        churn_processed = preprocess_churn_data(input_data.copy())
-        churn_pred = churn_model.predict(churn_processed)[0]
-        churn_prob = churn_model.predict_proba(churn_processed)[0][1]
-
-        # 2. Win Probability
-        input_data['player_level'] = 'intermediate'  # Default level for win probability
-        win_processed = preprocess_win_probability_data(input_data.copy())
-        win_prob = win_model.predict(win_processed)[0]
-        win_prob = float(np.clip(win_prob, 0, 1))
-
-        # 3. Engagement Prediction
-        engagement_processed = preprocess_engagement_data(input_data.copy())
-        engagement_pred = float(engagement_model.predict(engagement_processed)[0])
-
-        # 4. Skill Classification
-        class_processed = preprocess_classification_data(input_data.copy())
-        class_pred = classification_model.predict(class_processed)[0]
-        predicted_level = classification_encoder['level_encoder'].inverse_transform([class_pred])[0]
-
-        # Compile comprehensive response
+        # Get predictions from each model using only required features
         predictions_response = {
-            "churn_prediction": {
-                "result": "Yes" if churn_pred else "No",
-                "probability": float(churn_prob),
-                "advice": get_churn_advice(churn_prob, win_ratio, input_data['total_games_played'].iloc[0])
-            },
-            "skill_assessment": {
-                "predicted_level": str(predicted_level),
-                "current_stats": {
-                    "games_played": int(input_data['total_games_played'].iloc[0]),
-                    "win_rate": float(round(win_ratio, 2)),
-                    "total_playtime": int(input_data['total_time_played_minutes'].iloc[0])
-                },
-                "advice": get_skill_advice(predicted_level, win_ratio)
-            },
-            "engagement_prediction": {
-                "predicted_minutes": float(round(engagement_pred, 2)),
-                "advice": get_engagement_advice(engagement_pred, input_data['total_games_played'].iloc[0])
-            },
-            "win_probability": {
-                "probability": float(round(win_prob, 3)),
-                "advice": get_win_probability_advice(win_prob, predicted_level)
-            }
+            "churn_prediction": get_churn_prediction(input_data),
+            "win_probability": get_win_probability(input_data),
+            "engagement_prediction": get_engagement_prediction(input_data),
+            "skill_assessment": get_classification_prediction(input_data)
         }
 
         return UnifiedPredictionResponse(
