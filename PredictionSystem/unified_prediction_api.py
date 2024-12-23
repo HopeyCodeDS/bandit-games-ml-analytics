@@ -121,6 +121,33 @@ def get_churn_prediction(data: pd.DataFrame) -> dict:
     }
 
 
+def get_win_probability(data: pd.DataFrame) -> dict:
+    """Get win probability using only required features"""
+    win_data = prepare_features(data, WIN_PROB_FEATURES)
+
+    # Add player level (could be derived from other features in a more sophisticated implementation)
+    win_data['player_level'] = 'intermediate'
+
+    # Encode categorical variables
+    win_data['gender_encoded'] = win_encoder['gender_encoder'].transform(win_data['gender'])
+    win_data['country_encoded'] = win_encoder['country_encoder'].transform(win_data['country'])
+    win_data['game_encoded'] = win_encoder['game_encoder'].transform(win_data['game_name'])
+    win_data['player_level_encoded'] = win_encoder['level_encoder'].transform(win_data['player_level'])
+
+    # Prepare final features for scaling
+    final_features = ['total_games_played', 'total_moves', 'total_wins', 'total_losses',
+                      'player_level_encoded', 'gender_encoded', 'country_encoded', 'age', 'game_encoded']
+    X = win_data[final_features]
+    X_scaled = win_scaler.transform(X)
+
+    prediction = float(np.clip(win_model.predict(X_scaled)[0], 0, 1))
+
+    return {
+        "probability": prediction,
+        "advice": get_win_probability_advice(prediction, win_data['player_level'].iloc[0])
+    }
+
+
 
 
 def get_churn_advice(churn_prob: float, win_rate: float, games_played: int) -> str:
