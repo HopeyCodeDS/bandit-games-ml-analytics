@@ -175,6 +175,44 @@ def get_engagement_prediction(data: pd.DataFrame) -> dict:
 
 
 
+def get_classification_prediction(data: pd.DataFrame) -> dict:
+    """Get skill classification using only required features"""
+    classification_data = prepare_features(data, CLASSIFICATION_FEATURES)
+
+    # Calculate win ratio
+    classification_data['win_ratio'] = (classification_data['total_wins'] /
+                                        classification_data['total_games_played'] * 100)
+
+    # Encode categorical variables
+    classification_data['gender_encoded'] = classification_encoder['gender_encoder'].transform(
+        classification_data['gender'])
+    classification_data['country_encoded'] = classification_encoder['country_encoder'].transform(
+        classification_data['country'])
+    classification_data['game_encoded'] = classification_encoder['game_encoder'].transform(
+        classification_data['game_name'])
+
+    # Prepare final features for scaling
+    final_features = ['total_games_played', 'total_moves', 'total_wins', 'total_losses',
+                      'win_ratio', 'total_time_played_minutes', 'gender_encoded',
+                      'country_encoded', 'age', 'game_encoded']
+    X = classification_data[final_features]
+    X_scaled = classification_scaler.transform(X)
+
+    prediction = classification_model.predict(X_scaled)[0]
+    predicted_level = classification_encoder['level_encoder'].inverse_transform([prediction])[0]
+
+    return {
+        "predicted_level": str(predicted_level),
+        "current_stats": {
+            "games_played": int(data['total_games_played'].iloc[0]),
+            "win_rate": float(round(data['win_ratio'].iloc[0], 2)),
+            "total_playtime": int(data['total_time_played_minutes'].iloc[0])
+        },
+        "advice": get_skill_advice(predicted_level, data['win_ratio'].iloc[0])
+    }
+
+
+
 def get_churn_advice(churn_prob: float, win_rate: float, games_played: int) -> str:
     if churn_prob > 0.7:
         if win_rate < 40:
