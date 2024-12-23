@@ -121,3 +121,34 @@
     "age": 25
 }
 >>> (Low win ratio, few games, less efficient with moves)
+
+
+== Test data for Aggregated prediction Data ==
+
+- Overall Positive Remark
+
+{
+  "total_games_played": 130,
+  "total_moves": 6211,
+  "total_wins": 96,
+  "total_losses": 34,
+  "total_time_played_minutes": 2000,
+  "gender": "Male",
+  "country": "South Korea",
+  "game_name": "battleship",
+  "age": 27
+}
+
+- Overall Negative Remark
+
+{
+  "total_games_played": 10,
+  "total_moves": 50,
+  "total_wins": 10,
+  "total_losses": 40,
+  "total_time_played_minutes": 200,
+  "gender": "Male",
+  "country": "China",
+  "game_name": "battleship",
+  "age": 24
+}
