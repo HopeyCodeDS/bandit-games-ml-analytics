@@ -86,6 +86,43 @@ CLASSIFICATION_FEATURES = ['total_games_played', 'total_moves', 'total_wins', 't
                            'total_time_played_minutes', 'gender', 'country', 'game_name', 'age']
 
 
+
+def prepare_features(data: pd.DataFrame, required_features: list) -> pd.DataFrame:
+    """Extract only the required features from the input data"""
+    return data[required_features].copy()
+
+
+def get_churn_prediction(data: pd.DataFrame) -> dict:
+    """Get churn prediction using only required features"""
+    # Calculate win ratio if needed
+    if 'win_ratio' not in data.columns:
+        data['win_ratio'] = (data['total_wins'] / data['total_games_played']) * 100
+
+    churn_data = prepare_features(data, CHURN_FEATURES)
+
+    # Encode categorical variables
+    churn_data['gender_encoded'] = churn_encoder['gender_encoder'].transform(churn_data['gender'])
+    churn_data['country_encoded'] = churn_encoder['country_encoder'].transform(churn_data['country'])
+    churn_data['game_encoded'] = churn_encoder['game_encoder'].transform(churn_data['game_name'])
+
+    # Prepare final features for scaling
+    final_features = ['total_games_played', 'win_ratio', 'total_time_played_minutes', 'total_moves',
+                      'gender_encoded', 'country_encoded', 'game_encoded', 'age']
+    X = churn_data[final_features]
+    X_scaled = churn_scaler.transform(X)
+
+    prediction = churn_model.predict(X_scaled)[0]
+    probability = churn_model.predict_proba(X_scaled)[0][1]
+
+    return {
+        "result": "Yes" if prediction else "No",
+        "probability": float(probability),
+        "advice": get_churn_advice(probability, data['win_ratio'].iloc[0], data['total_games_played'].iloc[0])
+    }
+
+
+
+
 def get_churn_advice(churn_prob: float, win_rate: float, games_played: int) -> str:
     if churn_prob > 0.7:
         if win_rate < 40:
