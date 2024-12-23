@@ -142,11 +142,11 @@
 - Overall Negative Remark
 
 {
-  "total_games_played": 10,
-  "total_moves": 50,
-  "total_wins": 10,
-  "total_losses": 40,
-  "total_time_played_minutes": 200,
+  "total_games_played": 4,
+  "total_moves": 10,
+  "total_wins": 1,
+  "total_losses": 3,
+  "total_time_played_minutes": 100,
   "gender": "Male",
   "country": "China",
   "game_name": "battleship",
