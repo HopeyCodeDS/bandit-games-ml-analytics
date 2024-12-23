@@ -118,7 +118,7 @@ def get_churn_prediction(data: pd.DataFrame) -> dict:
 
     return {
         "result": "Yes" if prediction else "No",
-        "probability": float(probability),
+        "probability": f"{float(probability)}",
         "advice": get_churn_advice(probability, data['win_ratio'].iloc[0], data['total_games_played'].iloc[0])
     }
 
@@ -144,8 +144,10 @@ def get_win_probability(data: pd.DataFrame) -> dict:
 
     prediction = float(np.clip(win_model.predict(X_scaled)[0], 0, 1))
 
+    prediction_percentage = round(prediction * 100, 1)  # Convert to percentage and round to 1 decimal
+
     return {
-        "probability": prediction,
+        "probability": f"{prediction} ----> {prediction_percentage}%",
         "advice": get_win_probability_advice(prediction, win_data['player_level'].iloc[0])
     }
 
@@ -170,8 +172,14 @@ def get_engagement_prediction(data: pd.DataFrame) -> dict:
 
     prediction = float(engagement_model.predict(X_scaled)[0])
 
+    predicted_minutes = float(engagement_model.predict(X_scaled)[0])
+    hours = int(predicted_minutes // 60)  # Get whole hours
+    minutes = int(predicted_minutes % 60)  # Get remaining minutes
+    time_format = f"{hours} hours {minutes} minutes"
+
     return {
-        "predicted_minutes": round(prediction, 2),
+        "predicted_engagement": time_format,  # e.g., "5 hours 30 minutes"
+        "raw_minutes": round(predicted_minutes, 2),  # kept for calculations
         "advice": get_engagement_advice(prediction, data['total_games_played'].iloc[0])
     }
 
