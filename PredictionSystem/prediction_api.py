@@ -7,7 +7,7 @@ from typing import Dict, Optional
 from datetime import datetime
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="Player Analytics API",
+app = FastAPI(title="Prediction API",
               description="API for predicting player churn, win probability, engagement, and skill classification")
 
 origins = [
