@@ -72,6 +72,20 @@ class UnifiedPredictionResponse(BaseModel):
     metadata: Dict
 
 
+# Feature sets for each model
+CHURN_FEATURES = ['total_games_played', 'win_ratio', 'total_time_played_minutes',
+                  'total_moves', 'gender', 'country', 'game_name', 'age']
+
+WIN_PROB_FEATURES = ['total_games_played', 'total_moves', 'total_wins', 'total_losses',
+                     'gender', 'country', 'game_name', 'age']
+
+ENGAGEMENT_FEATURES = ['game_name', 'total_games_played', 'win_ratio',
+                       'gender', 'country', 'age']
+
+CLASSIFICATION_FEATURES = ['total_games_played', 'total_moves', 'total_wins', 'total_losses',
+                           'total_time_played_minutes', 'gender', 'country', 'game_name', 'age']
+
+
 def get_churn_advice(churn_prob: float, win_rate: float, games_played: int) -> str:
     if churn_prob > 0.7:
         if win_rate < 40:
