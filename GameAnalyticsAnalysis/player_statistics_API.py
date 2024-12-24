@@ -16,24 +16,24 @@ load_dotenv()
 DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_HOST = os.getenv('DB_HOST', 'localhost')
-DB_PORT = os.getenv('DB_PORT', '3306')
+DB_PORT = os.getenv('DB_PORT', '3307')
 DB_NAME = 'game_analytics'
 
 # Create SQLAlchemy engine
 DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?charset=utf8mb4"
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 
 # Initialize FastAPI app
 app = FastAPI(
     title="Player Statistics API",
     description="API for retrieving player game statistics for dashboard",
-    version="1.0.0"
+    version="1.0.1"
 )
 
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure this appropriately for production
+    allow_origins=["http://localhost:3000"],  # Configure this appropriately for production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -77,20 +77,22 @@ def get_db():
 async def root():
     return {
         "message": "Player Statistics API",
-        "version": "1.0.0",
+        "version": "1.0.1",
         "endpoints": [
-            "/stats/players",
-            "/stats/player/{player_id}",
-            "/stats/game/{game_id}",
-            "/stats/summary"
+            "/api/stats/players",
+            "/api/stats/player/{player_id}",
+            "/api/stats/game/{game_id}",
+            "/api/stats/summary",
+            "/api/stats/most-played-games?limit=5",
+            "/api/stats/top-players/{game_id}?limit=3"
         ]
     }
 
 
-@app.get("/stats/players", response_model=List[PlayerStats])
+@app.get("/api/stats/players", response_model=List[PlayerStats])
 async def get_all_player_stats(
-        skip: int = Query(0, ge=0),
-        limit: int = Query(100, ge=1, le=1000),
+        skip: int = Query(0, ge=0, description="Number of records to skip for pagination"),
+        limit: int = Query(20, ge=1, le=100, description="Maximum number of records to return"),
         db: Session = Depends(get_db)
 ):
     """
@@ -128,10 +130,11 @@ async def get_all_player_stats(
 
         return stats
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error retrieving player statistics")
 
 
-@app.get("/stats/player/{player_id}", response_model=List[PlayerStats])
+@app.get("/api/stats/player/{player_id}", response_model=List[PlayerStats])
 async def get_player_stats(
         player_id: UUID,
         db: Session = Depends(get_db)
@@ -173,12 +176,13 @@ async def get_player_stats(
 
         return stats
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error retrieving player statistics")
 
 
-@app.get("/stats/game/{game_id}", response_model=List[PlayerStats])
+@app.get("/api/stats/game/{game_id}", response_model=List[PlayerStats])
 async def get_game_stats(
-        game_id: int,
+        game_id: UUID,
         db: Session = Depends(get_db)
 ):
     """
@@ -204,11 +208,11 @@ async def get_game_stats(
                 rating,
                 last_played
             FROM player_game_stats
-            WHERE game_id = :game_id
+            WHERE game_id = UUID_TO_BIN(:game_id)
             ORDER BY rating DESC, win_ratio DESC
         """)
 
-        result = db.execute(query, {"game_id": game_id})
+        result = db.execute(query, {"game_id": str(game_id)})
         stats = [dict(zip(result.keys(), row)) for row in result.fetchall()]
 
         if not stats:
@@ -219,10 +223,87 @@ async def get_game_stats(
 
         return stats
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error retrieving game statistics")
+
+@app.get("/api/stats/most-played-games")
+async def get_most_played_games(
+    limit: int = Query(10, ge=1, le=50, description="Number of games to return"),
+    db: Session = Depends(get_db)
+):
+    """
+    Get the most played games ranked by total matches played across all players.
+    """
+    try:
+        query = text("""
+            SELECT 
+                BIN_TO_UUID(game_id) as game_id,
+                game_name,
+                COUNT(DISTINCT player_id) as unique_players,
+                SUM(total_games_played) as total_matches,
+                AVG(rating) as average_rating,
+                MAX(last_played) as last_played
+            FROM player_game_stats
+            GROUP BY game_id, game_name
+            ORDER BY total_matches DESC
+            LIMIT :limit
+        """)
+
+        result = db.execute(query, {"limit": limit})
+        games = [dict(zip(result.keys(), row)) for row in result.fetchall()]
+
+        if not games:
+            raise HTTPException(status_code=404, detail="No games found")
+
+        return games
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error retrieving most played games")
+
+@app.get("/api/stats/top-players/{game_id}")
+async def get_top_players_by_game(
+    game_id: UUID,
+    limit: int = Query(3, ge=1, le=10, description="Number of top players to return"),
+    db: Session = Depends(get_db)
+):
+    """
+    Get the top players for a specific game, ranked by rating and win ratio.
+    """
+    try:
+        query = text("""
+            SELECT 
+                BIN_TO_UUID(player_id) as player_id,
+                player_name,
+                country,
+                total_games_played,
+                total_wins,
+                total_losses,
+                win_ratio,
+                rating,
+                last_played
+            FROM player_game_stats
+            WHERE game_id = UUID_TO_BIN(:game_id)
+            ORDER BY rating DESC, win_ratio DESC
+            LIMIT :limit
+        """)
+
+        result = db.execute(query, {"game_id": str(game_id), "limit": limit})
+        players = [dict(zip(result.keys(), row)) for row in result.fetchall()]
+
+        if not players:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No players found for game {game_id}"
+            )
+
+        return players
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error retrieving top players")
 
 
-@app.get("/stats/summary")
+
+@app.get("/api/stats/summary")
 async def get_stats_summary(db: Session = Depends(get_db)):
     """
     Get summary statistics across all games and players.
@@ -260,7 +341,8 @@ async def get_stats_summary(db: Session = Depends(get_db)):
 
         return summary
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error retrieving summary statistics")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,1001 @@
+player_name,game_name,total_games_played,total_wins,total_losses,total_moves,total_time_played_minutes,win_ratio,age,gender,country,is_churned,player_level,engagement_level,win_probability
+"David Ali",battleship,37,21,16,1766,919,56.76,64,Male,"South Korea",0,intermediate,73.18,0.5676
+"Mohammed Ali",battleship,88,44,44,4267,2416,50.00,51,Male,Japan,0,intermediate,100.00,0.5000
+"Amir Nguyen",battleship,136,42,94,6592,3597,30.88,18,Male,USA,0,intermediate,100.00,0.3088
+"Sophia Brown",battleship,120,86,34,6016,3259,71.67,43,Male,Brazil,0,expert,100.00,0.7167
+"Elena Garcia",reversi,19,3,16,249,244,15.79,64,Male,Japan,0,intermediate,52.48,0.1579
+"John Tanaka",reversi,2,1,1,6,18,50.00,51,Male,China,1,novice,41.16,0.5000
+"John Liu",battleship,106,29,77,5086,2936,27.36,32,Male,China,0,intermediate,100.00,0.2736
+"Carlos Tanaka",battleship,123,39,84,5765,3180,31.71,27,Male,Brazil,0,intermediate,100.00,0.3171
+"Haruto Davis",chess,89,25,59,4186,3545,28.09,50,Male,USA,0,intermediate,100.00,0.2809
+"Raj Williams",chess,28,15,13,1320,1152,53.57,18,Male,Canada,0,intermediate,74.24,0.5357
+"John Nguyen",battleship,130,96,34,6211,3380,73.85,22,Male,China,0,expert,100.00,0.7385
+"Amir Nguyen",chess,107,68,34,5335,4278,63.55,18,Male,USA,0,intermediate,100.00,0.6355
+"Ahmad Schmidt",chess,76,18,55,3811,2935,23.68,28,Male,Spain,0,intermediate,100.00,0.2368
+"Li Kumar",battleship,92,24,68,4445,2578,26.09,37,Male,Germany,0,intermediate,100.00,0.2609
+"Anna Davis",battleship,113,79,34,5419,3082,69.91,35,Male,Singapore,0,expert,100.00,0.6991
+"Dmitri Khan","connect four",54,21,31,625,657,38.89,59,Male,Russia,0,intermediate,74.74,0.3889
+"Emma Ivanov","connect four",22,11,11,227,271,50.00,51,Male,Japan,0,intermediate,54.22,0.5000
+"Olivia Ahmed",battleship,42,18,24,1948,1009,42.86,63,Male,Canada,0,intermediate,76.98,0.4286
+"Joseph Liu",battleship,123,67,56,5954,3390,54.47,60,Male,China,0,intermediate,100.00,0.5447
+"Anna Nguyen","connect four",44,23,18,510,530,52.27,42,Male,Singapore,0,intermediate,68.20,0.5227
+"Zhang Davis","connect four",46,26,18,482,585,56.52,60,Male,Singapore,0,intermediate,70.10,0.5652
+"David Khan","connect four",72,20,49,825,905,27.78,45,Male,Singapore,0,intermediate,86.90,0.2778
+"Sophia Brown","connect four",57,44,12,672,675,77.19,43,Male,Brazil,0,expert,76.30,0.7719
+"Maria Sato",chess,80,31,49,3691,3266,38.75,19,Male,China,0,intermediate,100.00,0.3875
+"Hans Khan",chess,63,42,20,2855,2538,66.67,31,Male,Singapore,0,expert,100.00,0.6667
+"Isabella Ali",battleship,75,46,29,3565,2034,61.33,46,Female,Singapore,0,intermediate,100.00,0.6133
+"Zara Brown",battleship,35,13,22,1658,925,37.14,31,Male,USA,0,intermediate,72.50,0.3714
+"Emma Suzuki","tic tac toe",46,31,13,479,585,67.39,35,Male,Singapore,0,intermediate,70.10,0.6739
+"Yuki Tran","tic tac toe",54,28,20,545,684,51.85,23,Male,Brazil,0,intermediate,75.28,0.5185
+"Isabella Williams",battleship,133,62,71,6256,3620,46.62,37,Female,UK,0,intermediate,100.00,0.4662
+"Elena Nguyen",battleship,127,74,53,6108,3570,58.27,37,Male,Germany,0,intermediate,100.00,0.5827
+"Li Suzuki","tic tac toe",52,13,36,535,583,25.00,59,Male,Japan,0,intermediate,72.46,0.2500
+"Sophia Martinez","tic tac toe",7,2,5,72,83,28.57,36,Male,Germany,0,novice,44.46,0.2857
+"Dmitri Rodriguez",go,5,3,2,285,234,60.00,23,Male,Singapore,0,novice,46.68,0.6000
+"Mohammed Ali",go,15,7,8,1217,950,46.67,43,Male,USA,0,intermediate,65.00,0.4667
+"Robert Kumar",battleship,32,14,18,1470,848,43.75,33,Male,Singapore,0,intermediate,69.76,0.4375
+"Hans Brown",battleship,112,49,63,5382,3179,43.75,59,Male,Singapore,0,intermediate,100.00,0.4375
+"Li Suzuki","connect four",57,27,26,655,715,47.37,59,Male,Japan,0,intermediate,77.10,0.4737
+"Elena Tran","connect four",82,55,22,1037,970,67.07,46,Male,Singapore,0,expert,92.20,0.6707
+"Yuki Petrov",chess,64,42,20,3118,2611,65.63,31,Male,Singapore,0,expert,100.00,0.6563
+"Priya Wang",chess,75,20,52,3806,2933,26.67,23,Male,Singapore,0,intermediate,100.00,0.2667
+"Ivan Kumar","connect four",63,30,30,645,763,47.62,44,Male,France,0,intermediate,80.46,0.4762
+"Hassan Lee","connect four",28,9,19,330,321,32.14,55,Male,Japan,0,intermediate,57.62,0.3214
+"William Nguyen",chess,103,34,68,5003,4010,33.01,53,Male,Russia,0,intermediate,100.00,0.3301
+"Emma Ivanov",chess,82,30,49,4001,3129,36.59,51,Male,Japan,0,intermediate,100.00,0.3659
+"Anna Williams","tic tac toe",24,16,8,263,270,66.67,44,Male,Germany,0,intermediate,55.00,0.6667
+"William Miller","tic tac toe",33,14,17,355,396,42.42,39,Male,Singapore,0,intermediate,61.12,0.4242
+"Elena Khan",battleship,85,33,52,4230,2236,38.82,24,Female,USA,0,intermediate,100.00,0.3882
+"Elena Tran",battleship,31,11,20,1429,873,35.48,46,Male,Singapore,0,intermediate,69.86,0.3548
+"Priya Davis","connect four",83,49,33,881,1018,59.04,53,Male,India,0,intermediate,93.56,0.5904
+"Sofia Johnson","connect four",49,36,10,598,583,73.47,39,Female,China,0,intermediate,71.26,0.7347
+"Zhang Mueller","connect four",20,5,14,225,217,25.00,53,Male,Singapore,0,intermediate,52.34,0.2500
+"Arjun Martinez","connect four",66,45,18,749,809,68.18,56,Male,Russia,0,expert,82.58,0.6818
+"Yuki Kim","dots and boxes",12,1,11,95,161,8.33,38,Female,Singapore,1,intermediate,48.02,0.1000
+"Ivan Ahmed","dots and boxes",40,21,19,433,524,52.50,58,Male,Singapore,0,intermediate,66.48,0.5250
+"Yuki Garcia","tic tac toe",13,9,3,125,147,69.23,35,Male,Singapore,0,intermediate,48.14,0.6923
+"Yuki Khan","tic tac toe",37,12,24,416,476,32.43,49,Male,USA,0,intermediate,64.32,0.3243
+"Olivia Petrov",chess,82,60,15,3979,3331,73.17,55,Male,USA,0,expert,100.00,0.7317
+"Arjun Sato",chess,69,39,27,3402,2683,56.52,29,Male,India,0,intermediate,100.00,0.5652
+"Wei Park",chess,52,16,33,2528,2014,30.77,64,Male,Germany,0,intermediate,100.00,0.3077
+"Emma Patel",chess,89,18,69,4286,3432,20.22,20,Male,Singapore,0,intermediate,100.00,0.2022
+"Hassan Ahmed",battleship,101,60,41,4851,2798,59.41,50,Female,India,0,intermediate,100.00,0.5941
+"Sofia Ivanov",battleship,130,104,26,6617,3491,80.00,40,Male,Singapore,0,expert,100.00,0.8000
+"Anna Kim",battleship,37,19,18,1721,1027,51.35,61,Male,Canada,0,intermediate,75.34,0.5135
+"Wei Johnson",battleship,116,83,33,5620,3238,71.55,22,Male,Singapore,0,expert,100.00,0.7155
+"Ava Kumar",battleship,83,39,44,3894,2247,46.99,52,Male,USA,0,intermediate,100.00,0.4699
+"Hassan Schmidt",battleship,124,96,28,6098,3360,77.42,27,Male,Russia,0,expert,100.00,0.7742
+"Sophia Johnson",chess,63,40,19,3004,2566,63.49,22,Male,Netherlands,0,intermediate,100.00,0.6349
+"Hassan Ali",battleship,138,34,104,6818,3854,24.64,40,Male,Singapore,0,intermediate,100.00,0.2464
+"Amir Nguyen","dots and boxes",10,5,5,90,123,50.00,18,Male,USA,0,intermediate,46.46,0.5000
+"Hans Brown","dots and boxes",37,29,8,391,453,78.38,59,Male,Singapore,0,intermediate,63.86,0.7838
+"Elena Schmidt","connect four",64,44,17,786,767,68.75,34,Male,Brazil,0,expert,80.94,0.6875
+"Olivia Williams","connect four",44,16,26,545,484,36.36,44,Male,USA,0,intermediate,67.28,0.3636
+"Zara Brown",battleship,128,47,81,6128,3514,36.72,33,Female,Singapore,0,intermediate,100.00,0.3672
+"Ahmad Davis",battleship,129,34,95,6052,3493,26.36,23,Male,Japan,0,intermediate,100.00,0.2636
+"Carlos Tanaka",chess,98,58,34,4706,3711,59.18,28,Male,USA,0,intermediate,100.00,0.5918
+"Ahmad Kim",chess,38,20,15,1679,1549,52.63,50,Male,Japan,0,intermediate,86.18,0.5263
+"Priya Garcia",go,9,5,4,752,568,55.56,37,Male,France,0,novice,54.96,0.5556
+"Amir Khan",go,27,5,22,2445,1644,18.52,61,Female,Singapore,0,intermediate,83.68,0.1852
+"Mohammed Ivanov",chess,32,17,14,1793,1192,53.13,40,Male,Singapore,0,intermediate,76.64,0.5313
+"Ahmad Davis",chess,62,30,30,2873,2488,48.39,22,Male,Singapore,0,intermediate,100.00,0.4839
+"Isabella Kumar",chess,117,53,61,5671,4539,45.30,51,Male,France,0,intermediate,100.00,0.4530
+"Ahmad Mueller",chess,92,50,37,4560,3594,54.35,18,Male,Canada,0,intermediate,100.00,0.5435
+"Zhang Davis",battleship,112,79,33,5399,2898,70.54,60,Male,Singapore,0,expert,100.00,0.7054
+"Dmitri Khan",battleship,129,69,60,6270,3575,53.49,19,Male,China,0,intermediate,100.00,0.5349
+"Priya Ali",reversi,3,2,1,21,39,66.67,28,Male,Russia,1,novice,41.98,0.6667
+"Maria Sato",reversi,20,6,14,222,218,30.00,19,Male,China,0,intermediate,52.36,0.3000
+"Zara Brown",go,16,8,8,1277,1026,50.00,33,Female,Singapore,0,intermediate,66.92,0.5000
+"Yuki Kim",go,3,0,3,215,135,0.00,38,Female,Singapore,1,novice,43.90,0.1000
+"Ahmad Nguyen",chess,69,29,37,3371,2724,42.03,22,Female,"South Korea",0,intermediate,100.00,0.4203
+"Priya Williams","dots and boxes",40,19,21,471,463,47.50,63,Male,Singapore,0,intermediate,65.26,0.4750
+"Joseph Liu","dots and boxes",11,7,4,120,144,63.64,18,Male,Singapore,0,intermediate,47.28,0.6364
+"John Sato",battleship,94,43,51,4513,2561,45.74,40,Male,Singapore,0,intermediate,100.00,0.4574
+"Dmitri Lee",battleship,108,56,52,5286,2835,51.85,58,Male,Singapore,0,intermediate,100.00,0.5185
+"Joseph Liu","tic tac toe",43,8,33,473,470,18.60,60,Male,China,0,intermediate,66.60,0.1860
+"Hans Khan","tic tac toe",57,21,33,609,696,36.84,31,Male,Singapore,0,intermediate,76.72,0.3684
+"Dmitri Sato",battleship,40,17,23,1981,1097,42.50,45,Male,UK,0,intermediate,77.94,0.4250
+"Olivia Williams",battleship,90,51,39,4338,2455,56.67,44,Male,USA,0,intermediate,100.00,0.5667
+"Priya Tran",battleship,32,16,16,1561,872,50.00,63,Male,India,0,intermediate,70.24,0.5000
+"Sofia Johnson",battleship,115,45,70,5510,3142,39.13,39,Female,China,0,intermediate,100.00,0.3913
+"Wei Rodriguez",go,22,12,10,1940,1220,54.55,28,Male,Singapore,0,intermediate,73.20,0.5455
+"Emma Suzuki",go,16,11,5,1422,921,68.75,35,Male,Singapore,0,intermediate,64.82,0.6875
+"Ahmad Singh",battleship,135,80,55,6510,3762,59.26,64,Male,Germany,0,intermediate,100.00,0.5926
+"Maria Khan",battleship,35,18,17,1735,962,51.43,20,Male,Singapore,0,intermediate,73.24,0.5143
+"Sofia Ivanov","connect four",28,17,10,301,328,60.71,40,Male,Singapore,0,intermediate,57.76,0.6071
+"Sophia Williams","connect four",83,19,63,956,962,22.89,33,Male,China,0,intermediate,92.44,0.2289
+"Ahmad Kim",battleship,83,57,26,3993,2270,68.67,50,Male,Japan,0,expert,100.00,0.6867
+"Soma Patel",battleship,118,69,49,5929,3247,58.47,24,Male,USA,0,intermediate,100.00,0.5847
+"Raj Patel","connect four",65,25,36,757,820,38.46,34,Male,UK,0,intermediate,82.40,0.3846
+"Haruto Lee","connect four",71,29,36,789,890,40.85,42,Male,USA,0,intermediate,86.20,0.4085
+"Ivan Miller","tic tac toe",11,5,4,130,107,45.45,19,Male,Australia,0,intermediate,46.54,0.4545
+"Carlos Tanaka","connect four",18,7,10,197,203,38.89,28,Male,USA,0,intermediate,51.26,0.3889
+"Elena Nguyen","connect four",56,22,31,633,664,39.29,37,Male,Germany,0,intermediate,75.68,0.3929
+"Ava Rodriguez",battleship,108,23,85,5357,2844,21.30,36,Male,UK,0,intermediate,100.00,0.2130
+"John Schmidt","connect four",24,10,13,260,284,41.67,18,Male,Australia,0,intermediate,55.28,0.4167
+"Yuki Petrov",battleship,42,16,26,2016,1057,38.10,31,Male,Singapore,0,intermediate,77.94,0.3810
+"Emma Lee",battleship,102,68,34,4860,2715,66.67,27,Male,UK,0,expert,100.00,0.6667
+"Yuki Ali",chess,28,13,15,1368,1072,46.43,23,Male,USA,0,intermediate,72.64,0.4643
+"Sophia Khan",battleship,112,35,77,5667,3083,31.25,64,Male,USA,0,intermediate,100.00,0.3125
+"Haruto Garcia",battleship,88,68,20,4387,2376,77.27,31,Male,Singapore,0,expert,100.00,0.7727
+"Hassan Petrov",battleship,129,92,37,6209,3599,71.32,37,Male,Japan,0,expert,100.00,0.7132
+"David Kumar",chess,115,51,59,5521,4479,44.35,20,Male,China,0,intermediate,100.00,0.4435
+"Elena Davis",chess,87,36,51,4373,3445,41.38,27,Male,Singapore,0,intermediate,100.00,0.4138
+"David Khan",chess,75,23,45,3468,2844,30.67,45,Male,Singapore,0,intermediate,100.00,0.3067
+"Hassan Sato",chess,64,38,22,3154,2410,59.38,48,Male,USA,0,intermediate,100.00,0.5938
+"Ivan Kumar",chess,81,30,50,3786,3376,37.04,44,Male,France,0,intermediate,100.00,0.3704
+"John Khan",chess,68,23,41,3301,2833,33.82,60,Male,Singapore,0,intermediate,100.00,0.3382
+"Priya Sato","connect four",53,18,32,584,640,33.96,32,Male,India,0,intermediate,74.00,0.3396
+"Dmitri Khan","connect four",28,17,11,304,343,60.71,19,Male,China,0,intermediate,58.06,0.6071
+"David Suzuki",chess,112,33,73,5178,4433,29.46,43,Male,"South Korea",0,intermediate,100.00,0.2946
+"John Kumar",chess,71,49,21,3552,3047,69.01,35,Male,Netherlands,0,expert,100.00,0.6901
+"Mohammed Ali","connect four",35,17,15,384,425,48.57,43,Male,USA,0,intermediate,62.50,0.4857
+"Zhang Lee","connect four",48,26,21,509,536,54.17,45,Male,Singapore,0,intermediate,69.92,0.5417
+"Haruto Singh",chess,58,38,17,2670,2223,65.52,39,Female,"South Korea",0,expert,100.00,0.6552
+"Zhang Petrov",battleship,35,17,18,1602,1016,48.57,32,Male,Germany,0,intermediate,74.32,0.4857
+"Yuki Wang",battleship,139,32,107,6974,3844,23.02,20,Non-Binary,Singapore,0,intermediate,100.00,0.2302
+"Michael Ivanov","connect four",50,20,23,615,593,40.00,21,Male,Singapore,0,intermediate,71.86,0.4000
+"Dmitri Park","connect four",77,51,22,877,974,66.23,19,Male,UK,0,expert,90.28,0.6623
+"Elena Garcia",battleship,108,59,49,5035,2907,54.63,64,Male,Japan,0,intermediate,100.00,0.5463
+"Yuki Kumar",battleship,119,42,77,5838,3384,35.29,27,Male,China,0,intermediate,100.00,0.3529
+"Joseph Suzuki","tic tac toe",56,38,17,635,676,67.86,36,Male,Singapore,0,expert,75.92,0.6786
+"Dmitri Williams","tic tac toe",13,7,6,135,157,53.85,37,Male,USA,0,intermediate,48.34,0.5385
+"Isabella Martinez",battleship,79,52,27,3930,2070,65.82,36,Male,Singapore,0,expert,100.00,0.6582
+"Sophia Martinez",battleship,110,54,56,5502,3032,49.09,36,Male,Germany,0,intermediate,100.00,0.4909
+"Sophia Singh","connect four",54,38,15,639,633,70.37,60,Male,Singapore,0,expert,74.26,0.7037
+"John Liu","connect four",64,39,20,684,737,60.94,32,Male,China,0,intermediate,80.34,0.6094
+"Emma Chen",chess,112,55,50,5567,4312,49.11,44,Male,Singapore,0,intermediate,100.00,0.4911
+"Ivan Tanaka",battleship,121,87,34,5854,3314,71.90,60,Male,Singapore,0,expert,100.00,0.7190
+"Priya Suzuki",battleship,112,78,34,5279,3100,69.64,53,Male,Singapore,0,expert,100.00,0.6964
+"Olivia Petrov",chess,66,47,16,3187,2751,71.21,52,Male,Singapore,0,expert,100.00,0.7121
+"Li Martinez",chess,116,77,34,5475,4661,66.38,26,Male,Singapore,0,expert,100.00,0.6638
+"Klaus Park",chess,113,43,69,5822,4660,38.05,40,Male,Singapore,0,intermediate,100.00,0.3805
+"Juan Patel",chess,33,19,13,1735,1294,57.58,25,Male,USA,0,intermediate,79.08,0.5758
+"Li Williams",battleship,32,13,19,1420,841,40.63,28,Male,China,0,intermediate,69.62,0.4063
+"Ava Johnson",battleship,93,40,53,4299,2592,43.01,37,Male,USA,0,intermediate,100.00,0.4301
+"Haruto Lee",battleship,87,44,43,4304,2393,50.57,42,Male,USA,0,intermediate,100.00,0.5057
+"Ava Davis",battleship,79,53,26,3725,2168,67.09,32,Male,Canada,0,expert,100.00,0.6709
+"John Mueller",chess,77,17,57,3504,3195,22.08,57,Male,UK,0,intermediate,100.00,0.2208
+"Dmitri Suzuki",chess,42,25,15,1915,1663,59.52,63,Male,China,0,intermediate,90.06,0.5952
+"Juan Williams",battleship,44,22,22,2129,1228,50.00,53,Male,Japan,0,intermediate,82.16,0.5000
+"John Mueller",battleship,120,59,61,5648,3213,49.17,57,Male,UK,0,intermediate,100.00,0.4917
+"Mohammed Ivanov","connect four",70,24,44,831,837,34.29,40,Male,Singapore,0,intermediate,84.74,0.3429
+"Yuki Johnson","connect four",66,30,33,768,814,45.45,55,Male,China,0,intermediate,82.68,0.4545
+"Emma Khan",battleship,86,48,38,4123,2315,55.81,27,Non-Binary,Singapore,0,intermediate,100.00,0.5581
+"Dmitri Williams",battleship,97,34,63,4547,2594,35.05,37,Male,USA,0,intermediate,100.00,0.3505
+"Hassan Ali","tic tac toe",14,6,8,160,153,42.86,40,Male,Singapore,0,intermediate,48.66,0.4286
+"Wei Rodriguez","tic tac toe",56,48,6,710,669,85.71,28,Male,Singapore,0,expert,75.78,0.8571
+"Elena Garcia",battleship,104,37,67,4971,2745,35.58,61,Male,"South Korea",0,intermediate,100.00,0.3558
+"Olivia Davis",chess,84,38,44,4079,3248,45.24,32,Male,Singapore,0,intermediate,100.00,0.4524
+"Carlos Davis",chess,95,40,50,4798,3857,42.11,32,Male,Singapore,0,intermediate,100.00,0.4211
+"Raj Tran",battleship,118,41,77,5769,3344,34.75,62,Male,China,0,intermediate,100.00,0.3475
+"Dmitri Sato",battleship,96,76,20,4891,2589,79.17,53,Male,Singapore,0,expert,100.00,0.7917
+"Joseph Suzuki",battleship,38,19,19,1853,1080,50.00,36,Female,Singapore,0,intermediate,76.80,0.5000
+"Anna Nguyen",go,30,22,8,2839,1584,73.33,42,Male,Singapore,0,intermediate,83.68,0.7333
+"Zhang Chen",chess,110,55,51,5131,4368,50.00,59,Male,Singapore,0,intermediate,100.00,0.5000
+"Zhang Williams",chess,33,10,22,1597,1323,30.30,22,Male,Singapore,0,intermediate,79.66,0.3030
+"Elena Kumar",go,13,11,2,1072,713,84.62,46,Female,USA,0,intermediate,59.46,0.8462
+"Anna Nguyen",battleship,97,32,65,4794,2613,32.99,42,Male,Singapore,0,intermediate,100.00,0.3299
+"Amir Nguyen","tic tac toe",12,7,5,147,159,58.33,18,Male,USA,0,intermediate,47.98,0.5833
+"David Lee","tic tac toe",57,24,28,656,623,42.11,34,Male,USA,0,intermediate,75.26,0.4211
+"Haruto Lee","tic tac toe",48,12,33,605,606,25.00,42,Male,USA,0,intermediate,71.32,0.2500
+"Hans Davis","tic tac toe",54,29,22,593,640,53.70,35,Male,Singapore,0,intermediate,74.40,0.5370
+"Isabella Martinez","dots and boxes",37,8,29,359,459,21.62,34,Male,Singapore,0,intermediate,63.98,0.2162
+"John Liu","dots and boxes",6,2,4,63,73,33.33,36,Male,Spain,0,novice,43.86,0.3333
+"Zara Ahmed",reversi,3,0,3,22,41,0.00,39,Male,China,1,novice,42.02,0.1000
+"Anna Sato",reversi,16,11,5,205,190,68.75,19,Male,Germany,0,intermediate,50.20,0.6875
+"Wei Khan",chess,38,15,22,1820,1455,39.47,59,Male,Singapore,0,intermediate,84.30,0.3947
+"Ava Kumar",go,23,16,7,1825,1351,69.57,52,Male,USA,0,intermediate,76.22,0.6957
+"Dmitri Khan",go,3,3,0,198,159,100.00,22,Female,Spain,1,novice,44.38,0.9000
+"Zara Sato","tic tac toe",39,12,27,433,435,30.77,35,Male,Brazil,0,intermediate,64.30,0.3077
+"Dmitri Singh",chess,104,44,55,5150,4246,42.31,59,Male,Singapore,0,intermediate,100.00,0.4231
+"Mohammed Suzuki",chess,29,16,12,1581,1234,55.17,26,Male,Singapore,0,intermediate,76.28,0.5517
+"Ahmad Kim","connect four",66,16,50,755,738,24.24,50,Male,Japan,0,intermediate,81.16,0.2424
+"Anna Davis",reversi,16,13,3,171,203,81.25,28,Male,Germany,0,intermediate,50.46,0.8125
+"Olivia Johnson",reversi,20,17,3,222,260,85.00,37,Male,Japan,0,intermediate,53.20,0.8500
+"David Schmidt","dots and boxes",6,5,1,77,81,83.33,49,Male,USA,0,novice,44.02,0.8333
+"Dmitri Suzuki","dots and boxes",31,17,14,318,340,54.84,61,Male,Singapore,0,intermediate,59.20,0.5484
+"Maria Kim","tic tac toe",59,38,17,697,706,64.41,64,Male,Brazil,0,intermediate,77.72,0.6441
+"Soma Singh","tic tac toe",66,53,12,728,745,80.30,34,Male,Singapore,0,expert,81.30,0.8030
+"Raj Davis","connect four",30,10,19,311,376,33.33,45,Male,USA,0,intermediate,59.52,0.3333
+"Ivan Miller","connect four",69,42,25,811,819,60.87,19,Male,Australia,0,intermediate,83.98,0.6087
+"Ivan Tanaka","connect four",76,27,43,843,916,35.53,60,Male,Singapore,0,intermediate,88.72,0.3553
+"Maria Rodriguez","connect four",81,33,47,913,974,40.74,39,Male,USA,0,intermediate,91.88,0.4074
+"Priya Ali",battleship,41,14,27,1840,1176,34.15,28,Male,Russia,0,intermediate,79.92,0.3415
+"Amir Davis",battleship,91,53,38,4345,2504,58.24,62,Female,Singapore,0,intermediate,100.00,0.5824
+"Ivan Garcia",battleship,129,66,63,6315,3581,51.16,52,Male,Singapore,0,intermediate,100.00,0.5116
+"Hans Miller",chess,105,56,48,5149,4146,53.33,25,Female,Australia,0,intermediate,100.00,0.5333
+"Ahmad Miller",chess,65,45,18,3305,2631,69.23,61,Male,Singapore,0,expert,100.00,0.6923
+"Klaus Kumar",battleship,134,49,85,6549,3763,36.57,60,Male,Singapore,0,intermediate,100.00,0.3657
+"Zara Patel","connect four",62,34,26,659,730,54.84,39,Male,Singapore,0,intermediate,79.40,0.5484
+"Dmitri Johnson","connect four",76,44,31,902,905,57.89,23,Male,Australia,0,intermediate,88.50,0.5789
+"Hassan Davis","tic tac toe",34,19,14,370,396,55.88,61,Male,China,0,intermediate,61.52,0.5588
+"Dmitri Khan","tic tac toe",42,13,27,450,521,30.95,19,Male,China,0,intermediate,67.22,0.3095
+"Priya Davis","tic tac toe",14,6,5,150,164,42.86,53,Male,India,0,intermediate,48.88,0.4286
+"Dmitri Sato","dots and boxes",12,10,2,136,131,83.33,53,Male,Singapore,0,intermediate,47.42,0.8333
+"Juan Miller","dots and boxes",33,3,30,346,381,9.09,33,Male,Brazil,1,intermediate,60.82,0.1000
+"Li Kumar",chess,29,16,12,1281,1112,55.17,37,Male,Germany,0,intermediate,73.84,0.5517
+"Zhang Lee",chess,67,51,16,3178,2793,76.12,45,Male,Singapore,0,expert,100.00,0.7612
+"Ivan Tanaka",go,37,14,23,3233,2241,37.84,60,Male,Singapore,0,intermediate,99.62,0.3784
+"Yuki Tran",reversi,12,3,9,135,162,25.00,23,Male,Brazil,0,intermediate,48.04,0.2500
+"David Lee",reversi,3,1,2,19,25,33.33,34,Male,USA,1,novice,41.70,0.3333
+"Arjun Singh",battleship,125,101,24,6041,3315,80.80,33,Male,Singapore,0,expert,100.00,0.8080
+"Soma Kim",battleship,78,40,38,3601,2010,51.28,30,Male,Singapore,0,intermediate,100.00,0.5128
+"Carlos Tanaka","tic tac toe",51,38,13,532,604,74.51,28,Male,USA,0,expert,72.48,0.7451
+"Hans Miller","tic tac toe",56,23,29,615,652,41.07,25,Female,Australia,0,intermediate,75.44,0.4107
+"Juan Petrov","connect four",37,29,6,413,466,78.38,60,Male,"South Korea",0,intermediate,64.12,0.7838
+"Sophia Wang","connect four",17,7,9,185,211,41.18,35,Male,UK,0,intermediate,51.02,0.4118
+"Olivia Martinez",chess,83,32,47,3996,3256,38.55,46,Male,Singapore,0,intermediate,100.00,0.3855
+"Sofia Tanaka",chess,104,28,72,5262,4289,26.92,64,Male,"South Korea",0,intermediate,100.00,0.2692
+"Dmitri Kumar",battleship,94,75,19,4435,2606,79.79,40,Male,Singapore,0,expert,100.00,0.7979
+"Dmitri Khan",battleship,35,16,19,1690,985,45.71,22,Female,Spain,0,intermediate,73.70,0.4571
+"Anna Davis",battleship,93,69,24,4457,2392,74.19,28,Male,Germany,0,expert,100.00,0.7419
+"Sophia Miller",battleship,119,39,80,5848,3359,32.77,57,Male,Singapore,0,intermediate,100.00,0.3277
+"Soma Williams","tic tac toe",50,22,26,494,575,44.00,59,Male,Singapore,0,intermediate,71.50,0.4400
+"Wei Wang","tic tac toe",12,6,6,135,138,50.00,33,Male,Germany,0,intermediate,47.56,0.5000
+"Anna Chen","dots and boxes",15,4,11,150,167,26.67,34,Male,China,0,intermediate,49.34,0.2667
+"Hassan Lee","dots and boxes",40,6,34,460,471,15.00,55,Male,Japan,0,intermediate,65.42,0.1500
+"Maria Rodriguez",go,7,3,4,474,378,42.86,39,Male,USA,0,novice,50.36,0.4286
+"Soma Garcia",battleship,45,25,20,2206,1211,55.56,29,Male,Germany,0,intermediate,82.22,0.5556
+"Wei Wang",battleship,105,33,72,5039,2804,31.43,33,Male,Germany,0,intermediate,100.00,0.3143
+"Soma Singh",battleship,37,21,16,1832,938,56.76,34,Male,Singapore,0,intermediate,73.56,0.5676
+"Dmitri Rodriguez","tic tac toe",48,17,27,544,662,35.42,23,Male,Singapore,0,intermediate,72.44,0.3542
+"Anna Chen",battleship,73,47,26,3432,1936,64.38,34,Male,China,0,intermediate,100.00,0.6438
+"Zhang Mueller",battleship,114,52,62,5546,3001,45.61,53,Male,Singapore,0,intermediate,100.00,0.4561
+"Li Williams",chess,98,25,64,4828,3815,25.51,28,Male,China,0,intermediate,100.00,0.2551
+"Dmitri Williams",chess,95,45,43,4396,3668,47.37,37,Male,USA,0,intermediate,100.00,0.4737
+"Amir Singh",chess,94,69,22,4552,4096,73.40,54,Male,France,0,expert,100.00,0.7340
+"Amir Davis",chess,93,61,25,4597,3896,65.59,62,Female,Singapore,0,expert,100.00,0.6559
+"Michael Ahmed",chess,80,55,23,3872,3159,68.75,34,Male,Singapore,0,expert,100.00,0.6875
+"Ahmad Miller",battleship,102,37,65,4630,2821,36.27,61,Male,Singapore,0,intermediate,100.00,0.3627
+"Priya Schmidt",battleship,112,41,71,5518,3076,36.61,54,Male,UK,0,intermediate,100.00,0.3661
+"Sophia Martinez",chess,100,53,43,4936,4047,53.00,36,Male,Germany,0,intermediate,100.00,0.5300
+"Hans Brown",chess,87,52,31,4286,3401,59.77,62,Male,Germany,0,intermediate,100.00,0.5977
+"Zara Sato",battleship,108,80,28,5154,2936,74.07,35,Male,Brazil,0,expert,100.00,0.7407
+"David Suzuki","connect four",78,42,35,906,937,53.85,43,Male,"South Korea",0,intermediate,89.94,0.5385
+"Mohammed Ali","tic tac toe",58,12,42,614,703,20.69,43,Male,USA,0,intermediate,77.26,0.2069
+"Wei Miller","tic tac toe",17,8,8,211,191,47.06,59,Male,Singapore,0,intermediate,50.62,0.4706
+"Li Lee","tic tac toe",21,10,8,225,240,47.62,48,Female,"South Korea",0,intermediate,53.20,0.4762
+"David Kumar",battleship,118,83,35,5916,3069,70.34,19,Male,"South Korea",0,expert,100.00,0.7034
+"Sofia Wang",battleship,95,58,37,4682,2600,61.05,44,Male,France,0,intermediate,100.00,0.6105
+"Olivia Patel",battleship,75,20,55,3554,1947,26.67,63,Female,Singapore,0,intermediate,100.00,0.2667
+"Wei Rodriguez",battleship,82,41,41,4228,2244,50.00,28,Male,Singapore,0,intermediate,100.00,0.5000
+"Ahmad Sato",chess,115,78,32,5237,4497,67.83,51,Male,USA,0,expert,100.00,0.6783
+"Sophia Brown",chess,75,41,32,3778,2995,54.67,42,Male,Singapore,0,intermediate,100.00,0.5467
+"Olivia Petrov",battleship,95,63,32,4443,2579,66.32,55,Male,USA,0,expert,100.00,0.6632
+"Robert Kumar",chess,104,65,37,5035,4313,62.50,33,Male,Singapore,0,intermediate,100.00,0.6250
+"Olivia Johnson",chess,93,26,62,4300,3608,27.96,37,Male,Japan,0,intermediate,100.00,0.2796
+"Maria Kim",battleship,92,58,34,4775,2419,63.04,64,Male,Brazil,0,intermediate,100.00,0.6304
+"Carlos Martinez","tic tac toe",59,45,13,691,679,76.27,51,Male,Singapore,0,expert,77.18,0.7627
+"Zhang Chen","tic tac toe",23,8,12,243,272,34.78,59,Male,Singapore,0,intermediate,54.64,0.3478
+"Mohammed Ali",battleship,121,70,51,6063,3209,57.85,43,Male,USA,0,intermediate,100.00,0.5785
+"Li Lee",battleship,131,43,88,6248,3533,32.82,48,Female,"South Korea",0,intermediate,100.00,0.3282
+"Mohammed Nguyen",battleship,42,22,20,2089,1147,52.38,33,Male,Singapore,0,intermediate,79.74,0.5238
+"Robert Kumar","connect four",23,11,11,292,254,47.83,33,Male,Singapore,0,intermediate,54.28,0.4783
+"Hans Lee","connect four",61,31,26,687,670,50.82,28,Female,USA,0,intermediate,77.80,0.5082
+"Wei Garcia",chess,62,40,18,3228,2417,64.52,46,Male,Singapore,0,intermediate,100.00,0.6452
+"Mohammed Ali",chess,89,28,56,4637,3448,31.46,51,Male,Japan,0,intermediate,100.00,0.3146
+"Isabella Martinez","dots and boxes",24,3,21,263,280,12.50,36,Male,Singapore,1,intermediate,55.20,0.1250
+"Dmitri Johnson",chess,70,27,40,3305,2742,38.57,23,Male,Australia,0,intermediate,100.00,0.3857
+"Ivan Tanaka",chess,101,78,22,4612,4098,77.23,60,Male,Singapore,0,expert,100.00,0.7723
+"Klaus Park",chess,57,23,32,2872,2257,40.35,35,Male,China,0,intermediate,100.00,0.4035
+"Carlos Martinez",battleship,30,18,12,1339,704,60.00,51,Male,Singapore,0,intermediate,66.08,0.6000
+"Wei Park",battleship,66,22,44,3222,1840,33.33,64,Male,Germany,0,intermediate,100.00,0.3333
+"Zara Martinez",battleship,32,10,22,1460,897,31.25,21,Male,Spain,0,intermediate,70.74,0.3125
+"Emma Chen",battleship,83,22,61,4222,2259,26.51,44,Male,Singapore,0,intermediate,100.00,0.2651
+"Hassan Brown",battleship,140,107,33,6751,3770,76.43,38,Male,Singapore,0,expert,100.00,0.7643
+"Elena Ali","connect four",78,32,42,822,950,41.03,50,Male,France,0,intermediate,90.20,0.4103
+"Robert Johnson","connect four",21,10,11,222,267,47.62,60,Male,Australia,0,intermediate,53.74,0.4762
+"Dmitri Suzuki","connect four",61,32,28,707,763,52.46,61,Male,Singapore,0,intermediate,79.66,0.5246
+"Emma Chen","connect four",20,9,11,209,228,45.00,44,Male,Singapore,0,intermediate,52.56,0.4500
+"Klaus Khan","connect four",15,6,9,130,163,40.00,33,Male,UK,0,intermediate,49.26,0.4000
+"Zara Sato","connect four",22,14,6,253,281,63.64,35,Male,Brazil,0,intermediate,54.42,0.6364
+"Maria Johnson","connect four",63,34,24,631,713,53.97,41,Male,China,0,intermediate,79.46,0.5397
+"Wei Rodriguez",reversi,4,2,2,56,49,50.00,28,Male,Singapore,1,novice,42.58,0.5000
+"Dmitri Park",reversi,14,10,4,127,176,71.43,19,Male,UK,0,intermediate,49.12,0.7143
+"Maria Chen",battleship,133,94,39,6506,3524,70.68,38,Female,Brazil,0,expert,100.00,0.7068
+"Sofia Davis","dots and boxes",10,6,4,108,126,60.00,30,Female,Singapore,0,intermediate,46.52,0.6000
+"Sophia Brown","dots and boxes",31,15,16,334,415,48.39,42,Male,Singapore,0,intermediate,60.70,0.4839
+"Sophia Miller",go,27,8,19,2700,1593,29.63,57,Male,Singapore,0,intermediate,82.66,0.2963
+"Emma Garcia",go,13,10,3,1207,681,76.92,64,Male,Germany,0,intermediate,58.82,0.7692
+"Hassan Park",battleship,113,89,24,5267,2942,78.76,61,Male,Singapore,0,expert,100.00,0.7876
+"Arjun Sato",go,34,22,12,3214,2031,64.71,29,Male,India,0,intermediate,94.22,0.6471
+"Raj Tran",go,27,16,11,2302,1679,59.26,62,Male,China,0,intermediate,84.38,0.5926
+"Emma Lee",chess,28,12,14,1263,1060,42.86,27,Male,UK,0,intermediate,72.40,0.4286
+"Robert Chen",chess,84,62,18,4135,3281,73.81,62,Male,India,0,expert,100.00,0.7381
+"Maria Khan",chess,48,24,24,2288,1854,50.00,20,Male,Singapore,0,intermediate,96.28,0.5000
+"Priya Petrov",chess,26,13,11,1256,1050,50.00,29,Male,China,0,intermediate,71.40,0.5000
+"Emma Khan","connect four",36,17,16,418,468,47.22,27,Non-Binary,Singapore,0,intermediate,63.76,0.4722
+"Maria Sato","connect four",78,29,43,889,894,37.18,19,Male,China,0,intermediate,89.08,0.3718
+"Zara Brown",chess,79,25,50,4031,2976,31.65,31,Male,USA,0,intermediate,100.00,0.3165
+"Joseph Suzuki",chess,69,48,19,3064,2744,69.57,36,Male,Singapore,0,expert,100.00,0.6957
+"Sophia Miller","connect four",23,12,10,305,279,52.17,57,Male,Singapore,0,intermediate,54.78,0.5217
+"Wei Martinez","connect four",63,49,11,761,768,77.78,29,Male,Japan,0,expert,80.56,0.7778
+"Hans Tanaka","tic tac toe",65,14,49,722,861,21.54,30,Male,Singapore,0,intermediate,83.22,0.2154
+"Haruto Wang","tic tac toe",18,9,9,198,201,50.00,63,Male,UK,0,intermediate,51.22,0.5000
+"Olivia Davis",battleship,108,49,59,5299,2880,45.37,32,Male,Singapore,0,intermediate,100.00,0.4537
+"Mohammed Ali",chess,80,29,51,3904,3018,36.25,49,Male,UK,0,intermediate,100.00,0.3625
+"Raj Patel",chess,111,65,42,5278,4281,58.56,34,Male,UK,0,intermediate,100.00,0.5856
+"Soma Singh",chess,37,20,13,1887,1428,54.05,34,Male,Singapore,0,intermediate,83.36,0.5405
+"Sofia Tanaka","dots and boxes",10,4,6,132,119,40.00,64,Male,"South Korea",0,intermediate,46.38,0.4000
+"Mohammed Ali","dots and boxes",31,22,9,364,380,70.97,43,Male,USA,0,intermediate,60.00,0.7097
+"Olivia Martinez","connect four",77,60,16,840,936,77.92,46,Male,Singapore,0,expert,89.52,0.7792
+"Hassan Mueller","connect four",22,8,10,240,271,36.36,62,Male,Singapore,0,intermediate,54.22,0.3636
+"John Schmidt",battleship,127,82,45,6108,3525,64.57,18,Male,Australia,0,intermediate,100.00,0.6457
+"Hans Davis",battleship,43,23,20,2109,1233,53.49,35,Male,Singapore,0,intermediate,81.86,0.5349
+"John Liu","tic tac toe",57,39,18,637,683,68.42,36,Male,Spain,0,expert,76.46,0.6842
+"Ivan Kumar","tic tac toe",51,35,15,643,572,68.63,44,Male,France,0,expert,71.84,0.6863
+"Dmitri Kumar",chess,68,41,26,3190,2559,60.29,42,Male,Spain,0,intermediate,100.00,0.6029
+"Zara Martinez",chess,120,32,81,5818,4742,26.67,21,Male,Singapore,0,intermediate,100.00,0.2667
+"David Schmidt",battleship,41,15,26,1938,1056,36.59,49,Male,USA,0,intermediate,77.52,0.3659
+"Carlos Park","connect four",47,26,19,532,602,55.32,32,Male,USA,0,intermediate,70.84,0.5532
+"Elena Garcia","connect four",49,20,28,531,564,40.82,64,Male,Japan,0,intermediate,70.88,0.4082
+"Elena Ali","dots and boxes",27,8,19,295,277,29.63,50,Male,France,0,intermediate,56.34,0.2963
+"Hans Tanaka","dots and boxes",13,3,10,119,125,23.08,30,Male,Singapore,0,intermediate,47.70,0.2308
+"Emma Garcia",go,5,4,1,345,282,80.00,63,Male,Singapore,0,novice,47.64,0.8000
+"Maria Chen",go,33,12,21,2670,1861,36.36,38,Female,Brazil,0,intermediate,90.42,0.3636
+"Arjun Johnson","dots and boxes",19,13,6,169,222,68.42,50,Female,India,0,intermediate,52.04,0.6842
+"Maria Johnson","dots and boxes",29,4,25,364,351,13.79,41,Male,China,1,intermediate,58.62,0.1379
+"Raj Wang","dots and boxes",29,13,16,357,350,44.83,60,Male,Germany,0,intermediate,58.60,0.4483
+"Anna Miller","dots and boxes",22,14,8,257,269,63.64,19,Male,"South Korea",0,intermediate,54.18,0.6364
+"Wei Schmidt",chess,26,14,12,1253,1049,53.85,28,Male,France,0,intermediate,71.38,0.5385
+"Carlos Park",battleship,66,36,30,3116,1704,54.55,32,Male,USA,0,intermediate,100.00,0.5455
+"Hassan Mueller",battleship,93,26,67,4478,2536,27.96,62,Male,Singapore,0,intermediate,100.00,0.2796
+"Hans Miller","connect four",46,19,25,567,586,41.30,25,Female,Australia,0,intermediate,70.12,0.4130
+"Zhang Petrov","connect four",65,35,29,772,768,53.85,32,Male,Germany,0,intermediate,81.36,0.5385
+"Ivan Kumar",battleship,22,9,13,983,584,40.91,44,Male,France,0,intermediate,60.48,0.4091
+"Dmitri Kumar","connect four",58,40,18,705,641,68.97,42,Male,Spain,0,expert,76.02,0.6897
+"Yuki Kumar","connect four",64,29,33,687,813,45.31,27,Male,China,0,intermediate,81.86,0.4531
+"Zhang Nguyen","connect four",79,25,53,930,934,31.65,64,Male,Singapore,0,intermediate,90.28,0.3165
+"Isabella Kumar","connect four",63,31,25,651,783,49.21,51,Male,France,0,intermediate,80.86,0.4921
+"Emma Suzuki",chess,85,53,31,4179,3405,62.35,35,Male,Singapore,0,intermediate,100.00,0.6235
+"Emma Ahmed",battleship,121,47,74,5768,3322,38.84,64,Female,Singapore,0,intermediate,100.00,0.3884
+"Elena Patel",battleship,126,101,25,6267,3381,80.16,57,Male,Japan,0,expert,100.00,0.8016
+"Elena Kumar",battleship,99,27,72,4653,2536,27.27,46,Female,USA,0,intermediate,100.00,0.2727
+"Juan Miller",battleship,50,24,26,2412,1407,48.00,33,Male,Brazil,0,intermediate,88.14,0.4800
+"Joseph Liu",battleship,76,52,24,3697,1996,68.42,18,Male,Singapore,0,expert,100.00,0.6842
+"Zhang Chen",battleship,87,30,57,3998,2374,34.48,59,Male,Singapore,0,intermediate,100.00,0.3448
+"Sofia Wang",chess,63,28,31,2919,2539,44.44,44,Male,France,0,intermediate,100.00,0.4444
+"Maria Sato",battleship,91,28,63,4666,2414,30.77,19,Male,China,0,intermediate,100.00,0.3077
+"Ava Chen",battleship,132,56,76,6435,3622,42.42,33,Male,Singapore,0,intermediate,100.00,0.4242
+"Michael Tran",chess,103,24,77,4912,4381,23.30,63,Male,China,0,intermediate,100.00,0.2330
+"Isabella Rodriguez",chess,101,41,55,4965,3972,40.59,29,Male,India,0,intermediate,100.00,0.4059
+"Anna Khan",chess,84,52,32,3876,3556,61.90,33,Male,Singapore,0,intermediate,100.00,0.6190
+"Zara Ahmed",battleship,45,18,27,2267,1175,40.00,39,Male,China,0,intermediate,81.50,0.4000
+"Hans Davis",go,34,17,17,2972,2149,50.00,35,Male,Singapore,0,intermediate,96.58,0.5000
+"Dmitri Suzuki",go,2,1,1,108,89,50.00,63,Male,China,1,novice,42.58,0.5000
+"Robert Mueller","dots and boxes",15,9,6,123,197,60.00,57,Female,Japan,0,intermediate,49.94,0.6000
+"Sophia Williams",chess,81,26,51,4156,3286,32.10,33,Male,China,0,intermediate,100.00,0.3210
+"Soma Patel",chess,97,69,25,4408,3780,71.13,24,Male,USA,0,expert,100.00,0.7113
+"Olivia Petrov",battleship,72,48,24,3545,1907,66.67,52,Male,Singapore,0,expert,100.00,0.6667
+"Anna Khan",battleship,81,29,52,3983,2217,35.80,33,Male,Singapore,0,intermediate,100.00,0.3580
+"Sophia Ahmed",battleship,121,83,38,5739,3359,68.60,55,Male,Singapore,0,expert,100.00,0.6860
+"Wei Schmidt","tic tac toe",49,30,16,553,607,61.22,28,Male,France,0,intermediate,71.74,0.6122
+"Hans Ali","tic tac toe",10,3,6,117,121,30.00,61,Male,Japan,0,intermediate,46.42,0.3000
+"Anna Miller",go,27,16,11,2445,1645,59.26,19,Male,"South Korea",0,intermediate,83.70,0.5926
+"Carlos Chen",go,9,5,4,686,496,55.56,45,Female,China,0,novice,53.52,0.5556
+"Elena Schmidt",go,4,1,3,237,226,25.00,36,Male,Japan,1,novice,46.12,0.2500
+"Ava Johnson",go,23,20,3,1859,1442,86.96,37,Male,USA,0,intermediate,78.04,0.8696
+"Emma Kumar",go,6,3,3,473,415,50.00,57,Male,USA,0,novice,50.70,0.5000
+"Joseph Patel",chess,119,81,33,5776,4799,68.07,21,Male,USA,0,expert,100.00,0.6807
+"Michael Tran",battleship,35,22,13,1770,962,62.86,63,Male,China,0,intermediate,73.24,0.6286
+"Ahmad Tanaka",battleship,71,24,47,3602,1889,33.80,57,Female,Brazil,0,intermediate,100.00,0.3380
+"Priya Petrov","tic tac toe",8,5,3,66,82,62.50,29,Male,China,0,novice,44.84,0.6250
+"Emma Singh","tic tac toe",32,20,11,281,398,62.50,29,Male,"South Korea",0,intermediate,60.76,0.6250
+"Wei Wang",chess,75,34,37,3767,2863,45.33,33,Male,Germany,0,intermediate,100.00,0.4533
+"Dmitri Johnson",battleship,108,27,81,5110,2687,25.00,23,Male,Australia,0,intermediate,100.00,0.2500
+"Mohammed Khan","tic tac toe",16,8,8,206,187,50.00,18,Male,USA,0,intermediate,50.14,0.5000
+"William Nguyen","tic tac toe",45,31,12,490,509,68.89,53,Male,Russia,0,intermediate,68.18,0.6889
+"John Khan",battleship,35,15,20,1695,944,42.86,60,Male,Singapore,0,intermediate,72.88,0.4286
+"Hans Brown","connect four",62,24,32,710,755,38.71,62,Male,Germany,0,intermediate,79.90,0.3871
+"Sophia Ahmed","connect four",58,18,39,641,760,31.03,55,Male,Singapore,0,intermediate,78.40,0.3103
+"Sofia Ivanov",chess,30,17,12,1612,1205,56.67,40,Male,Singapore,0,intermediate,76.10,0.5667
+"Dmitri Sato",chess,65,25,35,2948,2628,38.46,53,Male,Singapore,0,intermediate,100.00,0.3846
+"David Kumar",battleship,41,17,24,1913,1101,41.46,20,Male,China,0,intermediate,78.42,0.4146
+"Isabella Rodriguez",go,14,5,9,1228,851,35.71,29,Male,India,0,intermediate,62.62,0.3571
+"Dmitri Ahmed",go,5,2,3,323,338,40.00,51,Male,Singapore,0,novice,48.76,0.4000
+"William Nguyen",battleship,33,18,15,1535,938,54.55,53,Male,Russia,0,intermediate,71.96,0.5455
+"Priya Petrov","connect four",62,36,23,729,694,58.06,29,Male,China,0,intermediate,78.68,0.5806
+"Ahmad Davis","connect four",73,30,42,823,892,41.10,22,Male,Singapore,0,intermediate,87.04,0.4110
+"Sophia Ahmed","tic tac toe",36,17,17,406,422,47.22,55,Male,Singapore,0,intermediate,62.84,0.4722
+"Ahmad Nguyen","tic tac toe",55,20,34,658,640,36.36,22,Female,"South Korea",0,intermediate,74.80,0.3636
+"Wei Khan",go,36,27,9,2985,2202,75.00,59,Male,Singapore,0,intermediate,98.44,0.7500
+"John Liu",go,26,11,15,2247,1542,42.31,32,Male,China,0,intermediate,81.24,0.4231
+"Hassan Ahmed","dots and boxes",11,6,5,157,119,54.55,50,Female,India,0,intermediate,46.78,0.5455
+"Juan Khan","dots and boxes",38,4,34,404,442,10.53,35,Male,China,1,intermediate,64.04,0.1053
+"Dmitri Suzuki",chess,90,29,59,4367,3542,32.22,61,Male,Singapore,0,intermediate,100.00,0.3222
+"Sophia Ivanov",chess,25,13,12,1019,1003,52.00,38,Male,USA,0,intermediate,70.06,0.5200
+"John Khan","connect four",53,18,33,583,699,33.96,53,Male,Singapore,0,intermediate,75.18,0.3396
+"Sofia Tanaka","connect four",62,26,33,697,726,41.94,64,Male,"South Korea",0,intermediate,79.32,0.4194
+"Amir Singh","dots and boxes",48,35,13,516,555,72.92,54,Male,France,0,intermediate,70.30,0.7292
+"Dmitri Khan","tic tac toe",11,3,8,108,137,27.27,22,Female,Spain,0,intermediate,47.14,0.2727
+"Haruto Davis","tic tac toe",31,6,25,336,365,19.35,50,Male,USA,0,intermediate,59.70,0.1935
+"Emma Garcia",battleship,103,62,41,5003,2778,60.19,63,Male,Singapore,0,intermediate,100.00,0.6019
+"Amir Khan",chess,54,19,34,2698,2029,35.19,61,Female,Singapore,0,intermediate,100.00,0.3519
+"Hassan Mueller",chess,90,30,58,4485,3628,33.33,62,Male,Singapore,0,intermediate,100.00,0.3333
+"Yuki Williams","dots and boxes",36,12,24,399,412,33.33,19,Male,USA,0,intermediate,62.64,0.3333
+"William Miller","dots and boxes",7,4,3,59,84,57.14,39,Male,Singapore,0,novice,44.48,0.5714
+"Hassan Lee","tic tac toe",13,5,8,156,154,38.46,55,Male,Japan,0,intermediate,48.28,0.3846
+"Haruto Garcia","tic tac toe",63,47,13,686,795,74.60,31,Male,Singapore,0,expert,81.10,0.7460
+"Arjun Martinez","tic tac toe",29,4,24,310,352,13.79,56,Male,Russia,1,intermediate,58.64,0.1379
+"Isabella Ali",chess,46,18,25,2161,1928,39.13,46,Female,Brazil,0,intermediate,96.96,0.3913
+"Hassan Petrov",chess,80,24,55,4144,3148,30.00,37,Male,Japan,0,intermediate,100.00,0.3000
+"Emma Garcia",chess,106,49,56,5267,4118,46.23,63,Male,Singapore,0,intermediate,100.00,0.4623
+"Ahmad Kim","dots and boxes",9,4,5,85,113,44.44,50,Male,Japan,0,novice,45.86,0.4444
+"William Petrov",battleship,65,23,42,3095,1880,35.38,23,Male,Japan,0,intermediate,100.00,0.3538
+"Wei Brown",battleship,44,24,20,2127,1186,54.55,34,Female,Spain,0,intermediate,81.32,0.5455
+"Arjun Sato","tic tac toe",30,5,24,315,359,16.67,29,Male,India,0,intermediate,59.18,0.1667
+"Yuki Petrov","tic tac toe",19,3,16,160,224,15.79,31,Male,Singapore,0,intermediate,52.08,0.1579
+"Yuki Schmidt","tic tac toe",40,10,27,447,456,25.00,56,Male,Singapore,0,intermediate,65.12,0.2500
+"Raj Suzuki",chess,78,40,32,3766,3173,51.28,50,Male,Japan,0,intermediate,100.00,0.5128
+"Elena Davis",battleship,113,70,43,5395,3125,61.95,27,Male,Singapore,0,intermediate,100.00,0.6195
+"Juan Khan",battleship,82,40,42,4172,2259,48.78,35,Male,China,0,intermediate,100.00,0.4878
+"Anna Miller",battleship,74,34,40,3747,2030,45.95,19,Male,"South Korea",0,intermediate,100.00,0.4595
+"David Kumar","connect four",48,24,20,577,577,50.00,19,Male,"South Korea",0,intermediate,70.74,0.5000
+"Zara Davis","connect four",23,9,12,302,309,39.13,55,Male,Japan,0,intermediate,55.38,0.3913
+"Dmitri Suzuki","connect four",60,34,24,676,701,56.67,63,Male,China,0,intermediate,78.02,0.5667
+"Juan Patel","connect four",80,45,28,902,945,56.25,25,Male,USA,0,intermediate,90.90,0.5625
+"Hassan Brown","tic tac toe",56,40,15,626,704,71.43,38,Male,Singapore,0,expert,76.48,0.7143
+"Anna Davis","connect four",63,32,28,661,760,50.79,28,Male,Germany,0,intermediate,80.40,0.5079
+"Elena Schmidt","connect four",23,9,14,178,289,39.13,36,Male,Japan,0,intermediate,54.98,0.3913
+"Carlos Ahmed","dots and boxes",51,33,18,584,577,64.71,19,Male,Singapore,0,intermediate,71.94,0.6471
+"Zara Davis","dots and boxes",8,5,3,87,97,62.50,55,Male,Japan,0,novice,45.14,0.6250
+"Klaus Kim","tic tac toe",11,7,4,123,133,63.64,22,Male,Canada,0,intermediate,47.06,0.6364
+"Hassan Kumar","tic tac toe",63,17,41,667,748,26.98,39,Male,Canada,0,intermediate,80.16,0.2698
+"Haruto Nguyen","connect four",62,36,24,756,752,58.06,57,Male,China,0,intermediate,79.84,0.5806
+"David Kumar","connect four",70,18,47,799,786,25.71,20,Male,China,0,intermediate,83.72,0.2571
+"Raj Brown",battleship,35,17,18,1733,920,48.57,20,Male,China,0,intermediate,72.40,0.4857
+"Olivia Ahmed","connect four",71,48,21,773,781,67.61,63,Male,Canada,0,expert,84.02,0.6761
+"Wei Wang","connect four",66,38,26,719,776,57.58,33,Male,Germany,0,intermediate,81.92,0.5758
+"Sophia Ivanov",battleship,107,37,70,5386,2897,34.58,38,Male,USA,0,intermediate,100.00,0.3458
+"Carlos Tanaka",battleship,99,50,49,4770,2639,50.51,28,Male,USA,0,intermediate,100.00,0.5051
+"John Khan",battleship,134,52,82,6408,3658,38.81,53,Male,Singapore,0,intermediate,100.00,0.3881
+"Emma Lee",reversi,3,1,2,18,38,33.33,27,Male,UK,1,novice,41.96,0.3333
+"Sophia Martinez",reversi,20,6,14,232,263,30.00,36,Male,Germany,0,intermediate,53.26,0.3000
+"Zara Brown","tic tac toe",37,14,22,387,405,37.84,32,Female,Netherlands,0,intermediate,62.90,0.3784
+"Ava Kumar",chess,103,28,70,4997,4037,27.18,52,Male,USA,0,intermediate,100.00,0.2718
+"William Chen",chess,38,17,21,2015,1436,44.74,53,Male,USA,0,intermediate,83.92,0.4474
+"Klaus Khan",chess,76,39,32,3622,3008,51.32,33,Male,UK,0,intermediate,100.00,0.5132
+"Zhang Khan",chess,27,13,14,1357,1106,48.15,53,Male,Singapore,0,intermediate,72.92,0.4815
+"Elena Schmidt",battleship,88,54,34,4311,2367,61.36,34,Male,Brazil,0,intermediate,100.00,0.6136
+"Emma Ivanov",battleship,90,38,52,4406,2435,42.22,51,Male,Japan,0,intermediate,100.00,0.4222
+"Carlos Chen","connect four",51,17,33,577,563,33.33,45,Female,China,0,intermediate,71.66,0.3333
+"Ava Chen","connect four",19,7,11,195,214,36.84,33,Male,Singapore,0,intermediate,51.88,0.3684
+"Haruto Liu",chess,32,11,20,1562,1241,34.38,22,Male,Spain,0,intermediate,77.62,0.3438
+"Mohammed Suzuki","dots and boxes",39,28,11,391,466,71.79,26,Male,Singapore,0,intermediate,64.92,0.7179
+"Olivia Petrov","dots and boxes",3,1,2,23,37,33.33,55,Male,USA,1,novice,41.94,0.3333
+"Ivan Garcia",chess,86,50,34,4167,3340,58.14,52,Male,Singapore,0,intermediate,100.00,0.5814
+"John Ali",battleship,120,82,38,5807,3212,68.33,33,Male,France,0,expert,100.00,0.6833
+"Haruto Singh","tic tac toe",52,33,16,587,709,63.46,39,Female,"South Korea",0,intermediate,74.98,0.6346
+"Ahmad Sato",battleship,103,30,73,4981,2850,29.13,51,Male,USA,0,intermediate,100.00,0.2913
+"Dmitri Lee",chess,68,27,38,3329,2615,39.71,58,Male,Singapore,0,intermediate,100.00,0.3971
+"Dmitri Khan",chess,97,25,68,4613,3760,25.77,59,Male,Russia,0,intermediate,100.00,0.2577
+"Raj Suzuki",chess,87,34,49,4170,3378,39.08,47,Male,Singapore,0,intermediate,100.00,0.3908
+"Hassan Lee",battleship,80,26,54,3926,2204,32.50,55,Male,Japan,0,intermediate,100.00,0.3250
+"Wei Davis",chess,89,41,44,4193,3427,46.07,18,Female,Singapore,0,intermediate,100.00,0.4607
+"Raj Wang",chess,97,62,29,4676,3965,63.92,60,Male,Germany,0,intermediate,100.00,0.6392
+"John Nguyen",go,9,6,3,782,553,66.67,22,Male,China,0,novice,54.66,0.6667
+"Ava Davis",go,24,4,20,2224,1495,16.67,32,Male,Canada,0,intermediate,79.50,0.1667
+"Zara Ahmed","tic tac toe",16,9,7,201,175,56.25,39,Male,China,0,intermediate,49.90,0.5625
+"Elena Schmidt","tic tac toe",34,10,22,397,441,29.41,36,Male,Japan,0,intermediate,62.42,0.2941
+"Raj Martinez",chess,86,46,37,4105,3503,53.49,58,Male,Singapore,0,intermediate,100.00,0.5349
+"John Chen",chess,108,37,63,5168,4271,34.26,22,Male,USA,0,intermediate,100.00,0.3426
+"Anna Chen","tic tac toe",9,3,6,70,140,33.33,34,Male,China,0,novice,46.40,0.3333
+"John Sato","tic tac toe",49,13,32,550,604,26.53,40,Male,Singapore,0,intermediate,71.68,0.2653
+"David Kumar",go,5,2,3,295,300,40.00,19,Male,"South Korea",0,novice,48.00,0.4000
+"Elena Ali",go,25,12,13,1951,1539,48.00,50,Male,France,0,intermediate,80.78,0.4800
+"Priya Williams",chess,31,14,16,1501,1252,45.16,63,Male,Singapore,0,intermediate,77.44,0.4516
+"Raj Khan",chess,36,21,14,1836,1239,58.33,49,Male,Singapore,0,intermediate,79.18,0.5833
+"Ahmad Davis",chess,85,56,25,3956,3231,65.88,23,Male,Japan,0,expert,100.00,0.6588
+"Haruto Nguyen",chess,88,26,56,4169,3483,29.55,57,Male,China,0,intermediate,100.00,0.2955
+"Klaus Khan",battleship,104,71,33,4881,2783,68.27,33,Male,UK,0,expert,100.00,0.6827
+"Priya Sato",battleship,99,60,39,4803,2706,60.61,32,Male,India,0,intermediate,100.00,0.6061
+"Joseph Suzuki",battleship,84,53,31,3958,2160,63.10,36,Male,Singapore,0,intermediate,100.00,0.6310
+"Dmitri Kumar","connect four",70,41,27,790,797,58.57,40,Male,Singapore,0,intermediate,83.94,0.5857
+"Carlos Martinez","connect four",77,26,47,831,926,33.77,51,Male,Singapore,0,intermediate,89.32,0.3377
+"Sophia Brown","connect four",62,21,41,720,703,33.87,42,Male,Singapore,0,intermediate,68.86,0.3387
+"Ava Rodriguez","connect four",21,6,15,239,263,28.57,36,Male,UK,0,intermediate,43.66,0.2857
+"Ava Chen","tic tac toe",45,25,17,451,571,55.56,33,Male,Singapore,0,intermediate,59.42,0.5556
+"Arjun Sato",chess,104,45,51,5354,4154,43.27,30,Female,Singapore,0,intermediate,100.00,0.4327
+"Zara Ahmed",chess,93,58,29,4621,3596,62.37,38,Male,"South Korea",0,intermediate,100.00,0.6237
+"Ahmad Kumar",battleship,106,78,28,4958,2894,73.58,40,Male,USA,0,expert,100.00,0.7358
+"Sophia Wang",battleship,99,60,39,4774,2641,60.61,35,Male,UK,0,intermediate,100.00,0.6061
+"Michael Ivanov",battleship,96,36,60,4664,2602,37.50,21,Male,Singapore,0,intermediate,100.00,0.3750
+"Olivia Ahmed","tic tac toe",48,8,38,521,612,16.67,63,Male,Canada,0,intermediate,61.44,0.1667
+"Robert Patel","tic tac toe",29,15,13,284,355,51.72,36,Male,Singapore,0,intermediate,48.70,0.5172
+"Olivia Patel","connect four",56,32,21,631,737,57.14,63,Female,Singapore,0,intermediate,67.14,0.5714
+"Mohammed Nguyen","connect four",65,38,27,693,741,58.46,33,Male,Singapore,0,intermediate,70.82,0.5846
+"Ava Johnson",chess,26,18,8,1160,970,69.23,37,Male,USA,0,intermediate,59.80,0.6923
+"Anna Davis",chess,61,26,33,2858,2383,42.62,35,Male,Singapore,0,intermediate,100.00,0.4262
+"Wei Schmidt",battleship,122,48,74,5942,3248,39.34,28,Male,France,0,intermediate,100.00,0.3934
+"Haruto Garcia","connect four",26,12,11,255,338,46.15,31,Male,Singapore,0,intermediate,47.16,0.4615
+"Isabella Ivanov",chess,101,66,29,5143,3778,65.35,42,Male,USA,0,expert,100.00,0.6535
+"Raj Suzuki","tic tac toe",21,7,14,187,261,33.33,50,Male,Japan,0,intermediate,43.62,0.3333
+"John Nguyen",chess,63,38,21,3154,2415,60.32,22,Male,China,0,intermediate,100.00,0.6032
+"Robert Johnson",chess,70,26,42,3165,2791,37.14,60,Male,Australia,0,intermediate,100.00,0.3714
+"Dmitri Suzuki","tic tac toe",11,8,3,138,147,72.73,63,Male,China,0,intermediate,37.34,0.7273
+"Anna Williams",chess,101,27,71,4922,4160,26.73,44,Male,Germany,0,intermediate,100.00,0.2673
+"Hassan Ali",chess,73,35,36,3528,2986,47.95,40,Male,Singapore,0,intermediate,100.00,0.4795
+"Wei Johnson",chess,87,44,40,4539,3423,50.57,22,Male,Singapore,0,intermediate,100.00,0.5057
+"William Nguyen",go,2,1,1,118,124,50.00,53,Male,Russia,1,novice,33.28,0.5000
+"William Petrov",chess,91,47,43,4312,3618,51.65,23,Male,Japan,0,intermediate,100.00,0.5165
+"Dmitri Rodriguez","dots and boxes",28,19,9,326,345,67.86,23,Male,Singapore,0,intermediate,48.10,0.6786
+"Isabella Lee","dots and boxes",11,7,4,130,139,63.64,61,Male,"South Korea",0,intermediate,37.18,0.6364
+"Isabella Ivanov",battleship,130,57,73,6241,3504,43.85,42,Male,USA,0,intermediate,100.00,0.4385
+"Priya Garcia",battleship,117,44,73,5600,3222,37.61,37,Male,France,0,intermediate,100.00,0.3761
+"Emma Suzuki","connect four",63,47,14,774,749,74.60,35,Male,Singapore,0,expert,70.18,0.7460
+"Anna Davis","connect four",61,27,30,640,732,44.26,35,Male,Singapore,0,intermediate,69.04,0.4426
+"Yuki Johnson",battleship,105,31,74,4898,2763,29.52,55,Male,China,0,intermediate,100.00,0.2952
+"Robert Johnson",battleship,68,37,31,3184,1868,54.41,60,Male,Australia,0,intermediate,94.56,0.5441
+"Mohammed Ali","tic tac toe",14,6,7,163,159,42.86,49,Male,UK,0,intermediate,38.78,0.4286
+"Juan Petrov",chess,65,47,16,2762,2424,72.31,60,Male,"South Korea",0,expert,100.00,0.7231
+"John Liu","connect four",58,24,31,687,693,41.38,36,Male,Spain,0,intermediate,67.06,0.4138
+"Haruto Wang","connect four",23,8,13,290,274,34.78,63,Male,UK,0,intermediate,44.68,0.3478
+"Arjun Johnson",chess,69,15,48,3448,2689,21.74,49,Male,Brazil,0,intermediate,100.00,0.2174
+"John Tanaka",chess,26,14,10,1157,1000,53.85,51,Male,China,0,intermediate,60.40,0.5385
+"Dmitri Suzuki",battleship,100,31,69,4907,2781,31.00,61,Male,Singapore,0,intermediate,100.00,0.3100
+"Yuki Kim",battleship,39,12,27,1749,1100,30.77,38,Female,Singapore,0,intermediate,67.60,0.3077
+"David Lee",chess,29,16,12,1466,1116,55.17,34,Male,USA,0,intermediate,63.92,0.5517
+"William Nguyen","connect four",66,41,22,733,788,62.12,53,Male,Russia,0,intermediate,72.16,0.6212
+"Elena Garcia",chess,28,10,18,1406,1031,35.71,64,Male,Japan,0,intermediate,61.82,0.3571
+"Anna Tran",chess,63,21,38,3162,2549,33.33,46,Male,Singapore,0,intermediate,100.00,0.3333
+"Dmitri Williams","connect four",69,29,34,764,836,42.03,37,Male,USA,0,intermediate,74.32,0.4203
+"Wei Miller",battleship,37,17,20,1824,998,45.95,59,Male,Singapore,0,intermediate,64.76,0.4595
+"Anna Tran","tic tac toe",41,31,6,474,469,75.61,46,Male,Singapore,0,intermediate,55.78,0.7561
+"Wei Davis","connect four",47,26,20,578,551,55.32,18,Female,Singapore,0,intermediate,59.82,0.5532
+"Wei Park","connect four",47,20,23,536,539,42.55,64,Male,Germany,0,intermediate,59.58,0.4255
+"Olivia Petrov","connect four",26,16,10,302,287,61.54,52,Male,Singapore,0,intermediate,46.14,0.6154
+"Hassan Lee",chess,83,58,21,4473,3284,69.88,55,Male,Japan,0,expert,100.00,0.6988
+"Emma Patel","connect four",25,11,11,224,309,44.00,20,Male,Singapore,0,intermediate,46.18,0.4400
+"Arjun Johnson","connect four",73,37,35,924,842,50.68,50,Female,India,0,intermediate,76.04,0.5068
+"Hassan Schmidt","connect four",69,22,45,829,828,31.88,27,Male,Russia,0,intermediate,74.16,0.3188
+"John Tanaka","connect four",57,16,38,686,656,28.07,51,Male,China,0,intermediate,65.92,0.2807
+"Maria Chen","dots and boxes",10,7,3,109,112,70.00,38,Female,Brazil,0,intermediate,36.24,0.7000
+"Ava Davis","dots and boxes",35,27,8,365,426,77.14,32,Male,Canada,0,intermediate,52.52,0.7714
+"Hassan Kumar",chess,60,32,25,2965,2364,53.33,39,Male,Canada,0,intermediate,100.00,0.5333
+"Juan Tran",chess,84,25,57,4288,3228,29.76,57,Male,USA,0,intermediate,100.00,0.2976
+"Olivia Johnson","dots and boxes",51,38,13,571,611,74.51,37,Male,Japan,0,expert,62.62,0.7451
+"Ahmad Davis","dots and boxes",30,24,6,356,365,80.00,22,Male,Singapore,0,intermediate,49.30,0.8000
+"Olivia Ahmed","dots and boxes",7,4,3,81,102,57.14,63,Male,Canada,0,novice,34.84,0.5714
+"Klaus Kim",battleship,44,16,28,2084,1125,36.36,22,Male,Canada,0,intermediate,70.10,0.3636
+"Ivan Ahmed",battleship,45,26,19,2046,1175,57.78,58,Male,Singapore,0,intermediate,71.50,0.5778
+"Dmitri Khan",chess,87,24,59,3990,3343,27.59,19,Male,China,0,intermediate,100.00,0.2759
+"Sophia Brown","tic tac toe",51,23,27,599,604,45.10,42,Male,Singapore,0,intermediate,62.48,0.4510
+"Carlos Park","tic tac toe",36,23,10,381,403,63.89,32,Male,USA,0,intermediate,52.46,0.6389
+"Hassan Ali","dots and boxes",7,3,4,87,97,42.86,40,Male,Singapore,0,novice,34.74,0.4286
+"Mohammed Nguyen","dots and boxes",36,15,21,404,434,41.67,33,Male,Singapore,0,intermediate,53.08,0.4167
+"Raj Patel","dots and boxes",11,6,5,114,157,54.55,34,Male,UK,0,intermediate,37.54,0.5455
+"Amir Khan","connect four",38,18,18,408,455,47.37,61,Female,Singapore,0,intermediate,54.30,0.4737
+"Anna Chen","connect four",63,33,30,695,790,52.38,34,Male,China,0,intermediate,71.00,0.5238
+"Soma Williams","connect four",78,22,53,840,886,28.21,59,Male,Singapore,0,intermediate,78.92,0.2821
+"Michael Ahmed","tic tac toe",48,10,33,572,578,20.83,34,Male,Singapore,0,intermediate,60.76,0.2083
+"Anna Kim",chess,92,71,19,4374,3842,77.17,61,Male,Canada,0,expert,100.00,0.7717
+"Carlos Ahmed",chess,67,48,19,3475,2650,71.64,19,Male,Singapore,0,expert,100.00,0.7164
+"Zara Wang","connect four",26,12,12,298,259,46.15,26,Male,USA,0,intermediate,45.58,0.4615
+"Mohammed Ali","connect four",65,20,40,742,775,30.77,49,Male,UK,0,intermediate,71.50,0.3077
+"Wei Miller","connect four",16,4,12,179,151,25.00,59,Male,Singapore,0,intermediate,39.42,0.2500
+"William Petrov","connect four",64,17,45,751,715,26.56,23,Male,Japan,0,intermediate,69.90,0.2656
+"Emma Garcia","connect four",25,10,14,270,300,40.00,63,Male,Singapore,0,intermediate,46.00,0.4000
+"John Kumar",battleship,73,26,47,3553,2000,35.62,35,Male,Netherlands,0,intermediate,99.20,0.3562
+"Wei Martinez","tic tac toe",47,16,30,497,571,34.04,29,Male,Japan,0,intermediate,60.22,0.3404
+"Emma Lee","tic tac toe",17,10,6,155,184,58.82,27,Male,UK,0,intermediate,40.48,0.5882
+"Li Martinez",battleship,82,42,40,3919,2242,51.22,26,Male,Singapore,0,intermediate,100.00,0.5122
+"Hans Tanaka",chess,43,21,22,2122,1696,48.84,30,Male,Singapore,0,intermediate,81.12,0.4884
+"Yuki Williams",battleship,29,12,17,1339,785,41.38,19,Male,USA,0,intermediate,57.30,0.4138
+"Raj Schmidt","connect four",15,7,7,115,160,46.67,55,Male,France,0,intermediate,39.20,0.4667
+"Zara Davis","tic tac toe",58,13,44,615,660,22.41,55,Male,Japan,0,intermediate,66.40,0.2241
+"Hassan Petrov","tic tac toe",58,24,29,643,714,41.38,37,Male,Japan,0,intermediate,67.48,0.4138
+"Klaus Kumar",chess,38,11,24,1883,1418,28.95,60,Male,Singapore,0,intermediate,73.56,0.2895
+"Isabella Lee",battleship,74,44,30,3496,1874,59.46,61,Male,"South Korea",0,intermediate,97.08,0.5946
+"Olivia Johnson",battleship,47,19,28,2299,1305,40.43,37,Male,Japan,0,intermediate,74.90,0.4043
+"Arjun Martinez",battleship,38,13,25,1733,1019,34.21,56,Male,Russia,0,intermediate,65.58,0.3421
+"Wei Johnson","connect four",70,24,44,729,845,34.29,22,Male,Singapore,0,intermediate,74.90,0.3429
+"Anna Miller","connect four",64,42,17,766,763,65.63,19,Male,"South Korea",0,expert,70.86,0.6563
+"Dmitri Liu",battleship,30,11,19,1400,775,36.67,47,Male,Singapore,0,intermediate,57.50,0.3667
+"Sophia Ahmed",chess,35,11,23,1808,1361,31.43,55,Male,Singapore,0,intermediate,71.22,0.3143
+"Emma Patel",battleship,33,11,22,1639,925,33.33,20,Male,Singapore,0,intermediate,61.70,0.3333
+"Hans Davis","dots and boxes",36,14,22,411,450,38.89,35,Male,Singapore,0,intermediate,53.40,0.3889
+"Klaus Park","dots and boxes",21,13,8,223,269,61.90,40,Male,Singapore,0,intermediate,43.78,0.6190
+"Priya Tran","tic tac toe",17,10,7,166,234,58.82,63,Male,India,0,intermediate,41.48,0.5882
+"Isabella Williams","tic tac toe",34,15,16,380,402,44.12,37,Female,UK,0,intermediate,51.64,0.4412
+"Ivan Nguyen",chess,42,20,21,2125,1704,47.62,36,Male,Singapore,0,intermediate,80.88,0.4762
+"Yuki Schmidt",battleship,43,19,24,2307,1114,44.19,56,Male,Singapore,0,intermediate,69.48,0.4419
+"Ahmad Schmidt",battleship,111,63,48,5420,2920,56.76,28,Male,Spain,0,intermediate,100.00,0.5676
+"Priya Ali","connect four",61,19,34,761,735,31.15,28,Male,Russia,0,intermediate,69.10,0.3115
+"Isabella Rodriguez","connect four",22,8,14,215,264,36.36,29,Male,India,0,intermediate,44.08,0.3636
+"Juan Khan","connect four",75,48,23,918,888,64.00,35,Male,China,0,intermediate,77.76,0.6400
+"Carlos Chen",chess,86,42,43,4241,3216,48.84,45,Female,China,0,intermediate,100.00,0.4884
+"William Ivanov",chess,36,16,20,1760,1373,44.44,59,Male,Canada,0,intermediate,71.86,0.4444
+"Robert Mueller",chess,99,68,30,4743,3949,68.69,57,Female,Japan,0,expert,100.00,0.6869
+"Amir Liu",battleship,61,23,38,2889,1601,37.70,36,Female,Australia,0,intermediate,86.42,0.3770
+"Zhang Mueller",chess,45,19,25,2198,1689,42.22,53,Male,Singapore,0,intermediate,81.78,0.4222
+"Elena Khan",chess,97,23,72,4394,3862,23.71,33,Male,"South Korea",0,intermediate,100.00,0.2371
+"Isabella Rodriguez",battleship,46,22,24,2021,1183,47.83,29,Male,India,0,intermediate,72.06,0.4783
+"Ivan Nguyen",battleship,127,58,69,6362,3423,45.67,36,Male,Singapore,0,intermediate,100.00,0.4567
+"Haruto Davis",battleship,102,53,49,5021,2636,51.96,50,Male,USA,0,intermediate,100.00,0.5196
+"Haruto Nguyen",battleship,101,60,41,4960,2781,59.41,57,Male,China,0,intermediate,100.00,0.5941
+"Wei Davis",battleship,39,17,22,1852,1117,43.59,18,Female,Singapore,0,intermediate,67.94,0.4359
+"Hassan Kumar",reversi,3,2,1,28,43,66.67,39,Male,Canada,1,novice,32.06,0.6667
+"David Kumar",reversi,18,9,9,242,199,50.00,20,Male,China,0,intermediate,41.18,0.5000
+"Anna Miller",chess,98,45,49,4634,3804,45.92,19,Male,"South Korea",0,intermediate,100.00,0.4592
+"Sophia Martinez","connect four",76,19,52,854,960,25.00,36,Male,Germany,0,intermediate,79.60,0.2500
+"Maria Khan","connect four",75,19,55,848,940,25.33,20,Male,Singapore,0,intermediate,78.80,0.2533
+"Mohammed Nguyen","tic tac toe",61,45,15,700,778,73.77,33,Male,Singapore,0,expert,69.96,0.7377
+"Sofia Johnson","tic tac toe",13,6,6,143,181,46.15,39,Female,China,0,intermediate,38.82,0.4615
+"Mohammed Ali",chess,76,40,30,3614,3082,52.63,43,Male,USA,0,intermediate,100.00,0.5263
+"Soma Williams",battleship,45,19,26,2043,1204,42.22,59,Male,Singapore,0,intermediate,72.08,0.4222
+"Joseph Liu","tic tac toe",40,28,11,398,498,70.00,18,Male,Singapore,0,intermediate,55.96,0.7000
+"Ahmad Mueller","tic tac toe",15,7,6,137,150,46.67,18,Male,Canada,0,intermediate,39.00,0.4667
+"Hassan Ali","connect four",22,14,8,248,259,63.64,40,Male,Singapore,0,intermediate,43.98,0.6364
+"Klaus Kim","connect four",66,25,40,775,750,37.88,22,Male,Canada,0,intermediate,71.40,0.3788
+"Zara Brown","connect four",77,48,25,891,931,62.34,31,Male,USA,0,intermediate,79.42,0.6234
+"Klaus Park","connect four",54,16,35,617,682,29.63,40,Male,Singapore,0,intermediate,65.24,0.2963
+"Raj Martinez","connect four",61,38,19,696,775,62.30,58,Male,Singapore,0,intermediate,69.90,0.6230
+"Robert Johnson",go,5,2,3,348,325,40.00,60,Male,Australia,0,novice,38.50,0.4000
+"Dmitri Sato",reversi,16,2,14,191,189,12.50,45,Male,UK,1,intermediate,40.18,0.1250
+"Priya Petrov",reversi,4,1,3,28,40,25.00,29,Male,China,1,novice,32.40,0.2500
+"Amir Singh","connect four",72,51,18,804,858,70.83,54,Male,France,0,expert,75.96,0.7083
+"Ahmad Kim",go,4,4,0,245,226,100.00,50,Male,Japan,1,novice,36.12,0.9000
+"Anna Sato",go,13,7,6,1197,807,53.85,19,Male,Germany,0,intermediate,51.34,0.5385
+"Amir Singh",go,3,2,1,176,154,66.67,54,Male,France,1,novice,34.28,0.6667
+"Isabella Martinez",go,14,7,7,1038,850,50.00,36,Male,Singapore,0,intermediate,52.60,0.5000
+"Hans Ali",battleship,36,17,19,1658,903,47.22,61,Male,Japan,0,intermediate,62.46,0.4722
+"Isabella Martinez",battleship,118,40,78,5684,3306,33.90,34,Male,Singapore,0,intermediate,100.00,0.3390
+"Sophia Brown",battleship,129,71,58,6391,3456,55.04,42,Male,Singapore,0,intermediate,100.00,0.5504
+"Carlos Sato",chess,81,44,35,4063,3165,54.32,20,Male,France,0,intermediate,100.00,0.5432
+"John Sato",chess,40,25,15,1956,1596,62.50,40,Male,Singapore,0,intermediate,77.92,0.6250
+"William Miller",chess,76,25,47,3357,3098,32.89,39,Male,Singapore,0,intermediate,100.00,0.3289
+"Soma Williams",chess,27,14,12,1268,1111,51.85,59,Male,Singapore,0,intermediate,63.02,0.5185
+"Carlos Martinez",chess,77,43,32,3827,2957,55.84,51,Male,Singapore,0,intermediate,100.00,0.5584
+"Dmitri Rodriguez",chess,98,65,30,4588,3974,66.33,23,Male,Singapore,0,expert,100.00,0.6633
+"Raj Brown","connect four",34,18,16,390,430,52.94,20,Male,China,0,intermediate,52.20,0.5294
+"Ahmad Tanaka","tic tac toe",17,9,8,169,176,52.94,57,Female,Brazil,0,intermediate,40.32,0.5294
+"Yuki Kumar",reversi,4,2,2,44,62,50.00,27,Male,China,1,novice,32.84,0.5000
+"Hans Williams","dots and boxes",11,4,7,158,137,36.36,49,Male,Singapore,0,intermediate,37.14,0.3636
+"Ivan Garcia","connect four",55,12,39,620,619,21.82,52,Male,Singapore,0,intermediate,64.38,0.2182
+"Yuki Garcia",chess,98,48,47,4793,3769,48.98,35,Male,Singapore,0,intermediate,100.00,0.4898
+"Zara Ahmed","tic tac toe",16,7,9,159,206,43.75,38,Male,"South Korea",0,intermediate,40.52,0.4375
+"John Chen","tic tac toe",54,19,34,557,648,35.19,22,Male,USA,0,intermediate,64.56,0.3519
+"Dmitri Ahmed","tic tac toe",34,20,13,395,425,58.82,51,Male,Singapore,0,intermediate,52.10,0.5882
+"Yuki Johnson","tic tac toe",44,29,14,486,539,65.91,55,Male,China,0,intermediate,58.38,0.6591
+"Wei Brown","tic tac toe",55,31,19,680,655,56.36,34,Male,Netherlands,0,intermediate,65.10,0.5636
+"Sofia Johnson","dots and boxes",30,25,5,343,346,83.33,39,Female,China,0,intermediate,48.92,0.8333
+"John Liu","dots and boxes",11,5,6,113,140,45.45,32,Male,China,0,intermediate,37.20,0.4545
+"Sophia Miller","tic tac toe",17,7,10,155,213,41.18,57,Male,Singapore,0,intermediate,41.06,0.4118
+"Zhang Tanaka",chess,34,16,18,1472,1464,47.06,52,Male,Singapore,0,intermediate,72.88,0.4706
+"David Schmidt","tic tac toe",52,26,24,583,646,50.00,49,Male,USA,0,intermediate,63.72,0.5000
+"Li Kumar","tic tac toe",45,14,31,494,555,31.11,37,Male,Germany,0,intermediate,59.10,0.3111
+"Soma Mueller","dots and boxes",39,22,17,487,463,56.41,43,Male,UK,0,intermediate,54.86,0.5641
+"Dmitri Khan","dots and boxes",9,6,3,78,82,66.67,19,Male,China,0,novice,35.24,0.6667
+"Zhang Davis",go,28,19,9,2477,1479,67.86,60,Male,Singapore,0,intermediate,70.78,0.6786
+"Arjun Johnson",go,2,0,2,80,82,0.00,50,Female,India,1,novice,32.44,0.1000
+"Sophia Singh",battleship,113,56,57,5534,3081,49.56,60,Male,Singapore,0,intermediate,100.00,0.4956
+"John Mueller","connect four",58,11,45,619,663,18.97,57,Male,UK,0,intermediate,66.46,0.1897
+"Hassan Brown","connect four",48,29,18,510,573,60.42,41,Male,Spain,0,intermediate,60.66,0.6042
+"Carlos Chen",battleship,122,68,54,5934,3303,55.74,45,Female,China,0,intermediate,100.00,0.5574
+"Arjun Johnson","tic tac toe",31,22,9,344,356,70.97,49,Male,Brazil,0,intermediate,49.52,0.7097
+"David Suzuki","tic tac toe",16,7,8,193,185,43.75,43,Male,"South Korea",0,intermediate,40.10,0.4375
+"Mohammed Khan",reversi,12,3,9,113,141,25.00,18,Male,USA,0,intermediate,37.62,0.2500
+"Priya Williams",reversi,5,4,1,39,53,80.00,63,Male,Singapore,0,novice,33.06,0.8000
+"Juan Tran","connect four",50,13,37,578,584,26.00,57,Male,USA,0,intermediate,61.68,0.2600
+"Zhang Nguyen","dots and boxes",37,13,24,377,440,35.14,64,Male,Singapore,0,intermediate,53.60,0.3514
+"Emma Garcia","dots and boxes",25,9,16,266,285,36.00,63,Male,Singapore,0,intermediate,45.70,0.3600
+"Yuki Wang",chess,105,72,31,4666,4189,68.57,20,Non-Binary,Singapore,0,expert,100.00,0.6857
+"Hassan Brown",chess,86,31,49,4207,3351,36.05,41,Male,Spain,0,intermediate,100.00,0.3605
+"Juan Patel","dots and boxes",40,28,12,451,462,70.00,26,Female,Singapore,0,intermediate,55.24,0.7000
+"Wei Martinez","dots and boxes",8,3,5,90,100,37.50,29,Male,Japan,0,novice,35.20,0.3750
+"Amir Ali",go,5,2,3,308,345,40.00,37,Male,"South Korea",0,novice,38.90,0.4000
+"Dmitri Ahmed",chess,85,35,43,4113,3271,41.18,51,Male,Singapore,0,intermediate,100.00,0.4118
+"Carlos Ahmed",battleship,36,14,22,1662,1000,38.89,19,Male,Singapore,0,intermediate,64.40,0.3889
+"Ahmad Miller","connect four",84,66,17,931,964,78.57,61,Male,Singapore,0,expert,82.88,0.7857
+"Mohammed Khan","connect four",71,36,32,864,847,50.70,18,Male,USA,0,intermediate,75.34,0.5070
+"Elena Garcia",chess,38,17,19,1901,1597,44.74,61,Male,"South Korea",0,intermediate,77.14,0.4474
+"Ahmad Petrov",chess,84,26,54,3790,3328,30.95,42,Male,Singapore,0,intermediate,100.00,0.3095
+"Zara Brown",go,6,1,5,488,396,16.67,31,Male,USA,0,novice,40.32,0.1667
+"Haruto Wang",go,19,5,14,1704,1227,26.32,63,Male,UK,0,intermediate,62.14,0.2632
+"Olivia Johnson","connect four",50,24,25,480,613,48.00,37,Male,Japan,0,intermediate,62.26,0.4800
+"Robert Chen",reversi,7,2,5,77,81,28.57,62,Male,India,0,novice,34.42,0.2857
+"Haruto Garcia",chess,59,17,41,2856,2263,28.81,31,Male,Singapore,0,intermediate,98.86,0.2881
+"Dmitri Park",chess,40,17,22,1992,1656,42.50,19,Male,UK,0,intermediate,79.12,0.4250
+"Ivan Miller","dots and boxes",34,21,13,373,426,61.76,19,Male,Australia,0,intermediate,52.12,0.6176
+"Dmitri Ahmed","dots and boxes",22,7,15,198,299,31.82,51,Male,Singapore,0,intermediate,44.78,0.3182
+"Olivia Petrov","connect four",54,24,29,580,636,44.44,55,Male,USA,0,intermediate,64.32,0.4444
+"Emma Suzuki",reversi,2,1,1,9,24,50.00,35,Male,Singapore,1,novice,31.28,0.5000
+"Klaus Park",reversi,20,12,8,188,226,60.00,40,Male,Singapore,0,intermediate,42.52,0.6000
+"Emma Lee","connect four",25,11,14,223,316,44.00,27,Male,UK,0,intermediate,46.32,0.4400
+"Arjun Johnson",chess,86,18,63,4392,3444,20.93,50,Female,India,0,intermediate,100.00,0.2093
+"Dmitri Khan",chess,81,48,28,4066,3213,59.26,22,Female,Spain,0,intermediate,100.00,0.5926
+"William Miller","connect four",54,18,35,652,608,33.33,39,Male,Singapore,0,intermediate,63.76,0.3333
+"Yuki Garcia","connect four",27,11,15,317,336,40.74,35,Male,Singapore,0,intermediate,47.52,0.4074
+"Raj Khan",battleship,44,17,27,2308,1239,38.64,49,Male,Singapore,0,intermediate,72.38,0.3864
+"Raj Schmidt",battleship,67,48,19,3306,1835,71.64,55,Male,France,0,expert,93.50,0.7164
+"Raj Wang",battleship,80,31,49,4069,2222,38.75,60,Male,Germany,0,intermediate,100.00,0.3875
+"Zhang Petrov",chess,104,83,20,4982,4078,79.81,32,Male,Germany,0,expert,100.00,0.7981
+"Robert Mueller",battleship,106,61,45,5232,2901,57.55,57,Female,Japan,0,intermediate,100.00,0.5755
+"Sophia Johnson","connect four",30,12,16,328,355,40.00,22,Male,Netherlands,0,intermediate,49.10,0.4000
+"Emma Garcia",chess,52,24,27,2632,2055,46.15,64,Male,Germany,0,intermediate,91.90,0.4615
+"Yuki Williams",chess,31,13,16,1438,1154,41.94,19,Male,USA,0,intermediate,65.48,0.4194
+"Hans Brown","tic tac toe",50,29,18,528,596,58.00,62,Male,Germany,0,intermediate,61.92,0.5800
+"Hans Brown",battleship,123,54,69,6060,3286,43.90,62,Male,Germany,0,intermediate,100.00,0.4390
+"Carlos Chen",reversi,13,5,8,146,154,38.46,45,Female,China,0,intermediate,38.28,0.3846
+"Wei Brown",reversi,6,4,2,70,65,66.67,34,Male,Netherlands,0,novice,33.70,0.6667
+"Yuki Khan",chess,27,12,13,1134,976,44.44,49,Male,USA,0,intermediate,60.32,0.4444
+"Robert Patel",battleship,116,41,75,5750,3142,35.34,36,Male,Singapore,0,intermediate,100.00,0.3534
+"Dmitri Park",battleship,34,15,19,1654,869,44.12,19,Male,UK,0,intermediate,60.98,0.4412
+"Joseph Suzuki","dots and boxes",27,12,15,308,266,44.44,36,Female,Singapore,0,intermediate,46.12,0.4444
+"Priya Schmidt","dots and boxes",43,21,22,506,499,48.84,54,Male,UK,0,intermediate,57.18,0.4884
+"William Ivanov",battleship,92,25,67,4570,2389,27.17,59,Male,Canada,0,intermediate,100.00,0.2717
+"Olivia Rodriguez","dots and boxes",15,3,12,175,189,20.00,44,Male,Singapore,0,intermediate,39.78,0.2000
+"Sophia Ivanov","dots and boxes",10,4,6,106,127,40.00,38,Male,USA,0,intermediate,36.54,0.4000
+"Sofia Davis",battleship,30,14,16,1425,763,46.67,30,Female,Singapore,0,intermediate,57.26,0.4667
+"Hassan Kumar",battleship,88,45,43,4306,2293,51.14,39,Male,Canada,0,intermediate,100.00,0.5114
+"Zara Brown","tic tac toe",16,5,11,173,207,31.25,33,Female,Singapore,0,intermediate,40.54,0.3125
+"Klaus Park","connect four",27,11,15,290,339,40.74,35,Male,China,0,intermediate,47.58,0.4074
+"Elena Khan",chess,27,10,16,1177,1035,37.04,24,Female,USA,0,intermediate,61.50,0.3704
+"Ivan Ahmed",chess,38,18,19,1847,1493,47.37,58,Male,Singapore,0,intermediate,75.06,0.4737
+"John Schmidt",chess,70,51,15,3123,2600,72.86,18,Male,Australia,0,expert,100.00,0.7286
+"Yuki Schmidt",chess,113,53,55,5655,4441,46.90,56,Male,Singapore,0,intermediate,100.00,0.4690
+"John Ali",chess,83,57,24,3986,3241,68.67,33,Male,France,0,expert,100.00,0.6867
+"Zhang Nguyen",reversi,2,1,1,15,19,50.00,64,Male,Singapore,1,novice,31.18,0.5000
+"Amir Liu",reversi,22,18,4,272,247,81.82,36,Female,Australia,0,intermediate,43.74,0.8182
+"Sofia Davis","connect four",65,37,28,758,790,56.92,30,Female,Singapore,0,intermediate,71.80,0.5692
+"Sophia Ivanov","connect four",65,44,20,733,769,67.69,38,Male,USA,0,expert,71.38,0.6769
+"Sophia Khan","connect four",31,13,17,382,380,41.94,64,Male,USA,0,intermediate,50.00,0.4194
+"Priya Suzuki","connect four",27,13,14,345,312,48.15,53,Male,Singapore,0,intermediate,47.04,0.4815
+"Hassan Brown","tic tac toe",13,6,6,145,141,46.15,41,Male,Spain,0,intermediate,38.02,0.4615
+"Wei Rodriguez",chess,32,19,12,1706,1211,59.38,28,Male,Singapore,0,intermediate,67.02,0.5938
+"David Ali","connect four",27,11,14,284,298,40.74,64,Male,"South Korea",0,intermediate,46.76,0.4074
+"Zara Ahmed",battleship,102,45,57,4989,2796,44.12,38,Male,"South Korea",0,intermediate,100.00,0.4412
+"Anna Sato","tic tac toe",14,6,7,133,192,42.86,19,Male,Germany,0,intermediate,39.44,0.4286
+"Anna Tran",battleship,45,22,23,2100,1258,48.89,46,Male,Singapore,0,intermediate,73.16,0.4889
+"Ahmad Petrov","tic tac toe",16,10,5,179,213,62.50,42,Male,Singapore,0,intermediate,40.66,0.6250
+"Yuki Kumar","tic tac toe",18,8,8,180,228,44.44,27,Male,China,0,intermediate,41.76,0.4444
+"Sofia Davis",chess,28,16,12,1432,1169,57.14,30,Female,Singapore,0,intermediate,64.58,0.5714
+"Yuki Ali","tic tac toe",16,6,9,182,174,37.50,23,Male,USA,0,intermediate,39.88,0.3750
+"William Petrov","tic tac toe",45,30,13,426,566,66.67,23,Male,Japan,0,intermediate,59.32,0.6667
+"Ivan Garcia","tic tac toe",19,8,10,227,244,42.11,52,Male,Singapore,0,intermediate,42.48,0.4211
+"Emma Garcia","connect four",82,47,31,967,1011,57.32,64,Male,Germany,0,intermediate,83.02,0.5732
+"Isabella Ali","connect four",61,42,18,784,752,68.85,46,Female,Singapore,0,expert,69.44,0.6885
+"Ahmad Mueller",battleship,112,79,33,5307,3090,70.54,18,Male,Canada,0,expert,100.00,0.7054
+"Zara Ahmed","connect four",77,35,37,810,901,45.45,39,Male,China,0,intermediate,78.82,0.4545
+"Anna Kim","connect four",22,16,6,231,304,72.73,61,Male,Canada,0,intermediate,44.88,0.7273
+"Ahmad Nguyen",battleship,45,25,20,2238,1169,55.56,22,Female,"South Korea",0,intermediate,71.38,0.5556
+"Juan Tran",battleship,75,37,38,3617,2050,49.33,57,Male,USA,0,intermediate,100.00,0.4933
+"Hans Miller",battleship,83,63,20,4013,2229,75.90,25,Female,Australia,0,expert,100.00,0.7590
+"Dmitri Kumar",reversi,3,0,3,20,49,0.00,40,Male,Singapore,1,novice,32.18,0.1000
+"Isabella Ali",reversi,19,14,5,196,222,73.68,46,Female,Singapore,0,intermediate,42.04,0.7368
+"Sofia Tanaka",battleship,99,59,40,4741,2661,59.60,64,Male,"South Korea",0,intermediate,100.00,0.5960
+"Mohammed Khan",chess,76,23,48,3664,3151,30.26,18,Male,USA,0,intermediate,100.00,0.3026
+"Ahmad Tanaka",chess,30,20,10,1227,1166,66.67,57,Female,Brazil,0,intermediate,65.32,0.6667
+"Arjun Singh","connect four",63,34,25,793,801,53.97,33,Male,Singapore,0,intermediate,71.22,0.5397
+"Sophia Williams",battleship,44,25,19,2138,1197,56.82,33,Male,China,0,intermediate,71.54,0.5682
+"Sophia Singh",chess,28,13,13,1314,1063,46.43,60,Male,Singapore,0,intermediate,62.46,0.4643
+"Soma Mueller",battleship,36,17,19,1712,919,47.22,43,Male,UK,0,intermediate,62.78,0.4722
+"Ivan Miller",battleship,89,60,29,4206,2373,67.42,19,Male,Australia,0,expert,100.00,0.6742
+"Elena Schmidt","tic tac toe",12,8,4,118,123,66.67,34,Male,Brazil,0,intermediate,37.26,0.6667
+"Hans Lee",chess,97,39,56,4604,3909,40.21,28,Female,USA,0,intermediate,100.00,0.4021
+"Elena Tran",reversi,7,3,4,74,92,42.86,46,Male,Singapore,0,novice,34.64,0.4286
+"Robert Kumar",reversi,21,12,9,201,238,57.14,33,Male,Singapore,0,intermediate,43.16,0.5714
+"Wei Brown",chess,39,20,18,1993,1542,51.28,34,Female,Spain,0,intermediate,76.44,0.5128
+"Emma Kumar",chess,27,19,8,1226,1060,70.37,57,Male,USA,0,intermediate,62.00,0.7037
+"Sofia Tanaka","tic tac toe",72,29,42,803,832,40.28,64,Male,"South Korea",0,intermediate,75.44,0.4028
+"Dmitri Kumar","tic tac toe",17,5,10,226,227,29.41,42,Male,Spain,0,intermediate,41.34,0.2941
+"Yuki Kim","tic tac toe",39,26,12,443,465,66.67,38,Female,Singapore,0,intermediate,54.90,0.6667
+"Wei Garcia","connect four",45,22,19,452,540,48.89,46,Male,Singapore,0,intermediate,58.80,0.4889
+"Priya Garcia","tic tac toe",12,7,2,124,168,58.33,37,Male,France,0,intermediate,38.16,0.5833
+"Dmitri Khan",battleship,47,25,22,2299,1229,53.19,59,Male,Russia,0,intermediate,73.38,0.5319
+"Zhang Lee",battleship,129,74,55,6236,3506,57.36,45,Male,Singapore,0,intermediate,100.00,0.5736
+"Amir Khan",battleship,37,20,17,1797,940,54.05,61,Female,Singapore,0,intermediate,63.60,0.5405
+"Anna Khan",go,4,3,1,244,220,75.00,33,Male,Singapore,1,novice,36.00,0.7500
+"Haruto Garcia",go,21,11,10,1864,1321,52.38,31,Male,Singapore,0,intermediate,64.82,0.5238
+"Ava Suzuki","connect four",62,35,22,716,734,56.45,25,Male,Singapore,0,intermediate,69.48,0.5645
+"Sophia Williams","tic tac toe",45,13,29,528,505,28.89,33,Male,China,0,intermediate,58.10,0.2889
+"Michael Ahmed","dots and boxes",5,5,0,48,61,100.00,34,Male,Singapore,0,novice,33.22,0.9000
+"Amir Ali","dots and boxes",47,19,28,465,537,40.43,37,Male,"South Korea",0,intermediate,59.54,0.4043
+"Zhang Nguyen",chess,105,38,62,5034,4133,36.19,64,Male,Singapore,0,intermediate,100.00,0.3619
+"Juan Johnson","connect four",23,13,9,243,277,56.52,46,Male,France,0,intermediate,44.74,0.5652
+"Zara Martinez",chess,33,17,14,1384,1365,51.52,21,Male,Spain,0,intermediate,70.50,0.5152
+"Dmitri Kumar",chess,55,19,33,2436,2181,34.55,40,Male,Singapore,0,intermediate,95.62,0.3455
+"Ahmad Davis",battleship,37,16,21,1764,985,43.24,22,Male,Singapore,0,intermediate,64.50,0.4324
+"Anna Williams","dots and boxes",12,7,5,130,136,58.33,44,Male,Germany,0,intermediate,37.52,0.5833
+"Sofia Johnson",chess,31,15,15,1448,1336,48.39,39,Female,China,0,intermediate,69.12,0.4839
+"Hassan Sato",battleship,44,18,26,2290,1157,40.91,48,Male,USA,0,intermediate,70.74,0.4091
+"Priya Williams","connect four",74,46,22,892,828,62.16,63,Male,Singapore,0,intermediate,76.16,0.6216
+"Ava Rodriguez","tic tac toe",33,16,15,353,358,48.48,36,Male,UK,0,intermediate,50.36,0.4848
+"Ahmad Petrov",battleship,39,21,18,1805,1068,53.85,42,Male,Singapore,0,intermediate,66.96,0.5385
+"Raj Wang","tic tac toe",18,7,9,183,196,38.89,60,Male,Germany,0,intermediate,41.12,0.3889
+"Olivia Petrov",reversi,22,9,13,248,260,40.91,52,Male,Singapore,0,intermediate,44.00,0.4091
+"Juan Miller",chess,86,56,29,4394,3213,65.12,33,Male,Brazil,0,expert,100.00,0.6512
+"Hassan Sato","tic tac toe",20,9,11,243,215,45.00,48,Male,USA,0,intermediate,42.30,0.4500
+"Zara Ahmed",chess,101,35,63,4649,3914,34.65,39,Male,China,0,intermediate,100.00,0.3465
+"Yuki Kim","connect four",58,14,43,597,743,24.14,38,Female,Singapore,0,intermediate,68.06,0.2414
+"Hans Davis",chess,82,55,24,3961,3340,67.07,35,Male,Singapore,0,expert,100.00,0.6707
+"Priya Tran","connect four",75,37,33,858,820,49.33,63,Male,India,0,intermediate,76.40,0.4933
+"Amir Nguyen","connect four",25,11,13,239,337,44.00,18,Male,USA,0,intermediate,46.74,0.4400
+"Raj Williams",go,6,2,4,601,332,33.33,18,Male,Canada,0,novice,39.04,0.3333
+"Emma Patel","tic tac toe",18,9,8,175,227,50.00,20,Male,Singapore,0,intermediate,41.74,0.5000
+"Maria Chen","connect four",27,10,16,300,299,37.04,38,Female,Brazil,0,intermediate,46.78,0.3704
+"Wei Rodriguez","dots and boxes",42,28,14,489,574,66.67,28,Male,Singapore,0,intermediate,58.28,0.6667
+"Dmitri Suzuki","dots and boxes",22,7,15,237,264,31.82,63,Male,China,0,intermediate,44.08,0.3182
+"Emma Kumar",battleship,93,34,59,4760,2382,36.56,57,Male,USA,0,intermediate,100.00,0.3656
+"Zhang Williams",battleship,131,59,72,6565,3514,45.04,22,Male,Singapore,0,intermediate,100.00,0.4504
+"Ava Suzuki","dots and boxes",5,3,2,44,43,60.00,25,Male,Singapore,0,novice,32.86,0.6000
+"Zhang Mueller","dots and boxes",43,4,39,473,531,9.30,53,Male,Singapore,1,intermediate,57.82,0.1000
+"Juan Tran",go,21,6,15,1873,1378,28.57,57,Male,USA,0,intermediate,65.96,0.2857
+"Carlos Tanaka",go,28,8,20,2284,1805,28.57,27,Male,Brazil,0,intermediate,77.30,0.2857
+"Mohammed Miller","tic tac toe",18,5,12,199,207,27.78,18,Female,Singapore,0,intermediate,31.34,0.2778
+"Olivia Johnson","tic tac toe",47,34,12,551,570,72.34,37,Male,Japan,0,intermediate,50.20,0.7234
+"Ivan Garcia","dots and boxes",11,4,7,111,122,36.36,52,Male,Singapore,1,intermediate,26.84,0.3636
+"Ahmad Schmidt","dots and boxes",37,8,29,440,433,21.62,28,Male,Spain,0,intermediate,43.46,0.2162
+"Zara Martinez","tic tac toe",57,23,31,618,721,40.35,21,Male,Singapore,0,intermediate,57.22,0.4035
+"Isabella Martinez","tic tac toe",15,8,7,153,161,53.33,36,Male,Singapore,1,intermediate,29.22,0.5333
+"Arjun Singh",chess,21,14,7,889,840,66.67,33,Male,Singapore,0,intermediate,45.20,0.6667
+"Elena Schmidt",battleship,37,18,19,1820,1041,48.65,36,Male,Japan,0,intermediate,55.62,0.4865
+"Ava Davis","tic tac toe",19,7,11,207,219,36.84,32,Male,Canada,0,intermediate,31.98,0.3684
+"Raj Tran","tic tac toe",56,21,33,636,637,37.50,62,Male,China,0,intermediate,55.14,0.3750
+"Hans Davis","connect four",64,19,44,734,824,29.69,35,Male,Singapore,0,intermediate,62.08,0.2969
+"Wei Brown","connect four",29,14,13,364,387,48.28,34,Female,Spain,0,intermediate,39.34,0.4828
+"Olivia Petrov","tic tac toe",12,6,4,128,149,50.00,55,Male,USA,1,intermediate,27.78,0.5000
+"Soma Mueller","connect four",81,42,32,879,932,51.85,43,Male,UK,0,intermediate,71.04,0.5185
+"Elena Schmidt",chess,37,18,16,1956,1485,48.65,34,Male,Brazil,0,intermediate,64.50,0.4865
+"Raj Martinez",battleship,122,69,53,5973,3381,56.56,58,Male,Singapore,0,intermediate,100.00,0.5656
+"Soma Garcia","connect four",21,10,11,231,287,47.62,29,Male,Germany,0,intermediate,34.14,0.4762
+"Zhang Khan","dots and boxes",25,11,14,235,308,44.00,53,Male,Singapore,0,intermediate,36.16,0.4400
+"Zara Brown","connect four",47,15,30,479,572,31.91,33,Female,Singapore,0,intermediate,50.24,0.3191
+"Priya Tran","dots and boxes",24,10,14,271,277,41.67,63,Male,India,0,intermediate,35.14,0.4167
+"Emma Garcia",battleship,114,82,32,5547,2932,71.93,64,Male,Germany,0,expert,100.00,0.7193
+"Elena Suzuki",battleship,94,67,27,4628,2542,71.28,30,Non-Binary,France,0,expert,100.00,0.7128
+"Wei Martinez",battleship,36,24,12,1663,966,66.67,29,Male,Japan,0,intermediate,53.72,0.6667
+"Elena Patel","tic tac toe",32,16,16,363,375,50.00,57,Male,Japan,0,intermediate,40.30,0.5000
+"Haruto Liu","tic tac toe",14,7,6,151,139,50.00,22,Male,Spain,1,intermediate,28.38,0.5000
+"Mohammed Miller",battleship,49,27,22,2456,1382,55.10,18,Female,Singapore,0,intermediate,67.24,0.5510
+"Mohammed Ivanov",battleship,105,71,34,5107,2838,67.62,40,Male,Singapore,0,expert,100.00,0.6762
+"Yuki Williams",go,6,3,3,324,429,50.00,19,Male,USA,0,novice,30.98,0.5000
+"John Ali","tic tac toe",14,6,7,137,158,42.86,33,Male,France,1,intermediate,28.76,0.4286
+"Michael Tran","tic tac toe",48,14,33,533,605,29.17,63,Male,China,0,intermediate,51.30,0.2917
+"Priya Garcia","dots and boxes",46,30,16,545,512,65.22,37,Male,France,0,intermediate,48.64,0.6522
+"John Ali","connect four",72,38,32,842,873,52.78,33,Male,France,0,intermediate,66.26,0.5278
+"Hans Miller","dots and boxes",9,2,7,63,132,22.22,25,Female,Australia,1,novice,26.24,0.2222
+"Ahmad Davis","tic tac toe",45,22,22,497,495,48.89,23,Male,Japan,0,intermediate,47.90,0.4889
+"Soma Kim","tic tac toe",53,24,29,566,682,45.28,30,Male,Singapore,0,intermediate,54.84,0.4528
+"John Khan",go,26,13,13,2248,1564,50.00,53,Male,Singapore,0,intermediate,61.68,0.5000
+"Wei Martinez",go,15,7,8,1404,939,46.67,29,Male,Japan,0,intermediate,44.78,0.4667
+"Hans Williams",battleship,106,27,79,5154,2893,25.47,49,Male,Singapore,0,intermediate,100.00,0.2547
+"Isabella Kumar","dots and boxes",20,12,8,223,253,60.00,51,Male,France,0,intermediate,33.06,0.6000
+"Zhang Davis",chess,23,10,13,1039,863,43.48,60,Male,Singapore,0,intermediate,46.46,0.4348
+"Wei Miller",chess,81,53,25,3703,3423,65.43,59,Male,Singapore,0,expert,100.00,0.6543
+"Isabella Williams","connect four",22,9,11,240,261,40.91,37,Female,UK,0,intermediate,34.02,0.4091
+"Klaus Park","tic tac toe",15,6,9,175,173,40.00,35,Male,China,1,intermediate,29.46,0.4000
+"Arjun Singh","tic tac toe",14,7,7,154,166,50.00,33,Male,Singapore,1,intermediate,28.92,0.5000
+"Emma Khan",chess,24,7,16,1148,1019,29.17,27,Non-Binary,Singapore,0,intermediate,49.98,0.2917
+"Robert Chen",battleship,111,61,50,5340,2983,54.95,62,Male,India,0,intermediate,100.00,0.5495
+"Ivan Tanaka","tic tac toe",43,29,14,575,534,67.44,60,Male,Singapore,0,intermediate,47.88,0.6744
+"Ahmad Singh","connect four",51,22,26,572,615,43.14,64,Male,Germany,0,intermediate,52.70,0.4314
+"Raj Suzuki","connect four",49,20,28,525,558,40.82,50,Male,Japan,0,intermediate,50.76,0.4082
+"Wei Brown",chess,105,45,57,5024,4068,42.86,34,Male,Netherlands,0,intermediate,100.00,0.4286
+"Arjun Wang",battleship,39,15,24,1853,1124,38.46,59,Male,Singapore,0,intermediate,58.08,0.3846
+"Hassan Ahmed","tic tac toe",12,7,4,138,139,58.33,50,Female,India,1,intermediate,27.58,0.5833
+"Yuki Kim",chess,37,25,11,1690,1457,67.57,38,Female,Singapore,0,intermediate,63.94,0.6757
+"Anna Sato",chess,102,29,67,5191,4205,28.43,19,Male,Germany,0,intermediate,100.00,0.2843
+"Soma Lee",battleship,42,22,20,1935,1099,52.38,37,Female,Singapore,0,intermediate,58.78,0.5238
+"Zhang Nguyen",battleship,96,34,62,4670,2489,35.42,64,Male,Singapore,0,intermediate,100.00,0.3542
+"Priya Suzuki",chess,79,46,30,3808,3088,58.23,53,Male,Singapore,0,intermediate,100.00,0.5823
+"Anna Sato","dots and boxes",40,30,10,472,465,75.00,19,Male,Germany,0,intermediate,45.30,0.7500
+"Priya Davis",go,23,10,13,2050,1316,43.48,53,Male,India,0,intermediate,55.52,0.4348
+"Hans Tanaka",go,7,1,6,536,395,14.29,30,Male,Singapore,1,novice,30.70,0.1429
+"Ahmad Davis","connect four",23,6,16,241,277,26.09,23,Male,Japan,0,intermediate,34.74,0.2609
+"Ava Davis",chess,91,22,66,4485,3662,24.18,32,Male,Canada,0,intermediate,100.00,0.2418
+"Elena Suzuki",chess,67,22,41,3289,2605,32.84,30,Non-Binary,France,0,intermediate,98.90,0.3284
+"Michael Ahmed",go,17,3,14,1548,926,17.65,34,Male,Singapore,0,intermediate,45.32,0.1765
+"Mohammed Ali",go,3,1,2,179,188,33.33,51,Male,Japan,1,novice,24.96,0.3333
+"Priya Petrov",battleship,82,46,36,3892,2182,56.10,29,Male,China,0,intermediate,96.44,0.5610
+"Carlos Davis","connect four",42,27,13,481,513,64.29,32,Male,Singapore,0,intermediate,47.06,0.6429
+"Juan Petrov",battleship,115,36,79,5430,3099,31.30,60,Male,"South Korea",0,intermediate,100.00,0.3130
+"Raj Suzuki",battleship,26,10,16,1175,685,38.46,47,Male,Singapore,0,intermediate,44.10,0.3846
+"Elena Ali",chess,29,14,14,1345,1101,48.28,50,Male,France,0,intermediate,53.62,0.4828
+"Priya Sato","tic tac toe",13,6,6,108,151,46.15,32,Male,India,1,intermediate,28.22,0.4615
+"Yuki Williams","tic tac toe",33,10,21,403,416,30.30,19,Male,USA,0,intermediate,41.52,0.3030
+"Juan Williams","tic tac toe",10,7,1,129,127,70.00,53,Male,Japan,1,intermediate,26.54,0.7000
+"Haruto Nguyen","tic tac toe",48,32,14,487,565,66.67,57,Male,China,0,intermediate,50.50,0.6667
+"David Kumar","tic tac toe",17,10,7,179,219,58.82,20,Male,China,0,intermediate,31.18,0.5882
+"Priya Williams",battleship,45,25,20,2109,1251,55.56,63,Male,Singapore,0,intermediate,63.02,0.5556
+"Dmitri Singh","connect four",77,44,30,887,961,57.14,59,Male,Singapore,0,intermediate,70.02,0.5714
+"Amir Liu",go,32,25,7,3106,1902,78.13,36,Female,Australia,0,intermediate,70.84,0.7813
+"Olivia Petrov",go,20,7,13,1866,1034,35.00,52,Male,Singapore,0,intermediate,48.68,0.3500
+"Hans Tanaka","connect four",73,39,31,749,847,53.42,30,Male,Singapore,0,intermediate,66.14,0.5342
+"Arjun Martinez","dots and boxes",25,8,17,293,286,32.00,56,Male,Russia,0,intermediate,35.72,0.3200
+"David Kumar","dots and boxes",40,15,25,450,479,37.50,20,Male,China,0,intermediate,45.58,0.3750
+"John Liu",chess,60,40,17,2881,2438,66.67,32,Male,China,0,expert,92.76,0.6667
+"Zara Sato",chess,88,49,36,4054,3547,55.68,35,Male,Brazil,0,intermediate,100.00,0.5568
+"Klaus Petrov","tic tac toe",12,5,7,106,154,41.67,63,Male,Singapore,1,intermediate,27.88,0.4167
+"Emma Chen","tic tac toe",48,26,19,527,568,54.17,44,Male,Singapore,0,intermediate,50.56,0.5417
+"Mohammed Khan","dots and boxes",46,22,24,476,564,47.83,18,Male,USA,0,intermediate,49.68,0.4783
+"Zara Wang",battleship,44,21,23,2117,1107,47.73,26,Male,USA,0,intermediate,59.74,0.4773
+"Zhang Chen","connect four",73,18,53,838,848,24.66,59,Male,Singapore,0,intermediate,66.16,0.2466
+"Haruto Singh","connect four",13,6,7,146,179,46.15,39,Female,"South Korea",1,intermediate,28.78,0.4615
+"Juan Williams",chess,41,23,18,2054,1693,56.10,53,Male,Japan,0,intermediate,70.26,0.5610
+"Robert Patel",chess,80,33,40,3775,3269,41.25,36,Male,Singapore,0,intermediate,100.00,0.4125
+"Klaus Park",battleship,76,25,51,3825,1946,32.89,40,Male,Singapore,0,intermediate,89.32,0.3289
+"Raj Tran","dots and boxes",30,20,10,335,370,66.67,62,Male,China,0,intermediate,39.40,0.6667
+"Joseph Patel","dots and boxes",14,6,8,143,158,42.86,21,Male,USA,1,intermediate,28.76,0.4286
+"William Ivanov",go,8,5,3,592,481,62.50,59,Male,Canada,0,novice,32.82,0.6250
+"Arjun Sato","tic tac toe",13,9,3,132,161,69.23,30,Female,Singapore,1,intermediate,28.42,0.6923
+"Sophia Wang","tic tac toe",57,17,38,617,642,29.82,35,Male,UK,0,intermediate,55.64,0.2982
+"Mohammed Suzuki",battleship,82,34,48,4032,2182,41.46,26,Male,Singapore,0,intermediate,96.44,0.4146
+"Li Suzuki",battleship,36,16,20,1825,906,44.44,59,Male,Japan,0,intermediate,52.52,0.4444
+"Anna Nguyen","tic tac toe",56,37,18,655,625,66.07,42,Male,Singapore,0,expert,54.90,0.6607
+"Elena Khan","tic tac toe",60,27,31,736,779,45.00,33,Male,"South Korea",0,intermediate,59.58,0.4500
+"Mohammed Ali","tic tac toe",50,24,23,614,592,48.00,51,Male,Japan,0,intermediate,51.84,0.4800
+"Klaus Khan","tic tac toe",20,8,10,220,238,40.00,33,Male,UK,0,intermediate,32.76,0.4000
+"John Kumar","dots and boxes",34,17,17,326,407,50.00,35,Male,Netherlands,0,intermediate,41.74,0.5000
+"Priya Davis",chess,109,41,65,5139,4196,37.61,53,Male,India,0,intermediate,100.00,0.3761
+"Soma Garcia",chess,64,41,21,3213,2427,64.06,29,Male,Germany,0,intermediate,94.14,0.6406
+"Hans Tanaka",battleship,41,22,19,1887,1062,53.66,30,Male,Singapore,0,intermediate,57.64,0.5366
+"Juan Johnson",battleship,28,11,17,1210,782,39.29,46,Male,France,0,intermediate,46.84,0.3929
+"Juan Patel","connect four",65,23,42,777,792,35.38,26,Female,Singapore,0,intermediate,61.84,0.3538
+"Isabella Lee","connect four",25,10,14,257,290,40.00,61,Male,"South Korea",0,intermediate,35.80,0.4000
+"Emma Singh",battleship,64,32,32,3075,1791,50.00,29,Male,"South Korea",0,intermediate,81.42,0.5000
+"Raj Martinez","tic tac toe",40,16,21,433,478,40.00,58,Male,Singapore,0,intermediate,45.56,0.4000
+"Ahmad Kumar","tic tac toe",46,14,28,578,564,30.43,40,Male,USA,0,intermediate,49.68,0.3043
+"Dmitri Sato",go,6,5,1,448,341,83.33,53,Male,Singapore,1,novice,29.22,0.8333
+"Mohammed Khan",battleship,83,33,50,3955,2166,39.76,18,Male,USA,0,intermediate,96.52,0.3976
+"Haruto Wang",chess,64,31,32,2910,2564,48.44,63,Male,UK,0,intermediate,96.88,0.4844
+"Klaus Kumar","connect four",52,28,24,600,656,53.85,60,Male,Singapore,0,intermediate,53.92,0.5385
+"Ivan Miller",go,7,2,5,480,385,28.57,19,Male,Australia,0,novice,30.50,0.2857
+"Hans Brown",chess,29,15,13,1405,1251,51.72,59,Male,Singapore,0,intermediate,56.62,0.5172
+"Yuki Williams","connect four",81,48,31,971,959,59.26,19,Male,USA,0,intermediate,71.58,0.5926
+"Arjun Sato","connect four",22,11,11,246,253,50.00,29,Male,India,0,intermediate,33.86,0.5000
+"Yuki Khan","connect four",59,32,26,678,768,54.24,49,Male,USA,0,intermediate,58.96,0.5424
+"John Chen","dots and boxes",11,6,5,132,132,54.55,22,Male,USA,1,intermediate,27.04,0.5455
+"Wei Schmidt",go,5,4,1,377,326,80.00,28,Male,France,1,novice,28.52,0.8000
+"Isabella Williams","dots and boxes",8,3,5,62,91,37.50,37,Female,UK,1,novice,25.02,0.3750
+"William Petrov",go,8,3,5,645,522,37.50,23,Male,Japan,0,novice,33.64,0.3750
+"Dmitri Sato",chess,21,9,11,1062,884,42.86,45,Male,UK,0,intermediate,46.08,0.4286
+"Carlos Davis",battleship,35,19,16,1639,967,54.29,32,Male,Singapore,0,intermediate,53.34,0.5429
+"Juan Tran","dots and boxes",39,15,24,365,496,38.46,57,Male,USA,0,intermediate,45.52,0.3846
+"Arjun Sato","dots and boxes",32,11,21,321,346,34.38,29,Male,India,0,intermediate,39.72,0.3438
+"Zara Brown","connect four",40,23,15,465,478,57.50,32,Female,Netherlands,0,intermediate,45.56,0.5750
+"Elena Khan","connect four",29,12,16,321,332,41.38,24,Female,USA,0,intermediate,38.24,0.4138
+"Raj Davis","dots and boxes",40,10,30,470,531,25.00,45,Male,USA,0,intermediate,46.62,0.2500
+"Ava Johnson","connect four",72,20,48,874,817,27.78,37,Male,USA,0,intermediate,65.14,0.2778
+"Ivan Miller",chess,102,65,32,4839,3969,63.73,19,Male,Australia,0,intermediate,100.00,0.6373
+"Zara Davis",chess,31,16,15,1642,1173,51.61,55,Male,Japan,0,intermediate,55.86,0.5161
+"Arjun Sato",battleship,137,71,66,6608,3736,51.82,29,Male,India,0,intermediate,100.00,0.5182
+"David Schmidt","connect four",57,35,17,642,781,61.40,49,Male,USA,0,intermediate,58.42,0.6140
+"Ahmad Mueller",reversi,4,2,2,44,57,50.00,18,Male,Canada,1,novice,22.74,0.5000
+"Dmitri Kumar",reversi,17,8,9,169,212,47.06,42,Male,Spain,0,intermediate,31.04,0.4706
+"Ahmad Kumar","connect four",24,10,10,273,273,41.67,40,Male,USA,0,intermediate,35.06,0.4167
+"Amir Liu",chess,30,14,15,1319,1103,46.67,36,Female,Australia,0,intermediate,54.06,0.4667
+"Yuki Schmidt","dots and boxes",46,14,32,522,556,30.43,56,Male,Singapore,0,intermediate,49.52,0.3043
+"Haruto Wang","dots and boxes",13,9,4,131,138,69.23,63,Male,UK,1,intermediate,27.96,0.6923
+"Dmitri Sato","connect four",71,46,23,800,894,64.79,53,Male,Singapore,0,intermediate,66.28,0.6479
+"John Nguyen","connect four",21,7,14,241,266,33.33,22,Male,China,0,intermediate,33.72,0.3333
+"Hassan Davis",battleship,76,36,40,3550,2132,47.37,61,Male,China,0,intermediate,93.04,0.4737
+"Olivia Patel","tic tac toe",56,41,11,641,682,73.21,63,Female,Singapore,0,expert,56.04,0.7321
+"Sofia Ivanov",go,8,3,5,603,430,37.50,40,Male,Singapore,0,novice,31.80,0.3750
+"Arjun Johnson",battleship,84,30,54,4143,2141,35.71,50,Female,India,0,intermediate,96.42,0.3571
+"David Lee","dots and boxes",3,3,0,20,34,100.00,34,Male,USA,1,novice,21.88,0.9000
+"Sophia Brown","dots and boxes",6,4,2,67,62,66.67,43,Male,Brazil,1,novice,23.64,0.6667
+"Hassan Mueller","dots and boxes",41,13,28,466,453,31.71,62,Male,Singapore,0,intermediate,45.46,0.3171
+"Dmitri Sato","connect four",24,12,12,277,270,50.00,45,Male,UK,0,intermediate,35.00,0.5000
+"William Chen",battleship,80,40,40,3807,2201,50.00,53,Male,USA,0,intermediate,96.02,0.5000
+"Arjun Johnson","connect four",19,8,10,198,224,42.11,49,Male,Brazil,0,intermediate,32.08,0.4211
+"Klaus Khan","dots and boxes",11,5,6,123,138,45.45,33,Male,UK,1,intermediate,27.16,0.4545
+"Yuki Garcia","dots and boxes",7,3,4,60,88,42.86,35,Male,Singapore,1,novice,24.56,0.4286
+"Li Kumar","connect four",21,11,9,173,212,52.38,37,Male,Germany,0,intermediate,32.64,0.5238
+"Li Suzuki",go,4,0,4,238,272,0.00,59,Male,Japan,1,novice,27.04,0.1000
+"Juan Khan",go,17,6,11,1560,1168,35.29,35,Male,China,0,intermediate,50.16,0.3529
+"Hassan Lee",go,5,0,5,216,249,0.00,55,Male,Japan,1,novice,26.98,0.1000
+"Hassan Petrov",go,25,20,5,2389,1493,80.00,37,Male,Japan,0,intermediate,59.86,0.8000
+"Zara Patel",chess,31,17,12,1424,1325,54.84,39,Male,Singapore,0,intermediate,58.90,0.5484
+"Maria Chen",chess,86,50,29,4367,3514,58.14,38,Female,Brazil,0,intermediate,100.00,0.5814
+"Isabella Martinez",chess,32,23,9,1544,1196,71.88,34,Male,Singapore,0,intermediate,56.72,0.7188
+"Raj Brown",chess,76,16,58,3316,3045,21.05,20,Male,China,0,intermediate,100.00,0.2105
+"Ahmad Mueller","dots and boxes",18,12,6,180,205,66.67,18,Male,Canada,0,intermediate,31.30,0.6667
+"Zhang Tanaka","dots and boxes",21,6,15,273,259,28.57,52,Male,Singapore,0,intermediate,33.58,0.2857
+"Anna Kim","dots and boxes",32,11,21,368,381,34.38,61,Male,Canada,0,intermediate,40.42,0.3438
+"Juan Patel","tic tac toe",17,9,7,140,200,52.94,26,Female,Singapore,0,intermediate,30.80,0.5294
+"Sophia Khan","tic tac toe",66,23,42,709,822,34.85,64,Male,USA,0,intermediate,62.84,0.3485
+"Elena Tran",go,23,5,18,2129,1384,21.74,46,Male,Singapore,0,intermediate,56.88,0.2174
+"Klaus Petrov","connect four",20,8,12,201,232,40.00,63,Male,Singapore,0,intermediate,32.64,0.4000
