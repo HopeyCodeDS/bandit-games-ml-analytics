@@ -1,0 +1,154 @@
+1. Player Churn Test Data:
+    - No
+{
+    "total_games_played": 100,
+    "win_ratio": 6.0,
+    "total_time_played_minutes": 5000,
+    "total_moves": 60,
+    "gender": "Male",
+    "country": "South Korea",
+    "game_name": "battleship",
+    "age": 27
+}
+
+    - Yes
+{
+    "total_games_played": 8,
+    "win_ratio": 5.0,
+    "total_time_played_minutes": 15,
+    "total_moves": 60,
+    "gender": "Female",
+    "country": "UK",
+    "game_name": "battleship",
+    "age": 28
+}
+
+
+2. Win Probability Test Data:
+    - Average/High Win Probability scenario:
+{
+    "total_games_played": 88,
+    "total_moves": 4267,
+    "total_wins": 44,
+    "total_losses": 44,
+    "player_level": "intermediate",
+    "gender": "Female",
+    "country": "UK",
+    "game_name": "battleship",
+    "age": 28
+}
+>>> (80% win rate, high experience, high rating)
+
+    - Low Win Probability scenario:
+ {
+    "total_games_played": 50,
+    "total_moves": 800,
+    "total_wins": 10,
+    "total_losses": 40,
+    "player_level": "novice",
+    "gender": "Female",
+    "country": "UK",
+    "game_name": "battleship",
+    "age": 28
+}
+>>> (20% win rate, low experience, low rating)
+
+3. Game Engagement Test Data
+    - High Engagement scenario: in minutes
+{
+    "game_name": "chess",
+    "total_games_played": 300,
+    "win_ratio": 60.0,
+    "gender": "Female",
+    "country": "UK",
+    "age": 28
+}
+>>> (High number of games, consistent win ratio, lots of moves)
+
+    - Low Engagements scenario: in minutes
+{
+    "game_name": "chess",
+    "total_games_played": 300,
+    "win_ratio": 60.0,
+    "gender": "Female",
+    "country": "UK",
+    "age": 28
+}
+>>> (Few games, low moves, mediocre win ratio)
+
+4. Player Classifications:
+    - Expert Player scenario:
+{
+    "total_games_played": 130,
+    "total_moves": 6211,
+    "total_wins": 96,
+    "total_losses": 34,
+    "win_ratio": 73.85,
+    "total_time_played_minutes": 3380,
+   "gender": "Male",
+    "country": "China",
+    "game_name": "battleship",
+    "age": 22
+}
+>>> (High win ratio, many games, efficient moves)
+
+    - Intermediate Player scenario:
+{
+    "total_games_played": 123,
+    "total_moves": 5765,
+    "total_wins": 39,
+    "total_losses": 84,
+    "win_ratio": 31.71,
+    "total_time_played_minutes": 3180,
+   "gender": "Male",
+    "country": "Brazil",
+    "game_name": "battleship",
+    "age": 50
+}
+>>> (Balanced win/loss, moderate experience)
+
+    - Novice Player scenario:
+{
+    "total_games_played": 4,
+    "total_moves": 10,
+    "total_wins": 1,
+    "total_losses": 3,
+    "win_ratio": 25.0,
+    "total_time_played_minutes": 100,
+   "gender": "Male",
+    "country": "USA",
+    "game_name": "chess",
+    "age": 25
+}
+>>> (Low win ratio, few games, less efficient with moves)
+
+
+== Test data for Aggregated prediction Data ==
+
+- Overall Positive Remark
+
+{
+  "total_games_played": 130,
+  "total_moves": 6211,
+  "total_wins": 96,
+  "total_losses": 34,
+  "total_time_played_minutes": 2000,
+  "gender": "Male",
+  "country": "South Korea",
+  "game_name": "battleship",
+  "age": 27
+}
+
+- Overall Negative Remark
+
+{
+  "total_games_played": 4,
+  "total_moves": 10,
+  "total_wins": 1,
+  "total_losses": 3,
+  "total_time_played_minutes": 100,
+  "gender": "Male",
+  "country": "China",
+  "game_name": "battleship",
+  "age": 24
+}
