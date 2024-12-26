@@ -22,5 +22,6 @@ build:
     - docker push $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA
     - docker tag $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA $DOCKER_IMAGE_NAME:latest
     - docker push $DOCKER_IMAGE_NAME:latest
-#  only:
-#    - main
+  only:
+    - main
+    - deployment
