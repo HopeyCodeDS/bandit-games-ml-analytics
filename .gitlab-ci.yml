@@ -1,0 +1,11 @@
+stages:
+  - trigger
+
+trigger_prediction_system:
+  stage: trigger
+  trigger:
+    include:
+      - local: PredictionSystem/.gitlab-ci.yml
+  rules:
+    - exists:
+        - PredictionSystem/.gitlab-ci.yml
