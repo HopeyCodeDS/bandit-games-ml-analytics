@@ -6,6 +6,8 @@ trigger_prediction_system:
   trigger:
     include:
       - local: PredictionSystem/.gitlab-ci.yml
+      - local: GameAnalytics/.gitlab-ci.yml
   rules:
     - exists:
         - PredictionSystem/.gitlab-ci.yml
+        - GameAnalytics/.gitlab-ci.yml
