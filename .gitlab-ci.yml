@@ -1,13 +1,50 @@
-stages:
-  - trigger
+image: docker:latest
 
-trigger_prediction_system:
-  stage: trigger
-  trigger:
-    include:
-      - local: PredictionSystem/.gitlab-ci.yml
-      - local: GameAnalytics/.gitlab-ci.yml
-  rules:
-    - exists:
-        - PredictionSystem/.gitlab-ci.yml
-        - GameAnalytics/.gitlab-ci.yml
+services:
+  - docker:dind
+
+variables:
+  DOCKER_REGISTRY: docker.io
+  PREDICTION_IMAGE: opeyemimomodu/prediction-api
+  STATS_API_IMAGE: opeyemimomodu/statistics-api
+  STATS_DB_IMAGE: opeyemimomodu/statistics-db
+
+stages:
+  - build
+
+before_script:
+  - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
+
+# Build Jobs
+build_prediction_api:
+  stage: build
+  script:
+    - docker build -t $PREDICTION_IMAGE:$CI_COMMIT_SHA -f PredictionSystem/Dockerfile PredictionSystem
+    - docker tag $PREDICTION_IMAGE:$CI_COMMIT_SHA $PREDICTION_IMAGE:latest
+    - docker push $PREDICTION_IMAGE:$CI_COMMIT_SHA
+    - docker push $PREDICTION_IMAGE:latest
+  only:
+    - main
+    - deployment
+
+build_stats_api:
+  stage: build
+  script:
+    - docker build -t $STATS_API_IMAGE:$CI_COMMIT_SHA -f GameAnalytics/Dockerfile GameAnalytics
+    - docker tag $STATS_API_IMAGE:$CI_COMMIT_SHA $STATS_API_IMAGE:latest
+    - docker push $STATS_API_IMAGE:$CI_COMMIT_SHA
+    - docker push $STATS_API_IMAGE:latest
+  only:
+    - main
+    - deployment
+
+build_stats_db:
+  stage: build
+  script:
+    - docker build -t $STATS_DB_IMAGE:$CI_COMMIT_SHA -f game_analytics_docker/Dockerfile game_analytics_docker
+    - docker tag $STATS_DB_IMAGE:$CI_COMMIT_SHA $STATS_DB_IMAGE:latest
+    - docker push $STATS_DB_IMAGE:$CI_COMMIT_SHA
+    - docker push $STATS_DB_IMAGE:latest
+  only:
+    - main
+    - deployment
