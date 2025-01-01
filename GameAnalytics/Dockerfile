@@ -1,5 +1,3 @@
-# Dockerfile for Player Statistics API
-
 FROM python:3.9-slim
 
 WORKDIR /app
@@ -16,10 +14,16 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the API file
-COPY player_statistics_API_new.py ./app.py
+COPY player_statistics_API_new.py ./main.py
+
+# Create .env file with environment variables
+RUN echo "DB_USER=root" >> .env && \
+    echo "DB_PASSWORD=root" >> .env && \
+    echo "DB_HOST=platform_analytics_mysql" >> .env && \
+    echo "DB_PORT=3306" >> .env
 
 # Expose the port the app runs on
 EXPOSE 8001
 
 # Command to run the application
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8001"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8001"]
