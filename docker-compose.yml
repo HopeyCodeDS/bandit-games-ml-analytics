@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  platform_analytics_db:
+    build:
+      context: ./game_analytics_docker
+    image: opeyemimomodu/statistics-db:latest
+    container_name: platform_analytics_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: platform_analytics
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3309:3306"
+    volumes:
+      - platform_analytics_data:/var/lib/mysql
+    networks:
+      - platform_analytics_network
+
+  player_stats_api:
+    build:
+      context: ./GameAnalytics
+      dockerfile: Dockerfile
+    image: opeyemimomodu/statistics-api:latest
+    container_name: player_stats_api
+    ports:
+      - "8001:8001"
+    depends_on:
+      - platform_analytics_db
+    environment:
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_HOST=platform_analytics_mysql
+      - DB_PORT=3306
+    networks:
+      - platform_analytics_network
+
+networks:
+  platform_analytics_network:
+    name: platform_analytics_network
+    driver: bridge
+
+volumes:
+  platform_analytics_data:
