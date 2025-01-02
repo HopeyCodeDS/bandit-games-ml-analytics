@@ -79,7 +79,7 @@ class RabbitMQConnection:
         self.channel.queue_bind(
             exchange='data_analytics_exchange',
             queue='data_analytics_q',
-            routing_key='game.over'
+            routing_key='game.over'  # Updated routing key
         )
         self.channel.queue_bind(
             exchange='user_signup_exchange',
