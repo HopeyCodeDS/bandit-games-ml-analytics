@@ -107,45 +107,29 @@ class TestEventPublisher:
 
         return None
 
-    def publish_game_event(self, player1_id: str, player2_id: str, max_retries=3) -> Optional[str]:
-        """Publish a test game event"""
+    def publish_game_event(self, player1_id: str, player2_id: str) -> str:
+        """Matches Java AnalysisGameOverEvent record format"""
         match_id = str(uuid.uuid4())
-        start_time = datetime.now() - timedelta(minutes=5)
-        end_time = datetime.now()
-
-        game_event = {
-            "eventHeader": {
-                "eventID": str(uuid.uuid4()),
-                "eventType": "GAME_OVER_STATISTICS_EVENT"
-            },
-            "eventBody": json.dumps({
-                "matchId": match_id,
-                "game": "battleship",
-                "player1Id": player1_id,
-                "player2Id": player2_id,
-                "startTime": start_time.isoformat(),
-                "endTime": end_time.isoformat(),
-                "player1MoveCounts": 10,
-                "player2MoveCounts": 9,
-                "winnerId": player1_id  # player1 wins
-            })
+        event = {
+            "matchId": match_id,
+            "game": "battleship",
+            "player1Id": player1_id,
+            "player2Id": player2_id,
+            "startTime": datetime.now().isoformat(),
+            "endTime": (datetime.now() + timedelta(minutes=5)).isoformat(),
+            "player1MoveCounts": 10,
+            "player2MoveCounts": 9,
+            "winnerId": player1_id
         }
 
         self.channel.basic_publish(
             exchange='data_analytics_exchange',
-            routing_key='game.completed',
-            body=json.dumps(game_event)
+            routing_key='game.over',
+            body=json.dumps(event)
         )
         logger.info(f"Published game event: {match_id}")
 
-        # Wait and verify with retries
-        for attempt in range(max_retries):
-            time.sleep(2)  # Wait for processing
-            if self.verify_game_record(match_id):
-                return match_id
-            logger.info(f"Game record not verified yet, attempt {attempt + 1}/{max_retries}")
-
-        return None
+        return match_id
 
     def verify_user_creation(self, user_id: str) -> bool:
         """Verify that the user was created in the database"""
