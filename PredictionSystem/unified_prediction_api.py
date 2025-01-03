@@ -171,16 +171,24 @@ def get_engagement_prediction(data: pd.DataFrame) -> dict:
     X_scaled = engagement_scaler.transform(X)
 
     prediction = float(engagement_model.predict(X_scaled)[0])
-
     predicted_minutes = float(engagement_model.predict(X_scaled)[0])
-    hours = int(predicted_minutes // 60)  # Get whole hours
-    minutes = int(predicted_minutes % 60)  # Get remaining minutes
-    time_format = f"{hours} hours {minutes} minutes"
+
+    # Calculate monthly stats
+    monthly_hours = int(predicted_minutes // 60)
+    monthly_minutes = int(predicted_minutes % 60)
+
+    # Calculate daily average
+    daily_minutes = predicted_minutes / 30  # Assuming 30 days in a month
+    daily_hours = int(daily_minutes // 60)
+    daily_mins = int(daily_minutes % 60)
 
     return {
-        "predicted_engagement": time_format,  # e.g., "5 hours 30 minutes"
-        "raw_minutes": round(predicted_minutes, 2),  # kept for calculations
-        "advice": get_engagement_advice(prediction, data['total_games_played'].iloc[0])
+        "predicted_engagement": {
+            "monthly forecast": f"{monthly_hours} hours {monthly_minutes} minutes per month",
+            "daily_average": f"{daily_hours} hours {daily_mins} minutes per day"
+        },
+        "raw_minutes": round(predicted_minutes, 2),
+        "advice": get_engagement_advice(predicted_minutes, data['total_games_played'].iloc[0])
     }
 
 
