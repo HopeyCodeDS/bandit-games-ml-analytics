@@ -82,17 +82,14 @@ async def root():
             "/api/stats/country/{country}",
             "/api/stats/most-played-games",
             "/api/stats/top-players/{game_name}"
+            "/api/stats/top-players"
         ]
     }
 
 @app.get("/api/stats/players", response_model=List[PlayerStats])
-async def get_all_player_stats(
-        skip: int = Query(0, ge=0, description="Number of records to skip for pagination"),
-        limit: int = Query(20, ge=1, le=100, description="Maximum number of records to return"),
-        db: Session = Depends(get_db)
-):
+async def get_all_player_stats(db: Session = Depends(get_db)):
     """
-    Get paginated player statistics for all players.
+    Get statistics for all players.
     """
     try:
         query = text("""
@@ -112,10 +109,9 @@ async def get_all_player_stats(
             JOIN players p ON pgs.player_id = p.player_id
             JOIN games g ON pgs.game_id = g.game_id
             ORDER BY pgs.last_played DESC
-            LIMIT :skip, :limit
         """)
 
-        result = db.execute(query, {"skip": skip, "limit": limit})
+        result = db.execute(query)
         stats = [dict(zip(result.keys(), row)) for row in result.fetchall()]
 
         if not stats:
@@ -283,6 +279,88 @@ async def get_top_players_by_game(
             raise HTTPException(status_code=404, detail=f"No players found for game {game_name}")
 
         return players
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error retrieving top players")
+
+
+@app.get("/api/stats/top-players")
+async def get_top_three_players_per_game(db: Session = Depends(get_db)):
+    """
+    Get the top 3 players for each game in the database.
+    """
+    try:
+        query = text("""
+            WITH RankedPlayers AS (
+                SELECT 
+                    CONCAT(p.firstname, ' ', p.lastname) as player_name,
+                    g.name as game_name,
+                    pgs.total_games_played,
+                    pgs.total_wins,
+                    pgs.total_losses,
+                    pgs.total_moves,
+                    pgs.total_time_played_minutes,
+                    pgs.win_ratio,
+                    TIMESTAMPDIFF(YEAR, p.birthdate, CURRENT_DATE) as age,
+                    p.gender,
+                    p.country,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY g.game_id 
+                        ORDER BY 
+                            pgs.win_ratio DESC, 
+                            pgs.total_games_played DESC
+                    ) as player_rank
+                FROM player_game_stats pgs
+                JOIN players p ON pgs.player_id = p.player_id
+                JOIN games g ON pgs.game_id = g.game_id
+                WHERE pgs.total_games_played > 0  -- Only include players who have played games
+            )
+            SELECT 
+                player_name,
+                game_name,
+                total_games_played,
+                total_wins,
+                total_losses,
+                win_ratio,
+                player_rank
+            FROM RankedPlayers
+            WHERE player_rank <= 3
+            ORDER BY game_name, player_rank;
+        """)
+
+        result = db.execute(query)
+        rows = result.fetchall()
+
+        if not rows:
+            raise HTTPException(status_code=404, detail="No player statistics found")
+
+        # Organize results by game
+        top_players = {}
+        for row in rows:
+            game_name = row.game_name
+            if game_name not in top_players:
+                top_players[game_name] = []
+
+            player_data = {
+                "rank": row.player_rank,
+                "player_name": row.player_name,
+                "total_games": row.total_games_played,
+                "wins": row.total_wins,
+                "losses": row.total_losses,
+                "win_ratio": row.win_ratio
+            }
+            top_players[game_name].append(player_data)
+
+        return {
+            "games": [
+                {
+                    "game_name": game,
+                    "top_players": players
+                }
+                for game, players in top_players.items()
+            ]
+        }
+
     except Exception as e:
         print(f"Error: {str(e)}")
         raise HTTPException(status_code=500, detail="Error retrieving top players")
