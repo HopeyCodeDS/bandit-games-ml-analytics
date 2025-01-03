@@ -8,6 +8,7 @@ variables:
   PREDICTION_IMAGE: opeyemimomodu/prediction-api
   STATS_API_IMAGE: opeyemimomodu/statistics-api
   STATS_DB_IMAGE: opeyemimomodu/statistics-db
+  ANALYTICS_CONSUMER_IMAGE: opeyemimomodu/analytics-consumer
 
 stages:
   - build
@@ -69,6 +70,28 @@ build_analytics_consumer:
       - .gitlab-ci.yml
 
 
-only:
-  - main
-  - deployment
+deploy:
+  stage: deploy
+  image: mcr.microsoft.com/azure-cli
+  script:
+    # Login to Azure
+    - az login --service-principal -u $AZURE_SP_ID -p $AZURE_SP_PASSWORD --tenant $AZURE_TENANT_ID
+
+    # Create resource group if it doesn't exist
+    - az group create --name game-analytics-rg --location westeurope
+
+    # Deploy using docker-compose
+    - az container create 
+        --resource-group game-analytics-rg 
+        --name game-analytics-platform 
+        --file docker-compose.yml 
+        --dns-name-label game-analytics-platform 
+        --ports 3309 8001 8002
+  only:
+    - main
+  environment: production
+
+
+#only:
+#  - main
+#  - deployment
