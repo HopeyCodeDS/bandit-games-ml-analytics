@@ -11,7 +11,7 @@ app = FastAPI(title="Player Analytics API",
               description="Unified API for comprehensive player predictions and analytics")
 
 # CORS configuration
-origins = ["http://localhost", "http://localhost:8080", "http://localhost:3000"]
+origins = ["http://localhost", "http://localhost:8080", "http://localhost:3000", "http://localhost:5173", "https://localhost:5173"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
