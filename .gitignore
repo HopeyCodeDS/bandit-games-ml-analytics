@@ -4,3 +4,5 @@ RAG/.venvRAG
 RAG/.env
 *.pyc
 __pycache__/
+.env.local
+.env.production
