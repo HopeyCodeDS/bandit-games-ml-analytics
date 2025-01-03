@@ -1,30 +1,26 @@
 version: '3.8'
 
 services:
-  db:
+  platform_analytics_db:
     build: .
-    container_name: game_analytics_mysql
+    image: opeyemimomodu/statistics-db:latest
+    container_name: platform_analytics_mysql
     restart: always
     environment:
+      MYSQL_DATABASE: platform_analytics
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: game_analytics
     ports:
-      - "3307:3306"
+      - "3309:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
-      - ./game_analytics_backup.sql:/docker-entrypoint-initdb.d/game_analytics_backup.sql
+      - platform_analytics_data:/var/lib/mysql
+#      - ./platform_analytics_backup.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - game_network
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-volumes:
-  mysql_data:
-    driver: local
+      - platform_analytics_network
 
 networks:
-  game_network:
+  platform_analytics_network:
+    name: platform_analytics_network
     driver: bridge
+
+volumes:
+  platform_analytics_data:

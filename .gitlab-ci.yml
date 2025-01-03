@@ -1,0 +1,148 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_REGISTRY: docker.io
+  PREDICTION_IMAGE: opeyemimomodu/prediction-api
+  STATS_API_IMAGE: opeyemimomodu/statistics-api
+  STATS_DB_IMAGE: opeyemimomodu/statistics-db
+  ANALYTICS_CONSUMER_IMAGE: opeyemimomodu/analytics-consumer
+
+stages:
+  - build
+  - deploy
+
+before_script:
+  - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
+
+# Build Jobs
+build_prediction_api:
+  stage: build
+  script:
+    - docker build -t $PREDICTION_IMAGE:$CI_COMMIT_SHA -f PredictionSystem/Dockerfile PredictionSystem
+    - docker tag $PREDICTION_IMAGE:$CI_COMMIT_SHA $PREDICTION_IMAGE:latest
+    - docker push $PREDICTION_IMAGE:$CI_COMMIT_SHA
+    - docker push $PREDICTION_IMAGE:latest
+  only:
+    changes:
+      - PredictionSystem/**/*
+      - .gitlab-ci.yml
+
+build_stats_api:
+  stage: build
+  script:
+    - docker build -t $STATS_API_IMAGE:$CI_COMMIT_SHA -f GameAnalytics/Dockerfile GameAnalytics
+    - docker tag $STATS_API_IMAGE:$CI_COMMIT_SHA $STATS_API_IMAGE:latest
+    - docker push $STATS_API_IMAGE:$CI_COMMIT_SHA
+    - docker push $STATS_API_IMAGE:latest
+  only:
+    changes:
+      - GameAnalytics/**/*
+      - .gitlab-ci.yml
+
+build_stats_db:
+  stage: build
+  script:
+    - docker build -t $STATS_DB_IMAGE:$CI_COMMIT_SHA -f game_analytics_docker/Dockerfile game_analytics_docker
+    - docker tag $STATS_DB_IMAGE:$CI_COMMIT_SHA $STATS_DB_IMAGE:latest
+    - docker push $STATS_DB_IMAGE:$CI_COMMIT_SHA
+    - docker push $STATS_DB_IMAGE:latest
+  only:
+    changes:
+      - game_analytics_docker/**/*
+      - .gitlab-ci.yml
+
+build_analytics_consumer:
+  stage: build
+  script:
+    - docker build -t $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA -f communication/Dockerfile communication
+    - docker tag $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA $ANALYTICS_CONSUMER_IMAGE:latest
+    - docker push $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA
+    - docker push $ANALYTICS_CONSUMER_IMAGE:latest
+  only:
+    changes:
+      - communication/**/*
+      - .gitlab-ci.yml
+
+deploy:
+  stage: deploy
+  image: mcr.microsoft.com/azure-cli
+  script:
+    # Login to Azure
+    - az login --service-principal -u $AZURE_SP_ID -p $AZURE_SP_PASSWORD --tenant $AZURE_TENANT_ID
+
+    # Create resource group if it doesn't exist
+    - az group create --name game-analytics-rg --location westeurope
+
+    # Create a docker-compose file with production settings
+    - |
+      cat > docker-compose.prod.yml << EOF
+      version: '3.8'
+      
+      services:
+        platform_analytics_db:
+          image: $STATS_DB_IMAGE:latest
+          container_name: platform_analytics_mysql
+          environment:
+            MYSQL_DATABASE: platform_analytics
+            MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+          ports:
+            - "3309:3306"
+      
+        player_stats_api:
+          image: $STATS_API_IMAGE:latest
+          container_name: player_stats_api
+          ports:
+            - "8001:8001"
+          environment:
+            - DB_USER=root
+            - DB_PASSWORD=$DB_ROOT_PASSWORD
+            - DB_HOST=platform_analytics_mysql
+            - DB_PORT=3306
+      
+        prediction_api:
+          image: $PREDICTION_IMAGE:latest
+          container_name: prediction_api
+          ports:
+            - "8002:8002"
+          environment:
+            - DB_USER=root
+            - DB_PASSWORD=$DB_ROOT_PASSWORD
+            - DB_HOST=platform_analytics_mysql
+            - DB_PORT=3306
+      
+        analytics_consumer:
+          image: $ANALYTICS_CONSUMER_IMAGE:latest
+          container_name: analytics_consumer
+          environment:
+            - DB_USER=root
+            - DB_PASSWORD=$DB_ROOT_PASSWORD
+            - DB_HOST=platform_analytics_mysql
+            - DB_PORT=3306
+            - RABBITMQ_HOST=48.209.190.184
+            - RABBITMQ_PORT=5672
+            - RABBITMQ_USERNAME=myuser
+            - RABBITMQ_PASSWORD=mypassword
+      EOF
+
+    # Deploy to Azure Container Instances
+    - |
+      az container create \
+        --resource-group game-analytics-rg \
+        --name game-analytics-platform \
+        --file docker-compose.prod.yml \
+        --dns-name-label game-analytics-platform \
+        --ports 3309 8001 8002 \
+        --environment-variables \
+          DB_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
+        --secure-environment-variables \
+          RABBITMQ_PASSWORD=$RABBITMQ_PASSWORD
+
+    # Output the deployment URL
+    - echo "Deployment complete! Your services are available at:"
+    - az container show --resource-group game-analytics-rg --name game-analytics-platform --query ipAddress.fqdn
+  only:
+    - main
+  environment: production
