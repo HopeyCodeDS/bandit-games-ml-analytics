@@ -11,6 +11,7 @@ variables:
 
 stages:
   - build
+  - deploy
 
 before_script:
   - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
@@ -24,8 +25,10 @@ build_prediction_api:
     - docker push $PREDICTION_IMAGE:$CI_COMMIT_SHA
     - docker push $PREDICTION_IMAGE:latest
   only:
-    - main
-    - deployment
+    changes:
+      - PredictionSystem/**/*
+      - .gitlab-ci.yml
+
 
 build_stats_api:
   stage: build
@@ -35,8 +38,10 @@ build_stats_api:
     - docker push $STATS_API_IMAGE:$CI_COMMIT_SHA
     - docker push $STATS_API_IMAGE:latest
   only:
-    - main
-    - deployment
+    changes:
+      - GameAnalytics/**/*
+      - .gitlab-ci.yml
+
 
 build_stats_db:
   stage: build
@@ -46,5 +51,13 @@ build_stats_db:
     - docker push $STATS_DB_IMAGE:$CI_COMMIT_SHA
     - docker push $STATS_DB_IMAGE:latest
   only:
-    - main
-    - deployment
+    changes:
+      - game_analytics_docker/**/*
+      - .gitlab-ci.yml
+
+
+
+
+only:
+  - main
+  - deployment
