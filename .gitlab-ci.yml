@@ -30,7 +30,6 @@ build_prediction_api:
       - PredictionSystem/**/*
       - .gitlab-ci.yml
 
-
 build_stats_api:
   stage: build
   script:
@@ -42,7 +41,6 @@ build_stats_api:
     changes:
       - GameAnalytics/**/*
       - .gitlab-ci.yml
-
 
 build_stats_db:
   stage: build
@@ -56,7 +54,6 @@ build_stats_db:
       - game_analytics_docker/**/*
       - .gitlab-ci.yml
 
-
 build_analytics_consumer:
   stage: build
   script:
@@ -69,7 +66,6 @@ build_analytics_consumer:
       - communication/**/*
       - .gitlab-ci.yml
 
-
 deploy:
   stage: deploy
   image: mcr.microsoft.com/azure-cli
@@ -80,18 +76,73 @@ deploy:
     # Create resource group if it doesn't exist
     - az group create --name game-analytics-rg --location westeurope
 
-    # Deploy using docker-compose
-    - az container create 
-        --resource-group game-analytics-rg 
-        --name game-analytics-platform 
-        --file docker-compose.yml 
-        --dns-name-label game-analytics-platform 
-        --ports 3309 8001 8002
+    # Create a docker-compose file with production settings
+    - |
+      cat > docker-compose.prod.yml << EOF
+      version: '3.8'
+      
+      services:
+        platform_analytics_db:
+          image: $STATS_DB_IMAGE:latest
+          container_name: platform_analytics_mysql
+          environment:
+            MYSQL_DATABASE: platform_analytics
+            MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+          ports:
+            - "3309:3306"
+      
+        player_stats_api:
+          image: $STATS_API_IMAGE:latest
+          container_name: player_stats_api
+          ports:
+            - "8001:8001"
+          environment:
+            - DB_USER=root
+            - DB_PASSWORD=$DB_ROOT_PASSWORD
+            - DB_HOST=platform_analytics_mysql
+            - DB_PORT=3306
+      
+        prediction_api:
+          image: $PREDICTION_IMAGE:latest
+          container_name: prediction_api
+          ports:
+            - "8002:8002"
+          environment:
+            - DB_USER=root
+            - DB_PASSWORD=$DB_ROOT_PASSWORD
+            - DB_HOST=platform_analytics_mysql
+            - DB_PORT=3306
+      
+        analytics_consumer:
+          image: $ANALYTICS_CONSUMER_IMAGE:latest
+          container_name: analytics_consumer
+          environment:
+            - DB_USER=root
+            - DB_PASSWORD=$DB_ROOT_PASSWORD
+            - DB_HOST=platform_analytics_mysql
+            - DB_PORT=3306
+            - RABBITMQ_HOST=48.209.190.184
+            - RABBITMQ_PORT=5672
+            - RABBITMQ_USERNAME=myuser
+            - RABBITMQ_PASSWORD=mypassword
+      EOF
+
+    # Deploy to Azure Container Instances
+    - |
+      az container create \
+        --resource-group game-analytics-rg \
+        --name game-analytics-platform \
+        --file docker-compose.prod.yml \
+        --dns-name-label game-analytics-platform \
+        --ports 3309 8001 8002 \
+        --environment-variables \
+          DB_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
+        --secure-environment-variables \
+          RABBITMQ_PASSWORD=$RABBITMQ_PASSWORD
+
+    # Output the deployment URL
+    - echo "Deployment complete! Your services are available at:"
+    - az container show --resource-group game-analytics-rg --name game-analytics-platform --query ipAddress.fqdn
   only:
     - main
   environment: production
-
-
-#only:
-#  - main
-#  - deployment
