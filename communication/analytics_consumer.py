@@ -98,94 +98,73 @@ class AnalyticsEventProcessor:
 
     def process_game_event(self, event_data: Dict[str, Any]) -> None:
         try:
-            event_body = json.loads(event_data["eventBody"])
-            logger.info(f"Processing game event for match {event_body['matchId']}")
+            logger.info(f"Processing game event for match {event_data['matchId']}")
 
             with self.db.get_connection() as conn:
                 cursor = conn.cursor()
 
-                # Insert into match_history
+                cursor.execute("SELECT game_id FROM games WHERE name = %s", (event_data["game"],))
+                game_result = cursor.fetchone()
+                if not game_result:
+                    raise Exception(f"Game {event_data['game']} not found")
+
                 match_history_query = """
                 INSERT INTO match_history (
                     match_id, game_id, player1_id, player2_id, winner_id,
                     start_time, end_time, duration_minutes, result
                 ) VALUES (
-                    UUID_TO_BIN(%s),
-                    (SELECT game_id FROM games WHERE name = %s),
-                    UUID_TO_BIN(%s),
-                    UUID_TO_BIN(%s),
-                    UUID_TO_BIN(%s),
+                    UUID_TO_BIN(%s), %s, UUID_TO_BIN(%s), UUID_TO_BIN(%s), UUID_TO_BIN(%s),
                     %s, %s, %s, %s
-                )
-                """
+                )"""
 
-                start_time = datetime.fromisoformat(event_body["startTime"].replace('Z', ''))
-                end_time = datetime.fromisoformat(event_body["endTime"].replace('Z', ''))
+                start_time = datetime.strptime(event_data["startTime"], "%Y-%m-%dT%H:%M:%S")
+                end_time = datetime.strptime(event_data["endTime"], "%Y-%m-%dT%H:%M:%S")
                 duration = int((end_time - start_time).total_seconds() / 60)
 
-                result = 'win' if event_body["winnerId"] else 'draw'
-
                 cursor.execute(match_history_query, (
-                    event_body["matchId"],
-                    event_body["game"],
-                    event_body["player1Id"],
-                    event_body["player2Id"],
-                    event_body["winnerId"],
+                    event_data["matchId"],
+                    game_result[0],
+                    event_data["player1Id"],
+                    event_data["player2Id"],
+                    event_data["winnerId"],
                     start_time,
                     end_time,
                     duration,
-                    result
+                    'win' if event_data["winnerId"] else 'draw'
                 ))
 
-                # Insert match moves for both players
                 moves_query = """
-                INSERT INTO match_moves (
-                    move_id, match_id, player_id, moves_count
-                ) VALUES (
-                    UUID_TO_BIN(%s),
-                    UUID_TO_BIN(%s),
-                    UUID_TO_BIN(%s),
-                    %s
-                )
+                INSERT INTO match_moves (move_id, match_id, player_id, moves_count)
+                VALUES (UUID_TO_BIN(%s), UUID_TO_BIN(%s), UUID_TO_BIN(%s), %s)
                 """
 
-                # Player 1 moves
                 cursor.execute(moves_query, (
                     str(uuid.uuid4()),
-                    event_body["matchId"],
-                    event_body["player1Id"],
-                    event_body["player1MoveCounts"]
+                    event_data["matchId"],
+                    event_data["player1Id"],
+                    event_data["player1MoveCounts"]
                 ))
-
-                # Player 2 moves
                 cursor.execute(moves_query, (
                     str(uuid.uuid4()),
-                    event_body["matchId"],
-                    event_body["player2Id"],
-                    event_body["player2MoveCounts"]
+                    event_data["matchId"],
+                    event_data["player2Id"],
+                    event_data["player2MoveCounts"]
                 ))
 
-                # Update player game stats for both players
-                for player_id in [event_body["player1Id"], event_body["player2Id"]]:
-                    # Get game_id first
-                    cursor.execute("SELECT game_id FROM games WHERE name = %s", (event_body["game"],))
-                    game_id_result = cursor.fetchone()
-                    if not game_id_result:
-                        raise Exception(f"Game {event_body['game']} not found in database")
+                stats_query = """
+                CALL update_player_game_stats(UUID_TO_BIN(%s), %s)
+                """
 
-                    # Convert player_id to binary
-                    cursor.execute("SELECT UUID_TO_BIN(%s)", (player_id,))
-                    player_id_bin = cursor.fetchone()[0]
-
-                    # Call stored procedure
-                    cursor.callproc('update_player_game_stats', [player_id_bin, game_id_result[0]])
+                for player_id in [event_data["player1Id"], event_data["player2Id"]]:
+                    cursor.execute(stats_query, (player_id, game_result[0]))
 
                 conn.commit()
-                logger.info(f"Successfully processed game event for match {event_body['matchId']}")
+                logger.info(f"Successfully processed game event for match {event_data['matchId']}")
 
         except Exception as e:
             logger.error(f"Error processing game event: {str(e)}")
             raise
+
 
     def process_user_event(self, event_data: Dict[str, Any]) -> None:
         try:
