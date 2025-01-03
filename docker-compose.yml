@@ -53,6 +53,27 @@ services:
     networks:
       - platform_analytics_network
 
+  analytics_consumer:
+    build:
+      context: ./communication
+      dockerfile: Dockerfile
+    image: opeyemimomodu/analytics-consumer:latest
+    container_name: analytics_consumer
+    depends_on:
+      - platform_analytics_db
+    environment:
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_HOST=platform_analytics_mysql
+      - DB_PORT=3306
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+    networks:
+      - platform_analytics_network
+
+
 networks:
   platform_analytics_network:
     name: platform_analytics_network
