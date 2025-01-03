@@ -56,6 +56,17 @@ build_stats_db:
       - .gitlab-ci.yml
 
 
+build_analytics_consumer:
+  stage: build
+  script:
+    - docker build -t $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA -f communication/Dockerfile communication
+    - docker tag $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA $ANALYTICS_CONSUMER_IMAGE:latest
+    - docker push $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA
+    - docker push $ANALYTICS_CONSUMER_IMAGE:latest
+  only:
+    changes:
+      - communication/**/*
+      - .gitlab-ci.yml
 
 
 only:
