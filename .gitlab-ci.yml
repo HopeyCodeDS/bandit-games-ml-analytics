@@ -71,12 +71,12 @@ deploy:
     # Create resource group
     - az group create --name game-analytics-rg --location westeurope
 
-    # Deploy container group using ACI Compose
+    # Deploy container group using Azure Resource Manager (ARM) template
     - |
-      az container create \
+      az deployment group create \
         --resource-group game-analytics-rg \
-        --name game-analytics-platform \
-        --file docker-compose.yml \
+        --template-file docker-compose.arm.json \
+        --parameters dockerComposeFile=docker-compose.yml \
         --debug
 
   needs:
