@@ -17,6 +17,7 @@ origins = [
     "http://localhost:3000",
     "http://localhost:5173",
     "https://localhost:5173",
+    "https://mango-sky-053dae803.4.azurestaticapps.net",
     "https://mango-sky-053dae803.4.azurestaticapps.net/"
 ]
 app.add_middleware(
