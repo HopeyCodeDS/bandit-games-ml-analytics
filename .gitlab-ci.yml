@@ -5,10 +5,11 @@ services:
 
 variables:
   # Docker Hub images
-  STATS_DB_IMAGE: opeyemimomodu/statistics-db
-  STATS_API_IMAGE: opeyemimomodu/statistics-api
-  PREDICTION_IMAGE: opeyemimomodu/prediction-api
-  ANALYTICS_CONSUMER_IMAGE: opeyemimomodu/analytics-consumer
+  DOCKER_HUB_USER: opeyemimomodu
+  STATS_DB_IMAGE: ${DOCKER_HUB_USER}/statistics-db
+  STATS_API_IMAGE: ${DOCKER_HUB_USER}/statistics-api
+  PREDICTION_IMAGE: ${DOCKER_HUB_USER}/prediction-api
+  ANALYTICS_CONSUMER_IMAGE: ${DOCKER_HUB_USER}/analytics-consumer
 
 stages:
   - build
