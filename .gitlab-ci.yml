@@ -10,12 +10,6 @@ variables:
   PREDICTION_IMAGE: ${DOCKER_HUB_USER}/prediction-api
   ANALYTICS_CONSUMER_IMAGE: ${DOCKER_HUB_USER}/analytics-consumer
 
-  # Azure credentials
-  AZURE_SP_ID: ${AZURE_SP_ID}
-  AZURE_SP_PASSWORD: ${AZURE_SP_PASSWORD}
-  AZURE_TENANT_ID: ${AZURE_TENANT_ID}
-  DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-
 stages:
   - build
   - deploy
@@ -60,9 +54,8 @@ deploy:
     # Azure Login
     - |
       echo "Debugging Environment Variables:"
-      echo "AZURE_SP_ID: $AZURE_SP_ID"
-      echo "AZURE_TENANT_ID: $AZURE_TENANT_ID"
-      echo "AZURE_SP_PASSWORD: [hidden]"
+      echo "AZURE_SP_ID is set: $([[ ! -z "$AZURE_SP_ID" ]] && echo "Yes" || echo "No")"
+      echo "AZURE_TENANT_ID is set: $([[ ! -z "$AZURE_TENANT_ID" ]] && echo "Yes" || echo "No")"
     - |
       az login --service-principal \
         -u "$AZURE_SP_ID" \
