@@ -73,22 +73,22 @@ deploy:
 
     # Create resource group
     - az group create --name game-analytics-rg --location westeurope
-    - |
-      if ! az login --service-principal \
-        -u "$AZURE_SP_ID" \
-        -p "$AZURE_SP_PASSWORD" \
-        --tenant "$AZURE_TENANT_ID"; then
-        echo "Failed to login to Azure"
-        exit 1
-      fi
-
-    - |
-      if ! az group create \
-        --name game-analytics-rg \
-        --location westeurope; then
-        echo "Failed to create resource group"
-        exit 1
-      fi
+#    - |
+#      if ! az login --service-principal \
+#        -u "$AZURE_SP_ID" \
+#        -p "$AZURE_SP_PASSWORD" \
+#        --tenant "$AZURE_TENANT_ID"; then
+#        echo "Failed to login to Azure"
+#        exit 1
+#      fi
+#
+#    - |
+#      if ! az group create \
+#        --name game-analytics-rg \
+#        --location westeurope; then
+#        echo "Failed to create resource group"
+#        exit 1
+#      fi
 
     # Deploy container group
     - |
