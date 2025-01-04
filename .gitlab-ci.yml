@@ -11,6 +11,12 @@ variables:
   PREDICTION_IMAGE: ${DOCKER_HUB_USER}/prediction-api
   ANALYTICS_CONSUMER_IMAGE: ${DOCKER_HUB_USER}/analytics-consumer
 
+  # Azure credentials
+  AZURE_SP_ID: $AZURE_SP_ID
+  AZURE_SP_PASSWORD: $AZURE_SP_PASSWORD
+  AZURE_TENANT_ID: $AZURE_TENANT_ID
+  DB_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+
 stages:
   - build
   - deploy
@@ -27,33 +33,33 @@ build_stats_db:
   <<: *build_definition
   script:
     - docker build -t $STATS_DB_IMAGE:$CI_COMMIT_SHA -f game_analytics_docker/Dockerfile game_analytics_docker
-    - docker tag $STATS_DB_IMAGE:$CI_COMMIT_SHA $STATS_DB_IMAGE:latest
+#    - docker tag $STATS_DB_IMAGE:$CI_COMMIT_SHA $STATS_DB_IMAGE:latest
     - docker push $STATS_DB_IMAGE:$CI_COMMIT_SHA
-    - docker push $STATS_DB_IMAGE:latest
+#    - docker push $STATS_DB_IMAGE:latest
 
 build_stats_api:
   <<: *build_definition
   script:
     - docker build -t $STATS_API_IMAGE:$CI_COMMIT_SHA -f GameAnalytics/Dockerfile GameAnalytics
-    - docker tag $STATS_API_IMAGE:$CI_COMMIT_SHA $STATS_API_IMAGE:latest
+#    - docker tag $STATS_API_IMAGE:$CI_COMMIT_SHA $STATS_API_IMAGE:latest
     - docker push $STATS_API_IMAGE:$CI_COMMIT_SHA
-    - docker push $STATS_API_IMAGE:latest
+#    - docker push $STATS_API_IMAGE:latest
 
 build_prediction_api:
   <<: *build_definition
   script:
     - docker build -t $PREDICTION_IMAGE:$CI_COMMIT_SHA -f PredictionSystem/Dockerfile PredictionSystem
-    - docker tag $PREDICTION_IMAGE:$CI_COMMIT_SHA $PREDICTION_IMAGE:latest
+#    - docker tag $PREDICTION_IMAGE:$CI_COMMIT_SHA $PREDICTION_IMAGE:latest
     - docker push $PREDICTION_IMAGE:$CI_COMMIT_SHA
-    - docker push $PREDICTION_IMAGE:latest
+#    - docker push $PREDICTION_IMAGE:latest
 
 build_analytics_consumer:
   <<: *build_definition
   script:
     - docker build -t $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA -f communication/Dockerfile communication
-    - docker tag $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA $ANALYTICS_CONSUMER_IMAGE:latest
+#    - docker tag $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA $ANALYTICS_CONSUMER_IMAGE:latest
     - docker push $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA
-    - docker push $ANALYTICS_CONSUMER_IMAGE:latest
+#    - docker push $ANALYTICS_CONSUMER_IMAGE:latest
 
 
 # Deploy to Azure
