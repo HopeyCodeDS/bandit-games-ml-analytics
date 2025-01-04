@@ -17,6 +17,7 @@
       "type": "Microsoft.ContainerInstance/containerGroups",
       "name": "[variables('containerGroupName')]",
       "location": "westeurope",
+      "apiVersion": "2021-10-01",
       "properties": {
         "containers": "[from(parameters('dockerComposeFile'))]",
         "osType": "Linux",
