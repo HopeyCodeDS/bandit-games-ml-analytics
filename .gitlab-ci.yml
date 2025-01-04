@@ -56,18 +56,21 @@ deploy:
   image: mcr.microsoft.com/azure-cli
   before_script:
     - echo "Starting deployment..."
-    - echo "Debugging Environment Variables:"
-    - echo "AZURE_SP_ID: $AZURE_SP_ID"
-    - echo "AZURE_TENANT_ID: $AZURE_TENANT_ID"
-    - echo "$AZURE_SP_PASSWORD:"
-
   script:
     # Azure Login
     - |
-      az login --service-principal -u "$AZURE_SP_ID" -p "$AZURE_SP_PASSWORD" --tenant "$AZURE_TENANT_ID" || {
-        echo "Azure login failed. Please verify credentials.";
-        exit 1;
-      }
+      echo "Debugging Environment Variables:"
+      echo "AZURE_SP_ID: $AZURE_SP_ID"
+      echo "AZURE_TENANT_ID: $AZURE_TENANT_ID"
+      echo "AZURE_SP_PASSWORD: [hidden]"
+    - |
+      az login --service-principal \
+        -u "$AZURE_SP_ID" \
+        -p "$AZURE_SP_PASSWORD" \
+        --tenant "$AZURE_TENANT_ID" || {
+          echo "Azure login failed. Please verify credentials.";
+          exit 1;
+        }
 
     # Register Container Instance provider
     - az provider register --namespace Microsoft.ContainerInstance
