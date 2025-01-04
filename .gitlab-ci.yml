@@ -63,6 +63,11 @@ deploy:
   image: mcr.microsoft.com/azure-cli
   script:
     - echo "Starting deployment to Azure..."
+
+    # Docker Hub login for pulling images
+    - |
+      az acr login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
+
     # Azure Login
     - az login --service-principal -u "$AZURE_SP_ID" -p "$AZURE_SP_PASSWORD" --tenant "$AZURE_TENANT_ID"
 
@@ -109,6 +114,8 @@ deploy:
         --os-type Linux \
         --memory 1.5 \
         --cpu 1 \
+        --registry-username $DOCKER_HUB_USER \
+        --registry-password $DOCKER_HUB_PASSWORD \
         --debug
 
   needs:
