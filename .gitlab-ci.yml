@@ -64,9 +64,6 @@ deploy:
   script:
     - echo "Starting deployment to Azure..."
 
-    # Docker Hub login for pulling images
-    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
-
     # Azure Login
     - az login --service-principal -u "$AZURE_SP_ID" -p "$AZURE_SP_PASSWORD" --tenant "$AZURE_TENANT_ID"
 
