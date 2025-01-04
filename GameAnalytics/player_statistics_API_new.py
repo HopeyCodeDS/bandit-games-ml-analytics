@@ -34,6 +34,7 @@ origins = [
     "http://localhost:3000",
     "http://localhost:5173",
     "https://localhost:5173",
+    "https://mango-sky-053dae803.4.azurestaticapps.net/"
 ]
 
 # Add CORS middleware
