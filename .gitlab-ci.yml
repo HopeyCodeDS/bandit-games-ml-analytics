@@ -75,6 +75,7 @@ deploy:
     - |
       az container create \
         --resource-group game-analytics-rg \
+        --name game-analytics-platform \
         --file docker-compose.yml \
         --debug
 
