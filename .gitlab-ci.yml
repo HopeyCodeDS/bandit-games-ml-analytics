@@ -79,46 +79,113 @@ deploy:
 
     # Create resource group
     - az group create --name game-analytics-rg --location westeurope
-#    - |
-#      if ! az login --service-principal \
-#        -u "$AZURE_SP_ID" \
-#        -p "$AZURE_SP_PASSWORD" \
-#        --tenant "$AZURE_TENANT_ID"; then
-#        echo "Failed to login to Azure"
-#        exit 1
-#      fi
-#
-#    - |
-#      if ! az group create \
-#        --name game-analytics-rg \
-#        --location westeurope; then
-#        echo "Failed to create resource group"
-#        exit 1
-#      fi
 
-    # Deploy container group
-    - |
-      az container create \
-        --resource-group game-analytics-rg \
-        --name game-analytics-platform \
-        --image $STATS_DB_IMAGE:latest \
-        --image $STATS_API_IMAGE:latest \
-        --image $PREDICTION_IMAGE:latest \
-        --image $ANALYTICS_CONSUMER_IMAGE:latest \
-        --dns-name-label game-analytics-platform \
-        --ports 3309 8001 8002 \
-        --environment-variables \
-          MYSQL_DATABASE=platform_analytics \
-          MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
-          RABBITMQ_HOST=48.209.190.184 \
-          RABBITMQ_PORT=5672 \
-          RABBITMQ_USERNAME=myuser \
-        --os-type Linux \
-        --memory 1.5 \
-        --cpu 1 \
-        --registry-username $DOCKER_HUB_USER \
-        --registry-password $DOCKER_HUB_PASSWORD \
-        --debug
+    # Define container group configuration in JSON
+    - cat <<EOF > container-group.json
+    {
+      "name": "game-analytics-platform",
+      "location": "westeurope",
+      "properties": {
+        "containers": [
+          {
+            "name": "stats-db",
+            "properties": {
+              "image": "$STATS_DB_IMAGE:$CI_COMMIT_SHA",
+              "resources": {
+                "requests": {
+                  "memoryInGb": 1.5,
+                  "cpu": 1
+                }
+              },
+              "environmentVariables": [
+                {
+                  "name": "MYSQL_DATABASE",
+                  "value": "platform_analytics"
+                },
+                {
+                  "name": "MYSQL_ROOT_PASSWORD",
+                  "value": "$DB_ROOT_PASSWORD"
+                }
+              ],
+              "ports": [
+                {
+                  "port": 3309
+                }
+              ]
+            }
+          },
+          {
+            "name": "stats-api",
+            "properties": {
+              "image": "$STATS_API_IMAGE:$CI_COMMIT_SHA",
+              "resources": {
+                "requests": {
+                  "memoryInGb": 1.5,
+                  "cpu": 1
+                }
+              },
+              "ports": [
+                {
+                  "port": 8001
+                }
+              ]
+            }
+          },
+          {
+            "name": "prediction-api",
+            "properties": {
+              "image": "$PREDICTION_IMAGE:$CI_COMMIT_SHA",
+              "resources": {
+                "requests": {
+                  "memoryInGb": 1.5,
+                  "cpu": 1
+                }
+              },
+              "ports": [
+                {
+                  "port": 8002
+                }
+              ]
+            }
+          },
+          {
+            "name": "analytics-consumer",
+            "properties": {
+              "image": "$ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA",
+              "resources": {
+                "requests": {
+                  "memoryInGb": 1.5,
+                  "cpu": 1
+                }
+              }
+            }
+          }
+        ],
+        "osType": "Linux",
+        "ipAddress": {
+          "type": "Public",
+          "dnsNameLabel": "game-analytics-platform",
+          "ports": [
+            {
+              "port": 3309,
+              "protocol": "TCP"
+            },
+            {
+              "port": 8001,
+              "protocol": "TCP"
+            },
+            {
+              "port": 8002,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      }
+    }
+    EOF
+
+    # Deploy container group using JSON file
+    - az container create --resource-group game-analytics-rg --file container-group.json
 
   needs:
     - build_stats_db
