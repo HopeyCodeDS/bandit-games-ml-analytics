@@ -26,9 +26,7 @@ build_prediction_api:
     - docker push $PREDICTION_IMAGE:$CI_COMMIT_SHA
     - docker push $PREDICTION_IMAGE:latest
   only:
-    changes:
-      - PredictionSystem/**/*
-      - .gitlab-ci.yml
+    - main
 
 build_stats_api:
   stage: build
@@ -38,9 +36,7 @@ build_stats_api:
     - docker push $STATS_API_IMAGE:$CI_COMMIT_SHA
     - docker push $STATS_API_IMAGE:latest
   only:
-    changes:
-      - GameAnalytics/**/*
-      - .gitlab-ci.yml
+    - main
 
 build_stats_db:
   stage: build
@@ -50,9 +46,7 @@ build_stats_db:
     - docker push $STATS_DB_IMAGE:$CI_COMMIT_SHA
     - docker push $STATS_DB_IMAGE:latest
   only:
-    changes:
-      - game_analytics_docker/**/*
-      - .gitlab-ci.yml
+    - main
 
 build_analytics_consumer:
   stage: build
@@ -62,9 +56,7 @@ build_analytics_consumer:
     - docker push $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA
     - docker push $ANALYTICS_CONSUMER_IMAGE:latest
   only:
-    changes:
-      - communication/**/*
-      - .gitlab-ci.yml
+    - main
 
 deploy:
   stage: deploy
@@ -169,7 +161,7 @@ deploy:
       fi
 
     # Output the deployment URL with verification
-    - echo "Verifying deployment and getting URL..."
+    - echo "Checking deployment status and getting URL..."
     - |
       if URL=$(az container show --resource-group game-analytics-rg --name game-analytics-platform --query ipAddress.fqdn -o tsv); then
         echo "Your services are available at: $URL"
@@ -181,11 +173,11 @@ deploy:
         echo "Failed to get deployment URL"
         exit 1
       fi
-  only:
-    - main
-  environment: production
   needs:
     - build_prediction_api
     - build_stats_api
     - build_stats_db
     - build_analytics_consumer
+  only:
+    - main
+  environment: production
