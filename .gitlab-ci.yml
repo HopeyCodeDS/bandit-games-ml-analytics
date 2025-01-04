@@ -89,6 +89,7 @@ deploy:
         exit 1
       fi
 
+    # Deploy container group
     - |
       az container create \
         --resource-group game-analytics-rg \
@@ -105,6 +106,7 @@ deploy:
           RABBITMQ_HOST=48.209.190.184 \
           RABBITMQ_PORT=5672 \
           RABBITMQ_USERNAME=myuser \
+        --os-type Linux \
         --debug
 
   needs:
