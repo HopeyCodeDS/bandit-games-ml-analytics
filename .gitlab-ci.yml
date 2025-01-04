@@ -60,10 +60,7 @@ deploy:
       az login --service-principal \
         -u "$AZURE_SP_ID" \
         -p "$AZURE_SP_PASSWORD" \
-        --tenant "$AZURE_TENANT_ID" || {
-          echo "Azure login failed. Please verify credentials.";
-          exit 1;
-        }
+        --tenant "$AZURE_TENANT_ID"
 
     # Register Container Apps provider
     - az provider register --namespace Microsoft.App
@@ -78,7 +75,7 @@ deploy:
         --resource-group game-analytics-rg \
         --location westeurope
 
-    # Deploy Stats API Container App
+    # Deploy Stats API Container App with CORS headers
     - |
       az containerapp create \
         --resource-group game-analytics-rg \
@@ -87,14 +84,15 @@ deploy:
         --image $STATS_API_IMAGE:$CI_COMMIT_SHA \
         --ingress external \
         --target-port 8001 \
-        --enable-cors \
-        --cors-allowed-origins "https://mango-sky-053dae803.4.azurestaticapps.net" \
         --env-vars \
           MYSQL_DATABASE=platform_analytics \
           MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
           RABBITMQ_HOST=48.209.190.184 \
           RABBITMQ_PORT=5672 \
-          RABBITMQ_USERNAME=myuser
+          RABBITMQ_USERNAME=myuser \
+          ALLOWED_ORIGINS="https://mango-sky-053dae803.4.azurestaticapps.net" \
+        --min-replicas 1 \
+        --max-replicas 10
 
     # Deploy Prediction API Container App
     - |
@@ -105,11 +103,12 @@ deploy:
         --image $PREDICTION_IMAGE:$CI_COMMIT_SHA \
         --ingress external \
         --target-port 8002 \
-        --enable-cors \
-        --cors-allowed-origins "https://mango-sky-053dae803.4.azurestaticapps.net" \
         --env-vars \
           MYSQL_DATABASE=platform_analytics \
-          MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
+          MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
+          ALLOWED_ORIGINS="https://mango-sky-053dae803.4.azurestaticapps.net" \
+        --min-replicas 1 \
+        --max-replicas 10
 
     # Deploy Analytics Consumer Container App
     - |
@@ -136,7 +135,7 @@ deploy:
           MYSQL_DATABASE=platform_analytics \
           MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
 
-    # Get the FQDN of the Stats API for frontend configuration
+    # Get the FQDN of the Stats API
     - |
       echo "Stats API URL:"
       az containerapp show \
