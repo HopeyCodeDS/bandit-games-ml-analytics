@@ -1,0 +1,44 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "dockerComposeFile": {
+      "type": "string",
+      "metadata": {
+        "description": "Path to the Docker Compose file to be deployed."
+      }
+    }
+  },
+  "variables": {
+    "containerGroupName": "game-analytics-platform"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ContainerInstance/containerGroups",
+      "name": "[variables('containerGroupName')]",
+      "location": "westeurope",
+      "properties": {
+        "containers": "[from(parameters('dockerComposeFile'))]",
+        "osType": "Linux",
+        "ipAddress": {
+          "ports": [
+            {
+              "protocol": "tcp",
+              "port": 3309
+            },
+            {
+              "protocol": "tcp",
+              "port": 8001
+            },
+            {
+              "protocol": "tcp",
+              "port": 8002
+            }
+          ],
+          "type": "Public",
+          "dnsNameLabel": "game-analytics-platform"
+        }
+      }
+    }
+  ]
+}
