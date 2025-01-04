@@ -70,13 +70,33 @@ deploy:
   stage: deploy
   image: mcr.microsoft.com/azure-cli
   script:
-    # Login to Azure
-    - az login --service-principal -u $AZURE_SP_ID -p $AZURE_SP_PASSWORD --tenant $AZURE_TENANT_ID
+    # Debug information
+    - echo "Starting deployment..."
+    - echo "Checking Azure CLI version"
+    - az --version
 
-    # Create resource group if it doesn't exist
-    - az group create --name game-analytics-rg --location westeurope
+    # Login to Azure with debug
+    - echo "Attempting to login to Azure..."
+    - |
+      if az login --service-principal -u $AZURE_SP_ID -p $AZURE_SP_PASSWORD --tenant $AZURE_TENANT_ID; then
+        echo "Successfully logged in to Azure"
+      else
+        echo "Failed to login to Azure"
+        exit 1
+      fi
 
-    # Create a docker-compose file with production settings
+    # Create resource group with debug
+    - echo "Creating/checking resource group..."
+    - |
+      if az group create --name game-analytics-rg --location westeurope; then
+        echo "Resource group created/confirmed"
+      else
+        echo "Failed to create resource group"
+        exit 1
+      fi
+
+    # Create docker-compose file with debug
+    - echo "Creating production docker-compose file..."
     - |
       cat > docker-compose.prod.yml << EOF
       version: '3.8'
@@ -84,6 +104,8 @@ deploy:
       services:
         platform_analytics_db:
           image: $STATS_DB_IMAGE:latest
+          volumes:
+            - mysql-data:/var/lib/mysql  # Persistent volume
           container_name: platform_analytics_mysql
           environment:
             MYSQL_DATABASE: platform_analytics
@@ -127,9 +149,10 @@ deploy:
             - RABBITMQ_PASSWORD=mypassword
       EOF
 
-    # Deploy to Azure Container Instances
+    # Deploy with debug
+    - echo "Deploying to Azure Container Instances..."
     - |
-      az container create \
+      if az container create \
         --resource-group game-analytics-rg \
         --name game-analytics-platform \
         --file docker-compose.prod.yml \
@@ -138,11 +161,31 @@ deploy:
         --environment-variables \
           DB_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
         --secure-environment-variables \
-          RABBITMQ_PASSWORD=$RABBITMQ_PASSWORD
+          RABBITMQ_PASSWORD=$RABBITMQ_PASSWORD; then
+        echo "Deployment successful"
+      else
+        echo "Deployment failed"
+        exit 1
+      fi
 
-    # Output the deployment URL
-    - echo "Deployment complete! Your services are available at:"
-    - az container show --resource-group game-analytics-rg --name game-analytics-platform --query ipAddress.fqdn
+    # Output the deployment URL with verification
+    - echo "Verifying deployment and getting URL..."
+    - |
+      if URL=$(az container show --resource-group game-analytics-rg --name game-analytics-platform --query ipAddress.fqdn -o tsv); then
+        echo "Your services are available at: $URL"
+        echo "Ports:"
+        echo "- Database: $URL:3309"
+        echo "- Statistics API: $URL:8001"
+        echo "- Prediction API: $URL:8002"
+      else
+        echo "Failed to get deployment URL"
+        exit 1
+      fi
   only:
     - main
   environment: production
+  needs:
+    - build_prediction_api
+    - build_stats_api
+    - build_stats_db
+    - build_analytics_consumer
