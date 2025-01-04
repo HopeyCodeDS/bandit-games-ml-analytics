@@ -56,8 +56,8 @@ deploy:
   image: mcr.microsoft.com/azure-cli
   script:
     - echo "Starting deployment to Azure..."
-    - echo "AZURE_SP_ID: $AZURE_SP_ID"
-    - echo "AZURE_TENANT_ID: $AZURE_TENANT_ID"
+    - echo "$AZURE_SP_ID"
+    - echo "$AZURE_TENANT_ID"
 
     # Azure Login
     - az login --service-principal -u "$AZURE_SP_ID" -p "$AZURE_SP_PASSWORD" --tenant "$AZURE_TENANT_ID"
