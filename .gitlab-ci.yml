@@ -15,63 +15,54 @@ stages:
   - build
   - deploy
 
-before_script:
-  # Secure Docker Hub login
-  - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
-
-# Build statistics database
-build_stats_db:
+# Build jobs with Docker login
+.build_template: &build_definition
   stage: build
+  before_script:
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+  only:
+    - main
+
+build_stats_db:
+  <<: *build_definition
   script:
     - docker build -t $STATS_DB_IMAGE:$CI_COMMIT_SHA -f game_analytics_docker/Dockerfile game_analytics_docker
     - docker tag $STATS_DB_IMAGE:$CI_COMMIT_SHA $STATS_DB_IMAGE:latest
     - docker push $STATS_DB_IMAGE:$CI_COMMIT_SHA
     - docker push $STATS_DB_IMAGE:latest
-  only:
-    - main
 
-# Build statistics API
 build_stats_api:
-  stage: build
+  <<: *build_definition
   script:
     - docker build -t $STATS_API_IMAGE:$CI_COMMIT_SHA -f GameAnalytics/Dockerfile GameAnalytics
     - docker tag $STATS_API_IMAGE:$CI_COMMIT_SHA $STATS_API_IMAGE:latest
     - docker push $STATS_API_IMAGE:$CI_COMMIT_SHA
     - docker push $STATS_API_IMAGE:latest
-  only:
-    - main
 
-# Build prediction API
 build_prediction_api:
-  stage: build
+  <<: *build_definition
   script:
     - docker build -t $PREDICTION_IMAGE:$CI_COMMIT_SHA -f PredictionSystem/Dockerfile PredictionSystem
     - docker tag $PREDICTION_IMAGE:$CI_COMMIT_SHA $PREDICTION_IMAGE:latest
     - docker push $PREDICTION_IMAGE:$CI_COMMIT_SHA
     - docker push $PREDICTION_IMAGE:latest
-  only:
-    - main
 
-# Build analytics consumer
 build_analytics_consumer:
-  stage: build
+  <<: *build_definition
   script:
     - docker build -t $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA -f communication/Dockerfile communication
     - docker tag $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA $ANALYTICS_CONSUMER_IMAGE:latest
     - docker push $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA
     - docker push $ANALYTICS_CONSUMER_IMAGE:latest
-  only:
-    - main
+
 
 # Deploy to Azure
+# Deploy job without Docker login
 deploy:
   stage: deploy
   image: mcr.microsoft.com/azure-cli
   script:
-    # Debug info
     - echo "Starting deployment to Azure..."
-
-    # Login to Azure
     - |
       if ! az login --service-principal \
         -u "$AZURE_SP_ID" \
@@ -81,7 +72,6 @@ deploy:
         exit 1
       fi
 
-    # Create resource group
     - |
       if ! az group create \
         --name game-analytics-rg \
@@ -90,7 +80,6 @@ deploy:
         exit 1
       fi
 
-    # Deploy container group with all services
     - |
       az container create \
         --resource-group game-analytics-rg \
