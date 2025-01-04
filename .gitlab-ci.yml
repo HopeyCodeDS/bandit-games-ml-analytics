@@ -85,8 +85,13 @@ deploy:
         --ingress external \
         --target-port 8001 \
         --env-vars \
+          DB_USER=root \
+          DB_PASSWORD=root \
+          DB_HOST=game-analytics-db.internal.thankfulsea-0ab28963.westeurope.azurecontainerapps.io \
+          DB_PORT=3306 \
+          DB_NAME=platform_analytics \
           MYSQL_DATABASE=platform_analytics \
-          MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
+          MYSQL_ROOT_PASSWORD=root \
           RABBITMQ_HOST=48.209.190.184 \
           RABBITMQ_PORT=5672 \
           RABBITMQ_USERNAME=myuser \
