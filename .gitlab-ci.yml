@@ -16,8 +16,12 @@ stages:
   - deploy
 
 before_script:
-  # Use Docker Hub credentials
-  - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+  # Login to Docker Hub - adjusted for better error handling
+  - |
+    if ! docker login -u "$DOCKER_HUB_USER" --password-stdin <<< "$DOCKER_HUB_PASSWORD"; then
+      echo "Failed to login to Docker Hub"
+      exit 1
+    fi
 
 # Build statistics database
 build_stats_db:
@@ -71,14 +75,28 @@ deploy:
     # Debug info
     - echo "Starting deployment to Azure..."
 
-    # Login to Azure
-    - az login --service-principal -u $AZURE_SP_ID -p $AZURE_SP_PASSWORD --tenant $AZURE_TENANT_ID
-
-    # Create resource group
-    - az group create --name game-analytics-rg --location westeurope
-
-    # Deploy container group
+    # Login to Azure with error handling
     - |
+      if ! az login --service-principal \
+        -u "$AZURE_SP_ID" \
+        -p "$AZURE_SP_PASSWORD" \
+        --tenant "$AZURE_TENANT_ID"; then
+        echo "Failed to login to Azure"
+        exit 1
+      fi
+
+    # Create resource group with error handling
+    - |
+      if ! az group create \
+        --name game-analytics-rg \
+        --location westeurope; then
+        echo "Failed to create resource group"
+        exit 1
+      fi
+
+    # Deploy container group with detailed logging
+    - |
+      echo "Creating container group..."
       az container create \
         --resource-group game-analytics-rg \
         --name game-analytics-platform \
@@ -93,7 +111,9 @@ deploy:
           MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
           RABBITMQ_HOST=48.209.190.184 \
           RABBITMQ_PORT=5672 \
-          RABBITMQ_USERNAME=myuser
+          RABBITMQ_USERNAME=myuser \
+        --debug
+
   needs:
     - build_stats_db
     - build_stats_api
