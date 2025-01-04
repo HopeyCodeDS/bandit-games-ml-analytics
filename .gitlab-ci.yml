@@ -80,7 +80,7 @@ deploy:
         --image $STATS_API_IMAGE:$CI_COMMIT_SHA \
         --image $PREDICTION_IMAGE:$CI_COMMIT_SHA \
         --image $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA \
-        --environment-variables \
+        --env-vars \
           MYSQL_DATABASE=platform_analytics \
           MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
           RABBITMQ_HOST=48.209.190.184 \
