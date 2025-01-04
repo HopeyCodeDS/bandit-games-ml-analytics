@@ -76,13 +76,9 @@ deploy:
       az container create \
         --resource-group game-analytics-rg \
         --name game-analytics-platform \
-        --container-name stats-db \
         --image $STATS_DB_IMAGE:$CI_COMMIT_SHA \
-        --container-name stats-api \
         --image $STATS_API_IMAGE:$CI_COMMIT_SHA \
-        --container-name prediction-api \
         --image $PREDICTION_IMAGE:$CI_COMMIT_SHA \
-        --container-name analytics-consumer \
         --image $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA \
         --dns-name-label game-analytics-platform \
         --ports 3309 8001 8002 \
@@ -94,6 +90,8 @@ deploy:
         --cpu 1 \
         --registry-username $DOCKER_HUB_USER \
         --registry-password $DOCKER_HUB_PASSWORD \
+        --multicontainer-config-type compose \
+        --multicontainer-config-file compose.yml \
         --debug
 
   needs:
