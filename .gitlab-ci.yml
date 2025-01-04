@@ -63,6 +63,15 @@ deploy:
   image: mcr.microsoft.com/azure-cli
   script:
     - echo "Starting deployment to Azure..."
+    # Azure Login
+    - az login --service-principal -u "$AZURE_SP_ID" -p "$AZURE_SP_PASSWORD" --tenant "$AZURE_TENANT_ID"
+
+    # Register Container Instance provider
+    - echo "Registering Container Instance provider..."
+    - az provider register --namespace Microsoft.ContainerInstance
+
+    # Create resource group
+    - az group create --name game-analytics-rg --location westeurope
     - |
       if ! az login --service-principal \
         -u "$AZURE_SP_ID" \
