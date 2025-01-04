@@ -16,12 +16,8 @@ stages:
   - deploy
 
 before_script:
-  # Login to Docker Hub - adjusted for better error handling
-  - |
-    if ! docker login -u "$DOCKER_HUB_USER" --password-stdin <<< "$DOCKER_HUB_PASSWORD"; then
-      echo "Failed to login to Docker Hub"
-      exit 1
-    fi
+  # Secure Docker Hub login
+  - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
 
 # Build statistics database
 build_stats_db:
@@ -75,7 +71,7 @@ deploy:
     # Debug info
     - echo "Starting deployment to Azure..."
 
-    # Login to Azure with error handling
+    # Login to Azure
     - |
       if ! az login --service-principal \
         -u "$AZURE_SP_ID" \
@@ -85,7 +81,7 @@ deploy:
         exit 1
       fi
 
-    # Create resource group with error handling
+    # Create resource group
     - |
       if ! az group create \
         --name game-analytics-rg \
@@ -94,9 +90,8 @@ deploy:
         exit 1
       fi
 
-    # Deploy container group with detailed logging
+    # Deploy container group with all services
     - |
-      echo "Creating container group..."
       az container create \
         --resource-group game-analytics-rg \
         --name game-analytics-platform \
