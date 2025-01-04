@@ -11,10 +11,10 @@ variables:
   ANALYTICS_CONSUMER_IMAGE: ${DOCKER_HUB_USER}/analytics-consumer
 
   # Azure credentials
-  AZURE_SP_ID: $AZURE_SP_ID
-  AZURE_SP_PASSWORD: $AZURE_SP_PASSWORD
-  AZURE_TENANT_ID: $AZURE_TENANT_ID
-  DB_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+  AZURE_SP_ID: ${AZURE_SP_ID}
+  AZURE_SP_PASSWORD: ${AZURE_SP_PASSWORD}
+  AZURE_TENANT_ID: ${AZURE_TENANT_ID}
+  DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
 
 stages:
   - build
@@ -54,13 +54,20 @@ build_analytics_consumer:
 deploy:
   stage: deploy
   image: mcr.microsoft.com/azure-cli
-  script:
-    - echo "Starting deployment to Azure..."
-    - echo "$AZURE_SP_ID"
-    - echo "$AZURE_TENANT_ID"
+  before_script:
+    - echo "Starting deployment..."
+    - echo "Debugging Environment Variables:"
+    - echo "AZURE_SP_ID: $AZURE_SP_ID"
+    - echo "AZURE_TENANT_ID: $AZURE_TENANT_ID"
+    - echo "$AZURE_SP_PASSWORD:"
 
+  script:
     # Azure Login
-    - az login --service-principal -u "$AZURE_SP_ID" -p "$AZURE_SP_PASSWORD" --tenant "$AZURE_TENANT_ID"
+    - |
+      az login --service-principal -u "$AZURE_SP_ID" -p "$AZURE_SP_PASSWORD" --tenant "$AZURE_TENANT_ID" || {
+        echo "Azure login failed. Please verify credentials.";
+        exit 1;
+      }
 
     # Register Container Instance provider
     - az provider register --namespace Microsoft.ContainerInstance
