@@ -72,13 +72,13 @@ migrate_database:
         --resource-group game-analytics-rg \
         --name game-analytics-mysql \
         --location eastus \
-        --admin-username root \
+        --admin-user root \
         --admin-password "$DB_ROOT_PASSWORD" \
         --sku-name B_Standard_B1s \
         --tier Burstable \
         --storage-size 32 \
         --database-name platform_analytics \
-        --version 8.0.21
+        --version 8.0
 
     # Configure firewall rules
     - |
