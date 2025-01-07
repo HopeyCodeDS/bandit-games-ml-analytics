@@ -77,6 +77,19 @@ deploy:
         --location westeurope \
         --internal-only false
 
+    # Create Azure File Share for MySQL data persistence
+    - |
+      az storage account create \
+        --name gameanalyticsstorage \
+        --resource-group game-analytics-rg \
+        --location westeurope \
+        --sku Standard_LRS
+
+    - |
+      az storage share create \
+        --name mysql-data \
+        --account-name gameanalyticsstorage
+
     # Deploy Stats DB Container App
     - |
       az containerapp create \
@@ -86,16 +99,21 @@ deploy:
         --image $STATS_DB_IMAGE:$CI_COMMIT_SHA \
         --ingress 'internal' \
         --target-port 3306 \
+        --min-replicas 1 \
+        --max-replicas 1 \
+        --cpu 1.0 \
+        --memory 2.0Gi \
         --env-vars \
           MYSQL_DATABASE=platform_analytics \
           MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
           MYSQL_USER=root \
-          MYSQL_PASSWORD=$DB_ROOT_PASSWORD
+          MYSQL_PASSWORD=$DB_ROOT_PASSWORD \
+        --volumes mysql-data:/var/lib/mysql
 
     # Wait for DB to be ready
     - |
       echo "Waiting for database to be ready..."
-      sleep 30
+      sleep 45
 
     # Deploy Stats API Container App
     - |
@@ -117,7 +135,7 @@ deploy:
           RABBITMQ_USERNAME=myuser \
           ALLOWED_ORIGINS="https://mango-sky-053dae803.4.azurestaticapps.net" \
         --min-replicas 1 \
-        --max-replicas 10 
+        --max-replicas 10
 
     # Deploy Prediction API Container App
     - |
