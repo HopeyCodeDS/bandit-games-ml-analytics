@@ -72,7 +72,7 @@ migrate_database:
         --resource-group game-analytics-rg \
         --name game-analytics-mysql \
         --location northeurope \
-        --admin-user root \
+        --admin-user azureuser \
         --admin-password "$DB_ROOT_PASSWORD" \
         --tier Burstable \
         --sku-name Standard_B1s \
