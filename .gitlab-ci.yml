@@ -71,7 +71,7 @@ migrate_database:
       az mysql flexible-server create \
         --resource-group game-analytics-rg \
         --name $MYSQL_SERVER_NAME \
-        --location westeurope \
+        --location eastus \         # Changed from westeurope to eastus
         --admin-user root \
         --admin-password $DB_ROOT_PASSWORD \
         --sku-name Standard_B1ms \
