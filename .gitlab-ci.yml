@@ -83,7 +83,7 @@ migrate_database:
         --sku-name Standard_B1s \
         --storage-size 32 \
         --database-name platform_analytics \
-        --version 8.0
+        --version 8.0.21
 
     # Configure firewall rules
     - |
