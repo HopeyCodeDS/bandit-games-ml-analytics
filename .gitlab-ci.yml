@@ -66,11 +66,6 @@ migrate_database:
         sleep 10
       done
 
-    # Check available locations
-    - |
-      echo "Available locations:"
-      az account list-locations --query "[].name" -o tsv
-
     # Create Azure Database for MySQL
     - |
       az mysql flexible-server create \
@@ -83,7 +78,8 @@ migrate_database:
         --sku-name Standard_B1s \
         --storage-size 32 \
         --database-name platform_analytics \
-        --version 8.0.21
+        --version 8.0.21 \
+        --yes
 
     # Configure firewall rules
     - |
