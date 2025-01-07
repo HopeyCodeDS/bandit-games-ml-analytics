@@ -117,13 +117,7 @@ deploy:
           RABBITMQ_USERNAME=myuser \
           ALLOWED_ORIGINS="https://mango-sky-053dae803.4.azurestaticapps.net" \
         --min-replicas 1 \
-        --max-replicas 10 \
-        --health-probe-path /health \
-        --health-probe-protocol HTTP \
-        --health-probe-interval 10 \
-        --health-probe-timeout 5 \
-        --health-threshold 3 \
-        --unhealthy-threshold 3
+        --max-replicas 10 
 
     # Deploy Prediction API Container App
     - |
