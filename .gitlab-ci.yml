@@ -10,6 +10,7 @@ variables:
   ANALYTICS_CONSUMER_IMAGE: ${DOCKER_HUB_USER}/analytics-consumer
   DB_ROOT_PASSWORD: root
   MYSQL_SERVER_NAME: game-analytics-mysql  # Azure MySQL server name
+  DB_USERNAME: azureuser
 
 stages:
   - build
@@ -70,9 +71,9 @@ migrate_database:
     - |
       az mysql flexible-server create \
         --resource-group game-analytics-rg \
-        --name game-analytics-mysql \
+        --name $MYSQL_SERVER_NAME \
         --location northeurope \
-        --admin-user azureuser \
+        --admin-user $DB_USERNAME \
         --admin-password "$DB_ROOT_PASSWORD" \
         --tier Burstable \
         --sku-name Standard_B1s \
@@ -138,7 +139,7 @@ deploy:
         --ingress external \
         --target-port 8001 \
         --env-vars \
-          DB_USER=root \
+          DB_USER=$DB_USERNAME \
           DB_PASSWORD=$DB_ROOT_PASSWORD \
           DB_HOST=$MYSQL_HOST \
           DB_PORT=3306 \
@@ -160,8 +161,11 @@ deploy:
         --ingress external \
         --target-port 8002 \
         --env-vars \
-          MYSQL_DATABASE=platform_analytics \
-          MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
+          DB_USER=$DB_USERNAME \
+          DB_PASSWORD=$DB_ROOT_PASSWORD \
+          DB_HOST=$MYSQL_HOST \
+          DB_PORT=3306 \
+          DB_NAME=platform_analytics \
           ALLOWED_ORIGINS="https://mango-sky-053dae803.4.azurestaticapps.net" \
         --min-replicas 1 \
         --max-replicas 10
@@ -174,8 +178,11 @@ deploy:
         --environment game-analytics-env \
         --image $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA \
         --env-vars \
-          MYSQL_DATABASE=platform_analytics \
-          MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
+          DB_USER=$DB_USERNAME \
+          DB_PASSWORD=$DB_ROOT_PASSWORD \
+          DB_HOST=$MYSQL_HOST \
+          DB_PORT=3306 \
+          DB_NAME=platform_analytics \
           RABBITMQ_HOST=48.209.190.184 \
           RABBITMQ_PORT=5672 \
           RABBITMQ_USERNAME=myuser
