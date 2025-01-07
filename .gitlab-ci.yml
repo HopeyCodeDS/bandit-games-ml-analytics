@@ -77,19 +77,6 @@ deploy:
         --location westeurope \
         --internal-only false
 
-    # Create Azure File Share for MySQL data persistence
-    - |
-      az storage account create \
-        --name gameanalyticsstorage \
-        --resource-group game-analytics-rg \
-        --location westeurope \
-        --sku Standard_LRS
-
-    - |
-      az storage share create \
-        --name mysql-data \
-        --account-name gameanalyticsstorage
-
     # Deploy Stats DB Container App
     - |
       az containerapp create \
@@ -108,7 +95,8 @@ deploy:
           MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
           MYSQL_USER=root \
           MYSQL_PASSWORD=$DB_ROOT_PASSWORD \
-        --volumes mysql-data:/var/lib/mysql
+        --volume-mount name=mysql-storage,mount-path=/var/lib/mysql \
+        --volume name=mysql-storage,storage-type=EmptyDir
 
     # Wait for DB to be ready
     - |
