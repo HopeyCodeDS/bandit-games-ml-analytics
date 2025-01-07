@@ -9,6 +9,7 @@ variables:
   STATS_API_IMAGE: ${DOCKER_HUB_USER}/statistics-api
   PREDICTION_IMAGE: ${DOCKER_HUB_USER}/prediction-api
   ANALYTICS_CONSUMER_IMAGE: ${DOCKER_HUB_USER}/analytics-consumer
+  DB_ROOT_PASSWORD: root
 
 stages:
   - build
@@ -73,9 +74,30 @@ deploy:
       az containerapp env create \
         --name game-analytics-env \
         --resource-group game-analytics-rg \
-        --location westeurope
+        --location westeurope \
+        --internal-only false
 
-    # Deploy Stats API Container App with CORS headers
+    # Deploy Stats DB Container App
+    - |
+      az containerapp create \
+        --resource-group game-analytics-rg \
+        --name game-analytics-db \
+        --environment game-analytics-env \
+        --image $STATS_DB_IMAGE:$CI_COMMIT_SHA \
+        --ingress 'internal' \
+        --target-port 3306 \
+        --env-vars \
+          MYSQL_DATABASE=platform_analytics \
+          MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
+          MYSQL_USER=root \
+          MYSQL_PASSWORD=$DB_ROOT_PASSWORD
+
+    # Wait for DB to be ready
+    - |
+      echo "Waiting for database to be ready..."
+      sleep 30
+
+    # Deploy Stats API Container App
     - |
       az containerapp create \
         --resource-group game-analytics-rg \
@@ -86,18 +108,22 @@ deploy:
         --target-port 8001 \
         --env-vars \
           DB_USER=root \
-          DB_PASSWORD=root \
-          DB_HOST=game-analytics-db.internal.thankfulsea-0ab28963.westeurope.azurecontainerapps.io \
+          DB_PASSWORD=$DB_ROOT_PASSWORD \
+          DB_HOST=game-analytics-db \
           DB_PORT=3306 \
           DB_NAME=platform_analytics \
-          MYSQL_DATABASE=platform_analytics \
-          MYSQL_ROOT_PASSWORD=root \
           RABBITMQ_HOST=48.209.190.184 \
           RABBITMQ_PORT=5672 \
           RABBITMQ_USERNAME=myuser \
           ALLOWED_ORIGINS="https://mango-sky-053dae803.4.azurestaticapps.net" \
         --min-replicas 1 \
-        --max-replicas 10
+        --max-replicas 10 \
+        --health-probe-path /health \
+        --health-probe-protocol HTTP \
+        --health-probe-interval 10 \
+        --health-probe-timeout 5 \
+        --health-threshold 3 \
+        --unhealthy-threshold 3
 
     # Deploy Prediction API Container App
     - |
@@ -128,17 +154,6 @@ deploy:
           RABBITMQ_HOST=48.209.190.184 \
           RABBITMQ_PORT=5672 \
           RABBITMQ_USERNAME=myuser
-
-    # Deploy Stats DB Container App
-    - |
-      az containerapp create \
-        --resource-group game-analytics-rg \
-        --name game-analytics-db \
-        --environment game-analytics-env \
-        --image $STATS_DB_IMAGE:$CI_COMMIT_SHA \
-        --env-vars \
-          MYSQL_DATABASE=platform_analytics \
-          MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
 
     # Get the FQDN of the Stats API
     - |
