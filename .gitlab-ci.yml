@@ -10,9 +10,11 @@ variables:
   PREDICTION_IMAGE: ${DOCKER_HUB_USER}/prediction-api
   ANALYTICS_CONSUMER_IMAGE: ${DOCKER_HUB_USER}/analytics-consumer
   DB_ROOT_PASSWORD: root
+  MYSQL_SERVER_NAME: game-analytics-mysql  # Azure MySQL server name
 
 stages:
   - build
+  - migrate
   - deploy
 
 .build_template: &build_definition
@@ -21,12 +23,6 @@ stages:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
   only:
     - main
-
-build_stats_db:
-  <<: *build_definition
-  script:
-    - docker build -t $STATS_DB_IMAGE:$CI_COMMIT_SHA -f game_analytics_docker/Dockerfile game_analytics_docker
-    - docker push $STATS_DB_IMAGE:$CI_COMMIT_SHA
 
 build_stats_api:
   <<: *build_definition
@@ -46,58 +42,78 @@ build_analytics_consumer:
     - docker build -t $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA -f communication/Dockerfile communication
     - docker push $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA
 
-deploy:
-  stage: deploy
+migrate_database:
+  stage: migrate
   image: mcr.microsoft.com/azure-cli
-  before_script:
-    - echo "Starting deployment..."
   script:
     # Azure Login
-    - |
-      echo "Debugging Environment Variables:"
-      echo "AZURE_SP_ID is set: $([[ ! -z "$AZURE_SP_ID" ]] && echo "Yes" || echo "No")"
-      echo "AZURE_TENANT_ID is set: $([[ ! -z "$AZURE_TENANT_ID" ]] && echo "Yes" || echo "No")"
     - |
       az login --service-principal \
         -u "$AZURE_SP_ID" \
         -p "$AZURE_SP_PASSWORD" \
         --tenant "$AZURE_TENANT_ID"
 
-    # Register Container Apps provider
-    - az provider register --namespace Microsoft.App
+    # Create Azure Database for MySQL if it doesn't exist
+    - |
+      az mysql flexible-server create \
+        --resource-group game-analytics-rg \
+        --name $MYSQL_SERVER_NAME \
+        --location westeurope \
+        --admin-user root \
+        --admin-password $DB_ROOT_PASSWORD \
+        --sku-name Standard_B1ms \
+        --tier Burstable \
+        --storage-size 32 \
+        --database-name platform_analytics \
+        --version 8.0.21 \
+        --yes
 
-    # Create resource group if it doesn't exist
-    - az group create --name game-analytics-rg --location westeurope
+    # Configure firewall rules
+    - |
+      az mysql flexible-server firewall-rule create \
+        --resource-group game-analytics-rg \
+        --name $MYSQL_SERVER_NAME \
+        --rule-name allAzureIPs \
+        --start-ip-address 0.0.0.0 \
+        --end-ip-address 255.255.255.255
+
+    # Install MySQL client
+    - apt-get update && apt-get install -y mysql-client
+
+    # Run database migrations
+    - |
+      MYSQL_HOST=$(az mysql flexible-server show \
+        --resource-group game-analytics-rg \
+        --name $MYSQL_SERVER_NAME \
+        --query "fullyQualifiedDomainName" -o tsv)
+      
+      # Import schema and data
+      mysql -h $MYSQL_HOST -u root -p$DB_ROOT_PASSWORD platform_analytics < ./game_analytics_docker/platform_analytics_dump.sql
+
+deploy:
+  stage: deploy
+  image: mcr.microsoft.com/azure-cli
+  script:
+    # Azure Login
+    - |
+      az login --service-principal \
+        -u "$AZURE_SP_ID" \
+        -p "$AZURE_SP_PASSWORD" \
+        --tenant "$AZURE_TENANT_ID"
+
+    # Get MySQL server FQDN
+    - |
+      MYSQL_HOST=$(az mysql flexible-server show \
+        --resource-group game-analytics-rg \
+        --name $MYSQL_SERVER_NAME \
+        --query "fullyQualifiedDomainName" -o tsv)
 
     # Create Container Apps environment if it doesn't exist
     - |
       az containerapp env create \
         --name game-analytics-env \
         --resource-group game-analytics-rg \
-        --location westeurope \
-        --internal-only false
-
-    # Deploy Stats DB Container App
-    - |
-      az containerapp create \
-        --resource-group game-analytics-rg \
-        --name game-analytics-db \
-        --environment game-analytics-env \
-        --image $STATS_DB_IMAGE:$CI_COMMIT_SHA \
-        --ingress 'internal' \
-        --target-port 3306 \
-        --min-replicas 1 \
-        --max-replicas 1 \
-        --cpu 1.0 \
-        --memory 2.0Gi \
-        --env-vars \
-          MYSQL_DATABASE=platform_analytics \
-          MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
-
-    # Wait for DB to be ready
-    - |
-      echo "Waiting for database to be ready..."
-      sleep 60
+        --location westeurope
 
     # Deploy Stats API Container App
     - |
@@ -111,13 +127,13 @@ deploy:
         --env-vars \
           DB_USER=root \
           DB_PASSWORD=$DB_ROOT_PASSWORD \
-          DB_HOST=game-analytics-db \
+          DB_HOST=$MYSQL_HOST \
           DB_PORT=3306 \
           DB_NAME=platform_analytics \
           RABBITMQ_HOST=48.209.190.184 \
           RABBITMQ_PORT=5672 \
           RABBITMQ_USERNAME=myuser \
-          ALLOWED_ORIGINS="https://mango-sky-053dae803.4.azurestaticapps.net" \
+          ALLOWED_ORIGINS="https://mango-sky-053dae803.4.azurestaticapps.net,http://localhost:3000,http://localhost:5173" \
         --min-replicas 1 \
         --max-replicas 10
 
