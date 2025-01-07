@@ -52,7 +52,21 @@ migrate_database:
         -p "$AZURE_SP_PASSWORD" \
         --tenant "$AZURE_TENANT_ID"
 
-    # Create Azure Database for MySQL if it doesn't exist
+    # Register the Microsoft.DBforMySQL resource provider
+    - |
+      echo "Registering MySQL provider..."
+      az provider register --namespace Microsoft.DBforMySQL
+
+    # Wait for registration to complete
+    - |
+      echo "Waiting for provider registration..."
+      az provider show -n Microsoft.DBforMySQL --query registrationState -o tsv
+      while [ "$(az provider show -n Microsoft.DBforMySQL --query registrationState -o tsv)" != "Registered" ]; do
+        echo "Still waiting for provider registration..."
+        sleep 10
+      done
+
+    # Create Azure Database for MySQL
     - |
       az mysql flexible-server create \
         --resource-group game-analytics-rg \
