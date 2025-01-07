@@ -94,9 +94,7 @@ deploy:
           MYSQL_DATABASE=platform_analytics \
           MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
           MYSQL_USER=root \
-          MYSQL_PASSWORD=$DB_ROOT_PASSWORD \
-        --volume-mount name=mysql-storage,mount-path=/var/lib/mysql \
-        --volume name=mysql-storage,storage-type=EmptyDir
+          MYSQL_PASSWORD=$DB_ROOT_PASSWORD
 
     # Wait for DB to be ready
     - |
