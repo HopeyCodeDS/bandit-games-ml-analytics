@@ -92,14 +92,12 @@ deploy:
         --memory 2.0Gi \
         --env-vars \
           MYSQL_DATABASE=platform_analytics \
-          MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
-          MYSQL_USER=root \
-          MYSQL_PASSWORD=$DB_ROOT_PASSWORD
+          MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
 
     # Wait for DB to be ready
     - |
       echo "Waiting for database to be ready..."
-      sleep 45
+      sleep 60
 
     # Deploy Stats API Container App
     - |
