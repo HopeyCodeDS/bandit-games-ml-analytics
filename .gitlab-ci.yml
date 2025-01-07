@@ -70,16 +70,15 @@ migrate_database:
     - |
       az mysql flexible-server create \
         --resource-group game-analytics-rg \
-        --name $MYSQL_SERVER_NAME \
-        --location eastus \         # Changed from westeurope to eastus
-        --admin-user root \
-        --admin-password $DB_ROOT_PASSWORD \
-        --sku-name Standard_B1ms \
+        --name game-analytics-mysql \
+        --location eastus \
+        --admin-username root \
+        --admin-password "$DB_ROOT_PASSWORD" \
+        --sku-name B_Standard_B1s \
         --tier Burstable \
         --storage-size 32 \
         --database-name platform_analytics \
-        --version 8.0.21 \
-        --yes
+        --version 8.0.21
 
     # Configure firewall rules
     - |
