@@ -5,7 +5,6 @@ services:
 
 variables:
   DOCKER_HUB_USER: opeyemimomodu
-  STATS_DB_IMAGE: ${DOCKER_HUB_USER}/statistics-db
   STATS_API_IMAGE: ${DOCKER_HUB_USER}/statistics-api
   PREDICTION_IMAGE: ${DOCKER_HUB_USER}/prediction-api
   ANALYTICS_CONSUMER_IMAGE: ${DOCKER_HUB_USER}/analytics-consumer
@@ -177,10 +176,10 @@ deploy:
         -o tsv
 
   needs:
-    - build_stats_db
     - build_stats_api
     - build_prediction_api
     - build_analytics_consumer
+    - migrate_database
   only:
     - main
   environment: production
