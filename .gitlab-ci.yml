@@ -66,16 +66,21 @@ migrate_database:
         sleep 10
       done
 
+    # Check available locations
+    - |
+      echo "Available locations:"
+      az account list-locations --query "[].name" -o tsv
+
     # Create Azure Database for MySQL
     - |
       az mysql flexible-server create \
         --resource-group game-analytics-rg \
         --name game-analytics-mysql \
-        --location eastus \
+        --location northeurope \
         --admin-user root \
         --admin-password "$DB_ROOT_PASSWORD" \
-        --sku-name B_Standard_B1s \
         --tier Burstable \
+        --sku-name Standard_B1s \
         --storage-size 32 \
         --database-name platform_analytics \
         --version 8.0
