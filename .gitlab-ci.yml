@@ -72,7 +72,7 @@ migrate_database:
       az mysql flexible-server create \
         --resource-group game-analytics-rg \
         --name $MYSQL_SERVER_NAME \
-        --location northeurope \
+        --location eastus \
         --admin-user $DB_USERNAME \
         --admin-password "$DB_ROOT_PASSWORD" \
         --tier Burstable \
