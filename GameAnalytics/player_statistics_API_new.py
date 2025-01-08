@@ -20,7 +20,7 @@ DB_NAME = 'platform_analytics'
 SSL_CA = os.getenv('SSL_CA', '/etc/ssl/certs/ca-certificates.crt')
 
 # Build database URL with SSL configuration
-DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?charset=utf8mb4&ssl_mode=REQUIRED&ssl_ca={SSL_CA}"
+DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?ssl_ca={SSL_CA}&ssl_verify_cert=true"
 
 # Create engine
 engine = create_engine(
