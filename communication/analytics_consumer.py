@@ -30,7 +30,6 @@ class DBConfig:
     database: str = os.getenv('DB_NAME', 'platform_analytics')
     pool_name: str = "analytics_pool"
     pool_size: int = 5
-    ssl_mode: str = os.getenv('DB_SSL_MODE', '')
     ssl_ca: str = os.getenv('DB_SSL_CA', '')
 
 
@@ -44,12 +43,14 @@ class DatabaseConnection:
             "database": config.database
         }
 
-        # Add SSL configuration if SSL mode is specified
-        if config.ssl_mode:
+        # Add SSL configuration if SSL CA is specified
+        if config.ssl_ca:
             self.dbconfig.update({
-                "ssl_mode": config.ssl_mode,
-                "ssl_ca": config.ssl_ca
+                "ssl": {
+                    "ca": config.ssl_ca
+                }
             })
+            logger.info("SSL configuration enabled for database connection")
 
         logger.info(f"Connecting to database at {config.host}:{config.port}")
 

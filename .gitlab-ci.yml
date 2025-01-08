@@ -230,7 +230,6 @@ deploy:
           DB_HOST=$MYSQL_HOST \
           DB_PORT=3306 \
           DB_NAME=platform_analytics \
-          DB_SSL_MODE=require \
           DB_SSL_CA=/etc/ssl/certs/ca-certificates.crt \
           RABBITMQ_HOST=48.209.190.184 \
           RABBITMQ_PORT=5672 \

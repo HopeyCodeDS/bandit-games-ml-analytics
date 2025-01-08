@@ -33,7 +33,6 @@ class TestEventPublisher:
         self.db_user = os.getenv('DB_USER', 'root')
         self.db_pass = os.getenv('DB_PASSWORD', 'root')
         self.db_name = os.getenv('DB_NAME', 'platform_analytics')
-        self.db_ssl_mode = os.getenv('DB_SSL_MODE', '')
         self.db_ssl_ca = os.getenv('DB_SSL_CA', '')
 
         # Initialize connections
@@ -86,10 +85,11 @@ class TestEventPublisher:
         }
 
         # Add SSL configuration if specified
-        if self.db_ssl_mode:
+        if self.db_ssl_ca:
             config.update({
-                "ssl_mode": self.db_ssl_mode,
-                "ssl_ca": self.db_ssl_ca
+                "ssl": {
+                    "ca": self.db_ssl_ca
+                }
             })
 
         self.db = mysql.connector.connect(**config)
