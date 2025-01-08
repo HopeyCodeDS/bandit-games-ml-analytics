@@ -219,22 +219,21 @@ deploy:
 
     # Deploy Analytics Consumer Container App
     - |
-      az containerapp create \
-        --resource-group game-analytics-rg \
+      az containerapp update \
         --name game-analytics-consumer \
-        --environment game-analytics-env \
+        --resource-group game-analytics-rg \
         --image $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA \
-        --env-vars \
+        --set-env-vars \
           DB_USER=$DB_USERNAME \
           DB_PASSWORD=$DB_ROOT_PASSWORD \
           DB_HOST=$MYSQL_HOST \
           DB_PORT=3306 \
           DB_NAME=platform_analytics \
-          DB_SSL_CA=/etc/ssl/certs/ca-certificates.crt \
+          DB_SSL_CA=/etc/ssl/certs/DigiCertGlobalRootCA.crt.pem \
           RABBITMQ_HOST=48.209.190.184 \
           RABBITMQ_PORT=5672 \
           RABBITMQ_USERNAME=myuser \
-          RABBITMQ_PASSWORD=$RABBITMQ_PASSWORD
+          "RABBITMQ_PASSWORD=$RABBITMQ_PASSWORD"
 
     # Get the FQDN of the Stats API
 #    - |

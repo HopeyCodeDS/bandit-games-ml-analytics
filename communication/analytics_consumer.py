@@ -40,30 +40,57 @@ class DatabaseConnection:
             "port": config.port,
             "user": config.user,
             "password": config.password,
-            "database": config.database
+            "database": config.database,
+            "pool_name": config.pool_name,
+            "pool_size": config.pool_size
         }
 
-        # Add SSL configuration if SSL CA is specified
+        # Configure SSL for Azure MySQL
         if config.ssl_ca:
+            logger.info(f"SSL CA file path: {config.ssl_ca}")
+            try:
+                with open(config.ssl_ca, 'r') as f:
+                    logger.info("Successfully read SSL CA file")
+            except Exception as e:
+                logger.error(f"Error reading SSL CA file: {str(e)}")
+
             self.dbconfig.update({
-                "ssl": {
-                    "ca": config.ssl_ca
-                }
+                "ssl_verify_cert": True,
+                "ssl_verify_identity": True
             })
+            if os.path.exists(config.ssl_ca):
+                self.dbconfig["ssl_ca"] = config.ssl_ca
             logger.info("SSL configuration enabled for database connection")
 
-        logger.info(f"Connecting to database at {config.host}:{config.port}")
+        logger.info(f"Attempting database connection to {config.host}:{config.port}")
+        logger.info(
+            f"Database config (excluding password): {dict((k, v) for k, v in self.dbconfig.items() if k != 'password')}")
 
-        self.pool = mysql.connector.pooling.MySQLConnectionPool(
-            pool_name=config.pool_name,
-            pool_size=config.pool_size,
-            **self.dbconfig
-        )
-        logger.info("Database connection pool created successfully")
+        try:
+            self.pool = mysql.connector.connect(**self.dbconfig)
+            logger.info("Successfully created single database connection")
+            self.pool.close()
+
+            # Now create the connection pool
+            self.pool = mysql.connector.pooling.MySQLConnectionPool(**self.dbconfig)
+            logger.info("Database connection pool created successfully")
+        except mysql.connector.Error as err:
+            logger.error(f"MySQL Connection Error: {err}")
+            if err.errno == mysql.connector.errorcode.ER_ACCESS_DENIED_ERROR:
+                logger.error("Invalid username or password")
+            elif err.errno == mysql.connector.errorcode.ER_BAD_DB_ERROR:
+                logger.error("Database does not exist")
+            else:
+                logger.error(f"Other MySQL Error: {err}")
+            raise
+        except Exception as e:
+            logger.error(f"Failed to create connection pool: {str(e)}")
+            logger.error(
+                f"Connection config (excluding password): {dict((k, v) for k, v in self.dbconfig.items() if k != 'password')}")
+            raise
 
     def get_connection(self):
         return self.pool.get_connection()
-
 
 class RabbitMQConnection:
     def __init__(self):
