@@ -1,13 +1,17 @@
-# analytics_consumer.py
 import json
-import pika
-import mysql.connector
+import logging
+import os
+import uuid
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Dict, Any
-import uuid
-import logging
-from dataclasses import dataclass
-from mysql.connector import pooling
+
+import mysql.connector
+import pika
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(
@@ -19,13 +23,15 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class DBConfig:
-    host: str = "localhost"
-    port: int = 3309
-    user: str = "root"
-    password: str = "root"
-    database: str = "platform_analytics"
+    host: str = os.getenv('DB_HOST', 'localhost')
+    port: int = int(os.getenv('DB_PORT', '3306'))
+    user: str = os.getenv('DB_USER', 'root')
+    password: str = os.getenv('DB_PASSWORD', 'root')
+    database: str = os.getenv('DB_NAME', 'platform_analytics')
     pool_name: str = "analytics_pool"
     pool_size: int = 5
+    ssl_mode: str = os.getenv('DB_SSL_MODE', '')
+    ssl_ca: str = os.getenv('DB_SSL_CA', '')
 
 
 class DatabaseConnection:
@@ -37,6 +43,15 @@ class DatabaseConnection:
             "password": config.password,
             "database": config.database
         }
+
+        # Add SSL configuration if SSL mode is specified
+        if config.ssl_mode:
+            self.dbconfig.update({
+                "ssl_mode": config.ssl_mode,
+                "ssl_ca": config.ssl_ca
+            })
+
+        logger.info(f"Connecting to database at {config.host}:{config.port}")
         self.pool = mysql.connector.pooling.MySQLConnectionPool(
             pool_name=config.pool_name,
             pool_size=config.pool_size,
