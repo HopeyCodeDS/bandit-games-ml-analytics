@@ -101,53 +101,87 @@ class RabbitMQConnection:
         self.username = os.getenv('RABBITMQ_USERNAME', 'guest')
         self.password = os.getenv('RABBITMQ_PASSWORD', 'guest')
 
+        # Log configuration (excluding password)
+        logger.info(f"RabbitMQ Configuration - Host: {self.host}, Port: {self.port}, Username: {self.username}")
+        if not self.password:
+            logger.warning("RabbitMQ password is not set!")
+
     def connect(self):
-        # Connect to RabbitMQ
-        logger.info(f"Connecting to RabbitMQ at {self.host}:{self.port}")
-        credentials = pika.PlainCredentials(self.username, self.password)
-        parameters = pika.ConnectionParameters(
-            host=self.host,
-            port=self.port,
-            credentials=credentials,
-            heartbeat=600,
-            blocked_connection_timeout=300
-        )
+        try:
+            # Connect to RabbitMQ
+            logger.info(f"Attempting to connect to RabbitMQ at {self.host}:{self.port}")
 
-        self.connection = pika.BlockingConnection(parameters)
-        self.channel = self.connection.channel()
+            # Create credentials
+            if not self.username or not self.password:
+                raise ValueError("RabbitMQ credentials not properly configured!")
 
-        # Declare exchanges
-        self.channel.exchange_declare(
-            exchange='data_analytics_exchange',
-            exchange_type='topic',
-            durable=True
-        )
-        self.channel.exchange_declare(
-            exchange='user_signup_exchange',
-            exchange_type='topic',
-            durable=True
-        )
+            credentials = pika.PlainCredentials(
+                username=self.username,
+                password=self.password
+            )
 
-        # Declare queues
-        self.channel.queue_declare(queue='data_analytics_q', durable=True)
-        self.channel.queue_declare(queue='user_signup_q', durable=True)
+            # Set connection parameters
+            parameters = pika.ConnectionParameters(
+                host=self.host,
+                port=self.port,
+                credentials=credentials,
+                heartbeat=600,
+                blocked_connection_timeout=300,
+                connection_attempts=3,
+                retry_delay=5
+            )
 
-        # Bind queues
-        self.channel.queue_bind(
-            exchange='data_analytics_exchange',
-            queue='data_analytics_q',
-            routing_key='game.over'
-        )
-        self.channel.queue_bind(
-            exchange='user_signup_exchange',
-            queue='user_signup_q',
-            routing_key='user.signup'
-        )
+            # Attempt connection
+            self.connection = pika.BlockingConnection(parameters)
+            self.channel = self.connection.channel()
+            logger.info("Successfully connected to RabbitMQ")
 
-        logger.info("RabbitMQ connection established successfully")
+            # Declare exchanges
+            self.channel.exchange_declare(
+                exchange='data_analytics_exchange',
+                exchange_type='topic',
+                durable=True
+            )
+            logger.info("Declared data_analytics_exchange")
+
+            self.channel.exchange_declare(
+                exchange='user_signup_exchange',
+                exchange_type='topic',
+                durable=True
+            )
+            logger.info("Declared user_signup_exchange")
+
+            # Declare queues
+            self.channel.queue_declare(queue='data_analytics_q', durable=True)
+            self.channel.queue_declare(queue='user_signup_q', durable=True)
+            logger.info("Declared queues")
+
+            # Bind queues
+            self.channel.queue_bind(
+                exchange='data_analytics_exchange',
+                queue='data_analytics_q',
+                routing_key='game.over'
+            )
+            self.channel.queue_bind(
+                exchange='user_signup_exchange',
+                queue='user_signup_q',
+                routing_key='user.signup'
+            )
+            logger.info("Successfully bound queues to exchanges")
+
+        except pika.exceptions.ProbableAuthenticationError as auth_error:
+            logger.error(f"RabbitMQ Authentication Error: {str(auth_error)}")
+            logger.error(f"Attempted connection with username: {self.username}")
+            raise
+        except pika.exceptions.AMQPConnectionError as conn_error:
+            logger.error(f"RabbitMQ Connection Error: {str(conn_error)}")
+            raise
+        except Exception as e:
+            logger.error(f"Unexpected error connecting to RabbitMQ: {str(e)}")
+            raise
 
     def close(self):
-        if self.connection:
+        if self.connection and not self.connection.is_closed:
             self.connection.close()
             logger.info("RabbitMQ connection closed")
 

@@ -11,6 +11,7 @@ variables:
   DB_ROOT_PASSWORD: root
   MYSQL_SERVER_NAME: game-analytics-mysql  # Azure MySQL server name
   DB_USERNAME: azureuser
+  RABBIT_PASSWORD: mypassword
 #
 stages:
   - build
@@ -219,6 +220,12 @@ deploy:
 
     # Deploy Analytics Consumer Container App
     - |
+      # First, verify the RabbitMQ password is set
+      if [ -z "$RABBITMQ_PASSWORD" ]; then
+        echo "Error: RABBITMQ_PASSWORD is not set"
+        exit 1
+      fi
+
       az containerapp update \
         --name game-analytics-consumer \
         --resource-group game-analytics-rg \
@@ -233,7 +240,18 @@ deploy:
           RABBITMQ_HOST=48.209.190.184 \
           RABBITMQ_PORT=5672 \
           RABBITMQ_USERNAME=myuser \
-          "RABBITMQ_PASSWORD=$RABBITMQ_PASSWORD"
+          RABBITMQ_PASSWORD="$RABBITMQ_PASSWORD"
+
+      echo "Verifying deployment..."
+      sleep 10
+      
+      # Verify the container app is running
+      STATUS=$(az containerapp show \
+        --name game-analytics-consumer \
+        --resource-group game-analytics-rg \
+        --query "properties.latestRevisionName" -o tsv)
+      
+      echo "Deployment Status: $STATUS"
 
     # Get the FQDN of the Stats API
 #    - |
@@ -243,13 +261,6 @@ deploy:
 #        --resource-group game-analytics-rg \
 #        --query "properties.configuration.ingress.fqdn" \
 #        -o tsv
-    # Verify deployment
-    - |
-      echo "Checking deployment status..."
-      az containerapp show \
-        --name game-analytics-consumer \
-        --resource-group game-analytics-rg \
-        --query "properties.latestRevisionName" -o tsv
 
   needs:
 #    - build_stats_api
