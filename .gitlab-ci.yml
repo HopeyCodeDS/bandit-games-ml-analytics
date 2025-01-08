@@ -44,8 +44,13 @@ build_analytics_consumer:
 
 migrate_database:
   stage: migrate
-  image: mcr.microsoft.com/azure-cli
+  image: mysql:8.0
   script:
+    # Install Azure CLI
+    - |
+      apt-get update && apt-get install -y curl gnupg lsb-release
+      curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+
     # Azure Login
     - |
       az login --service-principal \
