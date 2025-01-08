@@ -76,7 +76,7 @@ migrate_database:
         --admin-user $DB_USERNAME \
         --admin-password "$DB_ROOT_PASSWORD" \
         --tier Burstable \
-        --sku-name B_Standard_B1ms \
+        --sku-name Standard_B1ms \
         --storage-size 20 \
         --database-name platform_analytics \
         --version 8.0.21 \
