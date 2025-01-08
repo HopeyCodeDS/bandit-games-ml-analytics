@@ -73,16 +73,22 @@ migrate_database:
 
     # Delete existing MySQL server if it exists
     - |
-      echo "Deleting existing MySQL server if it exists..."
-      az mysql flexible-server delete \
-        --resource-group game-analytics-rg \
-        --name $MYSQL_SERVER_NAME \
-        --yes || true
-
-    # Wait for server deletion to complete
-    - |
-      echo "Waiting for server deletion to complete..."
-      sleep 30
+      echo "Checking if MySQL server exists..."
+      if az mysql flexible-server show --resource-group game-analytics-rg --name $MYSQL_SERVER_NAME &>/dev/null; then
+        echo "Deleting existing MySQL server..."
+        az mysql flexible-server delete \
+          --resource-group game-analytics-rg \
+          --name $MYSQL_SERVER_NAME \
+          --yes
+        
+        echo "Waiting for server deletion to complete..."
+        while az mysql flexible-server show --resource-group game-analytics-rg --name $MYSQL_SERVER_NAME &>/dev/null; do
+          echo "Still waiting for deletion..."
+          sleep 30
+        done
+      else
+        echo "MySQL server does not exist, proceeding with creation..."
+      fi
 
     # Register the Microsoft.DBforMySQL resource provider
     - |
