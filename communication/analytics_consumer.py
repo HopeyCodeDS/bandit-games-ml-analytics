@@ -92,6 +92,7 @@ class DatabaseConnection:
     def get_connection(self):
         return self.pool.get_connection()
 
+
 class RabbitMQConnection:
     def __init__(self):
         self.connection = None
@@ -101,17 +102,50 @@ class RabbitMQConnection:
         self.username = os.getenv('RABBITMQ_USERNAME', 'guest')
         self.password = os.getenv('RABBITMQ_PASSWORD', 'guest')
 
-        # Log configuration (excluding password)
         logger.info(f"RabbitMQ Configuration - Host: {self.host}, Port: {self.port}, Username: {self.username}")
-        if not self.password:
-            logger.warning("RabbitMQ password is not set!")
+
+    def _safe_declare_exchange(self, exchange_name: str, exchange_type: str):
+        """Safely declare an exchange, handling existing exchanges."""
+        try:
+            # Try to declare the exchange
+            self.channel.exchange_declare(
+                exchange=exchange_name,
+                exchange_type=exchange_type,
+                durable=True
+            )
+            logger.info(f"Successfully declared exchange: {exchange_name}")
+        except pika.exceptions.ChannelClosedByBroker as e:
+            if e.args[0] == 406:  # PRECONDITION_FAILED
+                logger.warning(f"Exchange {exchange_name} exists with different settings. Attempting to recreate...")
+                # Create a new channel since the old one is closed
+                self.channel = self.connection.channel()
+
+                try:
+                    # Delete the existing exchange
+                    self.channel.exchange_delete(exchange=exchange_name)
+                    logger.info(f"Deleted existing exchange: {exchange_name}")
+
+                    # Create a new channel
+                    self.channel = self.connection.channel()
+
+                    # Declare the exchange with desired settings
+                    self.channel.exchange_declare(
+                        exchange=exchange_name,
+                        exchange_type=exchange_type,
+                        durable=True
+                    )
+                    logger.info(f"Successfully recreated exchange: {exchange_name}")
+                except Exception as inner_e:
+                    logger.error(f"Failed to recreate exchange {exchange_name}: {str(inner_e)}")
+                    raise
+            else:
+                logger.error(f"Unexpected error declaring exchange {exchange_name}: {str(e)}")
+                raise
 
     def connect(self):
         try:
-            # Connect to RabbitMQ
             logger.info(f"Attempting to connect to RabbitMQ at {self.host}:{self.port}")
 
-            # Create credentials
             if not self.username or not self.password:
                 raise ValueError("RabbitMQ credentials not properly configured!")
 
@@ -120,7 +154,6 @@ class RabbitMQConnection:
                 password=self.password
             )
 
-            # Set connection parameters
             parameters = pika.ConnectionParameters(
                 host=self.host,
                 port=self.port,
@@ -131,25 +164,13 @@ class RabbitMQConnection:
                 retry_delay=5
             )
 
-            # Attempt connection
             self.connection = pika.BlockingConnection(parameters)
             self.channel = self.connection.channel()
             logger.info("Successfully connected to RabbitMQ")
 
-            # Declare exchanges
-            self.channel.exchange_declare(
-                exchange='data_analytics_exchange',
-                exchange_type='topic',
-                durable=True
-            )
-            logger.info("Declared data_analytics_exchange")
-
-            self.channel.exchange_declare(
-                exchange='user_signup_exchange',
-                exchange_type='topic',
-                durable=True
-            )
-            logger.info("Declared user_signup_exchange")
+            # Safely declare exchanges
+            self._safe_declare_exchange('data_analytics_exchange', 'direct')  # Changed to 'direct' to match existing
+            self._safe_declare_exchange('user_signup_exchange', 'direct')  # Changed to 'direct' to match existing
 
             # Declare queues
             self.channel.queue_declare(queue='data_analytics_q', durable=True)
@@ -171,7 +192,6 @@ class RabbitMQConnection:
 
         except pika.exceptions.ProbableAuthenticationError as auth_error:
             logger.error(f"RabbitMQ Authentication Error: {str(auth_error)}")
-            logger.error(f"Attempted connection with username: {self.username}")
             raise
         except pika.exceptions.AMQPConnectionError as conn_error:
             logger.error(f"RabbitMQ Connection Error: {str(conn_error)}")
@@ -184,7 +204,6 @@ class RabbitMQConnection:
         if self.connection and not self.connection.is_closed:
             self.connection.close()
             logger.info("RabbitMQ connection closed")
-
 
 class AnalyticsEventProcessor:
     def __init__(self, db_connection: DatabaseConnection):
