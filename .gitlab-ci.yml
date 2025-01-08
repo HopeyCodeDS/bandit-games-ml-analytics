@@ -44,12 +44,11 @@ build_analytics_consumer:
 
 migrate_database:
   stage: migrate
-  image: mysql:8.0
+  image: mcr.microsoft.com/azure-cli
   script:
-    # Install Azure CLI
+    # Install MySQL client
     - |
-      apt-get update && apt-get install -y curl gnupg lsb-release
-      curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+      apk add --no-cache mysql-client
 
     # Azure Login
     - |
@@ -96,9 +95,6 @@ migrate_database:
         --start-ip-address 0.0.0.0 \
         --end-ip-address 255.255.255.255
 
-    # Install MySQL client
-    - apt-get update && apt-get install -y mysql-client
-
     # Run database migrations
     - |
       MYSQL_HOST=$(az mysql flexible-server show \
@@ -106,8 +102,9 @@ migrate_database:
         --name $MYSQL_SERVER_NAME \
         --query "fullyQualifiedDomainName" -o tsv)
       
+      echo "MySQL Host: $MYSQL_HOST"
       # Import schema and data
-      mysql -h $MYSQL_HOST -u root -p$DB_ROOT_PASSWORD platform_analytics < ./game_analytics_docker/platform_analytics_dump.sql
+      mysql -h $MYSQL_HOST -u $DB_USERNAME -p"$DB_ROOT_PASSWORD" platform_analytics < ./game_analytics_docker/platform_analytics_dump.sql
 
 deploy:
   stage: deploy
