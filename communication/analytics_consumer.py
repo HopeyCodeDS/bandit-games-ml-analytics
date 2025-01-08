@@ -110,7 +110,7 @@ class RabbitMQConnection:
             self.channel.exchange_declare(
                 exchange=exchange_name,
                 exchange_type=exchange_type,
-                durable=True
+                durable=False
             )
             logger.info(f"Successfully declared exchange: {exchange_name}")
         except pika.exceptions.ChannelClosedByBroker as e:
@@ -124,7 +124,7 @@ class RabbitMQConnection:
                     self.channel.exchange_declare(
                         exchange=exchange_name,
                         exchange_type=exchange_type,
-                        durable=True
+                        durable=False
                     )
                     logger.info(f"Successfully recreated exchange: {exchange_name}")
                 except Exception as inner_e:
@@ -134,7 +134,7 @@ class RabbitMQConnection:
     def _safe_declare_queue(self, queue_name: str):
         """Safely declare a queue, handling existing queues."""
         try:
-            self.channel.queue_declare(queue=queue_name, durable=True)
+            self.channel.queue_declare(queue=queue_name, durable=False)
             logger.info(f"Successfully declared queue: {queue_name}")
         except pika.exceptions.ChannelClosedByBroker as e:
             if e.args[0] == 406:  # PRECONDITION_FAILED
@@ -144,7 +144,7 @@ class RabbitMQConnection:
                     self.channel.queue_delete(queue=queue_name)
                     logger.info(f"Deleted existing queue: {queue_name}")
                     self.channel = self.connection.channel()
-                    self.channel.queue_declare(queue=queue_name, durable=True)
+                    self.channel.queue_declare(queue=queue_name, durable=False)
                     logger.info(f"Successfully recreated queue: {queue_name}")
                 except Exception as inner_e:
                     logger.error(f"Failed to recreate queue {queue_name}: {str(inner_e)}")
