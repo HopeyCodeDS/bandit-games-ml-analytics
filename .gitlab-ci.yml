@@ -46,9 +46,9 @@ migrate_database:
   stage: migrate
   image: mcr.microsoft.com/azure-cli
   script:
-    # Install MySQL client
+    # Install MySQL client using apt-get
     - |
-      apk add --no-cache mysql-client
+      apt-get update && apt-get install -y mysql-client
 
     # Azure Login
     - |
