@@ -340,22 +340,45 @@ class AnalyticsConsumer:
 
             if routing_key.startswith('game.'):
                 logger.info("Processing as game event")
-                self.processor.process_game_event(message)
+                # Parse the eventBody which is a JSON string
+                if 'eventBody' in message:
+                    event_data = json.loads(message['eventBody'])
+                    self.processor.process_game_event(event_data)
+                else:
+                    # Handle direct message format
+                    self.processor.process_game_event(message)
             elif routing_key == 'user.signup':
                 logger.info("Processing as user signup event")
-                self.processor.process_user_event(message)
+                # Map the user signup data to expected format
+                user_data = {
+                    'player_id': message.get('userId'),
+                    'username': message.get('username'),
+                    'firstname': message.get('firstName'),
+                    'lastname': message.get('lastName'),
+                    'email': f"{message.get('username')}@example.com",  # Generate email if not provided
+                    'birthdate': f"{message['birthDate'][0]}-{str(message['birthDate'][1]).zfill(2)}-{str(message['birthDate'][2]).zfill(2)}",
+                    'gender': message.get('gender'),
+                    'country': message.get('country')
+                }
+                self.processor.process_user_event(user_data)
 
             ch.basic_ack(delivery_tag=method.delivery_tag)
             logger.info("Message processed successfully")
 
+        except json.JSONDecodeError as e:
+            logger.error(f"JSON Decode Error: {str(e)}")
+            logger.error(f"Problematic message: {body}")
+            ch.basic_reject(delivery_tag=method.delivery_tag, requeue=False)
+        except KeyError as e:
+            logger.error(f"Missing required field: {str(e)}")
+            logger.error(f"Message content: {message}")
+            ch.basic_reject(delivery_tag=method.delivery_tag, requeue=False)
         except Exception as e:
             logger.error(f"Error processing message: {str(e)}")
-            # Don't requeue messages with validation errors
             if "foreign key constraint fails" in str(e):
                 logger.error("Foreign key constraint failed - discarding message")
                 ch.basic_reject(delivery_tag=method.delivery_tag, requeue=False)
             else:
-                # Only requeue for other types of errors
                 ch.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
 
     def start(self):
@@ -381,7 +404,6 @@ class AnalyticsConsumer:
             self.rmq_connection.channel.stop_consuming()
         finally:
             self.rmq_connection.close()
-
 
 def main():
     consumer = AnalyticsConsumer()
