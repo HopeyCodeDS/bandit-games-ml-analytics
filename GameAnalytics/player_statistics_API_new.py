@@ -11,15 +11,28 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Database configuration remains the same
+# Database configuration with SSL
 DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_HOST = os.getenv('DB_HOST', 'localhost')
 DB_PORT = os.getenv('DB_PORT', '3306')
 DB_NAME = 'platform_analytics'
+SSL_CA = os.getenv('SSL_CA', '/etc/ssl/certs/ca-certificates.crt')
 
-DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?charset=utf8mb4"
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+# Build database URL with SSL configuration
+DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?charset=utf8mb4&ssl_mode=REQUIRED&ssl_ca={SSL_CA}"
+
+# Create engine with SSL configuration
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,
+    connect_args={
+        "ssl": {
+            "ca": SSL_CA,
+            "ssl_mode": "REQUIRED"
+        }
+    }
+)
 
 app = FastAPI(
     title="Player Statistics API",
