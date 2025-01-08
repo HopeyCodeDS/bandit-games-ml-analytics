@@ -72,12 +72,12 @@ migrate_database:
       az mysql flexible-server create \
         --resource-group game-analytics-rg \
         --name $MYSQL_SERVER_NAME \
-        --location uksouth \
+        --location eastus2 \
         --admin-user $DB_USERNAME \
         --admin-password "$DB_ROOT_PASSWORD" \
         --tier Burstable \
         --sku-name B_Standard_B1ms \
-        --storage-size 32 \
+        --storage-size 20 \
         --database-name platform_analytics \
         --version 8.0.21 \
         --yes
