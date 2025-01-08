@@ -22,16 +22,10 @@ SSL_CA = os.getenv('SSL_CA', '/etc/ssl/certs/ca-certificates.crt')
 # Build database URL with SSL configuration
 DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?charset=utf8mb4&ssl_mode=REQUIRED&ssl_ca={SSL_CA}"
 
-# Create engine with SSL configuration
+# Create engine
 engine = create_engine(
     DATABASE_URL,
-    pool_pre_ping=True,
-    connect_args={
-        "ssl": {
-            "ca": SSL_CA,
-            "ssl_mode": "REQUIRED"
-        }
-    }
+    pool_pre_ping=True
 )
 
 app = FastAPI(
