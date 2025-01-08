@@ -215,9 +215,21 @@ class RabbitMQConnection:
         if self.connection and not self.connection.is_closed:
             self.connection.close()
             logger.info("RabbitMQ connection closed")
+
+
+
 class AnalyticsEventProcessor:
     def __init__(self, db_connection: DatabaseConnection):
         self.db = db_connection
+
+    def _parse_datetime(self, datetime_str: str) -> datetime:
+        """Parse datetime string and truncate microseconds"""
+        try:
+            # First try parsing with microseconds
+            return datetime.strptime(datetime_str.split('.')[0], "%Y-%m-%dT%H:%M:%S")
+        except ValueError as e:
+            logger.error(f"Error parsing datetime {datetime_str}: {str(e)}")
+            raise
 
     def process_game_event(self, event_data: Dict[str, Any]) -> None:
         try:
@@ -240,8 +252,9 @@ class AnalyticsEventProcessor:
                     %s, %s, %s, %s
                 )"""
 
-                start_time = datetime.strptime(event_data["startTime"], "%Y-%m-%dT%H:%M:%S")
-                end_time = datetime.strptime(event_data["endTime"], "%Y-%m-%dT%H:%M:%S")
+                # Parse timestamps and handle microseconds
+                start_time = self._parse_datetime(event_data["startTime"])
+                end_time = self._parse_datetime(event_data["endTime"])
                 duration = int((end_time - start_time).total_seconds() / 60)
 
                 cursor.execute(match_history_query, (
@@ -288,12 +301,22 @@ class AnalyticsEventProcessor:
             logger.error(f"Error processing game event: {str(e)}")
             raise
 
-
     def process_user_event(self, event_data: Dict[str, Any]) -> None:
         try:
             logger.info(f"Processing user event for {event_data['username']}")
             with self.db.get_connection() as conn:
                 cursor = conn.cursor()
+
+                # First check if user exists
+                check_query = """
+                SELECT BIN_TO_UUID(player_id) FROM players WHERE player_id = UUID_TO_BIN(%s)
+                """
+                cursor.execute(check_query, (event_data["player_id"],))
+                existing_user = cursor.fetchone()
+
+                if existing_user:
+                    logger.info(f"User {event_data['username']} already exists, skipping creation")
+                    return
 
                 insert_query = """
                 INSERT INTO players (
@@ -321,6 +344,7 @@ class AnalyticsEventProcessor:
         except Exception as e:
             logger.error(f"Error processing user event: {str(e)}")
             raise
+
 
 
 class AnalyticsConsumer:
