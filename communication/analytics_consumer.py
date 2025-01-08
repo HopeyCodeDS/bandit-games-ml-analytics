@@ -52,11 +52,13 @@ class DatabaseConnection:
             })
 
         logger.info(f"Connecting to database at {config.host}:{config.port}")
+
         self.pool = mysql.connector.pooling.MySQLConnectionPool(
             pool_name=config.pool_name,
             pool_size=config.pool_size,
             **self.dbconfig
         )
+        logger.info("Database connection pool created successfully")
 
     def get_connection(self):
         return self.pool.get_connection()
@@ -66,12 +68,24 @@ class RabbitMQConnection:
     def __init__(self):
         self.connection = None
         self.channel = None
+        self.host = os.getenv('RABBITMQ_HOST', 'localhost')
+        self.port = int(os.getenv('RABBITMQ_PORT', '5672'))
+        self.username = os.getenv('RABBITMQ_USERNAME', 'guest')
+        self.password = os.getenv('RABBITMQ_PASSWORD', 'guest')
 
     def connect(self):
         # Connect to RabbitMQ
-        self.connection = pika.BlockingConnection(
-            pika.ConnectionParameters('localhost')
+        logger.info(f"Connecting to RabbitMQ at {self.host}:{self.port}")
+        credentials = pika.PlainCredentials(self.username, self.password)
+        parameters = pika.ConnectionParameters(
+            host=self.host,
+            port=self.port,
+            credentials=credentials,
+            heartbeat=600,
+            blocked_connection_timeout=300
         )
+
+        self.connection = pika.BlockingConnection(parameters)
         self.channel = self.connection.channel()
 
         # Declare exchanges
@@ -94,7 +108,7 @@ class RabbitMQConnection:
         self.channel.queue_bind(
             exchange='data_analytics_exchange',
             queue='data_analytics_q',
-            routing_key='game.over'  # Updated routing key
+            routing_key='game.over'
         )
         self.channel.queue_bind(
             exchange='user_signup_exchange',
@@ -102,9 +116,12 @@ class RabbitMQConnection:
             routing_key='user.signup'
         )
 
+        logger.info("RabbitMQ connection established successfully")
+
     def close(self):
         if self.connection:
             self.connection.close()
+            logger.info("RabbitMQ connection closed")
 
 
 class AnalyticsEventProcessor:
