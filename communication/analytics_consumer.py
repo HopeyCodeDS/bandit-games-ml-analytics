@@ -107,7 +107,6 @@ class RabbitMQConnection:
     def _safe_declare_exchange(self, exchange_name: str, exchange_type: str):
         """Safely declare an exchange, handling existing exchanges."""
         try:
-            # Try to declare the exchange
             self.channel.exchange_declare(
                 exchange=exchange_name,
                 exchange_type=exchange_type,
@@ -117,18 +116,11 @@ class RabbitMQConnection:
         except pika.exceptions.ChannelClosedByBroker as e:
             if e.args[0] == 406:  # PRECONDITION_FAILED
                 logger.warning(f"Exchange {exchange_name} exists with different settings. Attempting to recreate...")
-                # Create a new channel since the old one is closed
                 self.channel = self.connection.channel()
-
                 try:
-                    # Delete the existing exchange
                     self.channel.exchange_delete(exchange=exchange_name)
                     logger.info(f"Deleted existing exchange: {exchange_name}")
-
-                    # Create a new channel
                     self.channel = self.connection.channel()
-
-                    # Declare the exchange with desired settings
                     self.channel.exchange_declare(
                         exchange=exchange_name,
                         exchange_type=exchange_type,
@@ -138,9 +130,25 @@ class RabbitMQConnection:
                 except Exception as inner_e:
                     logger.error(f"Failed to recreate exchange {exchange_name}: {str(inner_e)}")
                     raise
-            else:
-                logger.error(f"Unexpected error declaring exchange {exchange_name}: {str(e)}")
-                raise
+
+    def _safe_declare_queue(self, queue_name: str):
+        """Safely declare a queue, handling existing queues."""
+        try:
+            self.channel.queue_declare(queue=queue_name, durable=True)
+            logger.info(f"Successfully declared queue: {queue_name}")
+        except pika.exceptions.ChannelClosedByBroker as e:
+            if e.args[0] == 406:  # PRECONDITION_FAILED
+                logger.warning(f"Queue {queue_name} exists with different settings. Attempting to recreate...")
+                self.channel = self.connection.channel()
+                try:
+                    self.channel.queue_delete(queue=queue_name)
+                    logger.info(f"Deleted existing queue: {queue_name}")
+                    self.channel = self.connection.channel()
+                    self.channel.queue_declare(queue=queue_name, durable=True)
+                    logger.info(f"Successfully recreated queue: {queue_name}")
+                except Exception as inner_e:
+                    logger.error(f"Failed to recreate queue {queue_name}: {str(inner_e)}")
+                    raise
 
     def connect(self):
         try:
@@ -169,26 +177,29 @@ class RabbitMQConnection:
             logger.info("Successfully connected to RabbitMQ")
 
             # Safely declare exchanges
-            self._safe_declare_exchange('data_analytics_exchange', 'direct')  # Changed to 'direct' to match existing
-            self._safe_declare_exchange('user_signup_exchange', 'direct')  # Changed to 'direct' to match existing
+            self._safe_declare_exchange('data_analytics_exchange', 'direct')
+            self._safe_declare_exchange('user_signup_exchange', 'direct')
 
-            # Declare queues
-            self.channel.queue_declare(queue='data_analytics_q', durable=True)
-            self.channel.queue_declare(queue='user_signup_q', durable=True)
-            logger.info("Declared queues")
+            # Safely declare queues
+            self._safe_declare_queue('data_analytics_q')
+            self._safe_declare_queue('user_signup_q')
 
             # Bind queues
-            self.channel.queue_bind(
-                exchange='data_analytics_exchange',
-                queue='data_analytics_q',
-                routing_key='game.over'
-            )
-            self.channel.queue_bind(
-                exchange='user_signup_exchange',
-                queue='user_signup_q',
-                routing_key='user.signup'
-            )
-            logger.info("Successfully bound queues to exchanges")
+            try:
+                self.channel.queue_bind(
+                    exchange='data_analytics_exchange',
+                    queue='data_analytics_q',
+                    routing_key='game.over'
+                )
+                self.channel.queue_bind(
+                    exchange='user_signup_exchange',
+                    queue='user_signup_q',
+                    routing_key='user.signup'
+                )
+                logger.info("Successfully bound queues to exchanges")
+            except Exception as e:
+                logger.error(f"Error binding queues: {str(e)}")
+                raise
 
         except pika.exceptions.ProbableAuthenticationError as auth_error:
             logger.error(f"RabbitMQ Authentication Error: {str(auth_error)}")
@@ -204,7 +215,6 @@ class RabbitMQConnection:
         if self.connection and not self.connection.is_closed:
             self.connection.close()
             logger.info("RabbitMQ connection closed")
-
 class AnalyticsEventProcessor:
     def __init__(self, db_connection: DatabaseConnection):
         self.db = db_connection
