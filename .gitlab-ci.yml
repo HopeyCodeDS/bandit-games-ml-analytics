@@ -44,11 +44,25 @@ build_analytics_consumer:
 
 migrate_database:
   stage: migrate
-  image: mcr.microsoft.com/azure-cli
+  image: ubuntu:20.04
+  variables:
+    DEBIAN_FRONTEND: noninteractive
   script:
-    # Install MySQL client using apt-get
+    # Install required packages
     - |
-      apt-get update && apt-get install -y mysql-client
+      apt-get update && apt-get install -y \
+        ca-certificates \
+        curl \
+        apt-transport-https \
+        lsb-release \
+        gnupg \
+        mysql-client
+
+    # Install Azure CLI
+    - |
+      curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
+      echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/azure-cli.list
+      apt-get update && apt-get install -y azure-cli
 
     # Azure Login
     - |
@@ -56,6 +70,19 @@ migrate_database:
         -u "$AZURE_SP_ID" \
         -p "$AZURE_SP_PASSWORD" \
         --tenant "$AZURE_TENANT_ID"
+
+    # Delete existing MySQL server if it exists
+    - |
+      echo "Deleting existing MySQL server if it exists..."
+      az mysql flexible-server delete \
+        --resource-group game-analytics-rg \
+        --name $MYSQL_SERVER_NAME \
+        --yes || true
+
+    # Wait for server deletion to complete
+    - |
+      echo "Waiting for server deletion to complete..."
+      sleep 30
 
     # Register the Microsoft.DBforMySQL resource provider
     - |
