@@ -67,17 +67,12 @@ migrate_database:
         sleep 10
       done
 
-    # List available SKUs
-    - |
-      echo "Available SKUs:"
-      az mysql flexible-server list-skus -l eastus
-
     # Create Azure Database for MySQL
     - |
       az mysql flexible-server create \
         --resource-group game-analytics-rg \
         --name $MYSQL_SERVER_NAME \
-        --location eastus \
+        --location westus2 \
         --admin-user $DB_USERNAME \
         --admin-password "$DB_ROOT_PASSWORD" \
         --tier Burstable \
