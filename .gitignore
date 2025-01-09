@@ -6,3 +6,4 @@ RAG/.env
 __pycache__/
 .env.local
 .env.production
+MQConfig
