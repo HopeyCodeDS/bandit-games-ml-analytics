@@ -245,12 +245,6 @@ deploy:
       echo "Verifying deployment..."
       sleep 10
       
-    # Verify the container app is running
-      STATUS=$(az containerapp show \
-        --name game-analytics-consumer \
-        --resource-group game-analytics-rg \
-        --query "properties.latestRevisionName" -o tsv)
-      
       echo "Deployment Status: $STATUS"
 
     # Get the FQDN of the Stats API
