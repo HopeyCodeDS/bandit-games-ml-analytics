@@ -168,14 +168,14 @@ deploy:
         --name $MYSQL_SERVER_NAME \
         --query "fullyQualifiedDomainName" -o tsv)
 
-     Create Container Apps environment if it doesn't exist
+    # Create Container Apps environment if it doesn't exist
     - |
       az containerapp env create \
         --name game-analytics-env \
         --resource-group game-analytics-rg \
         --location westeurope
 
-     Deploy Stats API Container App
+    # Deploy Stats API Container App
     - |
       az containerapp create \
         --resource-group game-analytics-rg \
@@ -245,7 +245,7 @@ deploy:
       echo "Verifying deployment..."
       sleep 10
       
-      # Verify the container app is running
+    # Verify the container app is running
       STATUS=$(az containerapp show \
         --name game-analytics-consumer \
         --resource-group game-analytics-rg \
