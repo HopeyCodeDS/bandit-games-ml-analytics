@@ -161,25 +161,6 @@ deploy:
         -p "$AZURE_SP_PASSWORD" \
         --tenant "$AZURE_TENANT_ID"
 
-    # Delete existing MySQL server if it exists
-    - |
-      echo "Checking if MySQL server exists..."
-      if az mysql flexible-server show --resource-group game-analytics-rg --name $MYSQL_SERVER_NAME &>/dev/null; then
-        echo "Deleting existing MySQL server..."
-        az mysql flexible-server delete \
-          --resource-group game-analytics-rg \
-          --name $MYSQL_SERVER_NAME \
-          --yes
-        
-        echo "Waiting for server deletion to complete..."
-        while az mysql flexible-server show --resource-group game-analytics-rg --name $MYSQL_SERVER_NAME &>/dev/null; do
-          echo "Still waiting for deletion..."
-          sleep 30
-        done
-      else
-        echo "MySQL server does not exist, proceeding with creation..."
-      fi
-
     # Get MySQL server FQDN
     - |
       MYSQL_HOST=$(az mysql flexible-server show \
