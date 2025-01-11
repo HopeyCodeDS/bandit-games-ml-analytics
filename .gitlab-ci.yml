@@ -230,7 +230,7 @@ deploy:
         --name game-analytics-consumer \
         --resource-group game-analytics-rg \
         --image $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA \
-        --set-env-vars \
+        --env-vars \
           DB_USER=$DB_USERNAME \
           DB_PASSWORD=$DB_ROOT_PASSWORD \
           DB_HOST=$MYSQL_HOST \
