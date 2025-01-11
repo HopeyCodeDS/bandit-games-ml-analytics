@@ -16,7 +16,7 @@ variables:
 stages:
   - build
   - test
-  - migrate
+#  - migrate
   - deploy
 
 .build_template: &build_definition
@@ -53,102 +53,102 @@ test:
   only:
     - main
 
-migrate_database:
-  stage: migrate
-  image: ubuntu:20.04
-  variables:
-    DEBIAN_FRONTEND: noninteractive
-  script:
-    # Install required packages
-    - |
-      apt-get update && apt-get install -y \
-        ca-certificates \
-        curl \
-        apt-transport-https \
-        lsb-release \
-        gnupg \
-        mysql-client
-
-    # Install Azure CLI
-    - |
-      curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
-      echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/azure-cli.list
-      apt-get update && apt-get install -y azure-cli
-
-    # Azure Login
-    - |
-      az login --service-principal \
-        -u "$AZURE_SP_ID" \
-        -p "$AZURE_SP_PASSWORD" \
-        --tenant "$AZURE_TENANT_ID"
-
-    # Delete existing MySQL server if it exists
-    - |
-      echo "Checking if MySQL server exists..."
-      if az mysql flexible-server show --resource-group game-analytics-rg --name $MYSQL_SERVER_NAME &>/dev/null; then
-        echo "Deleting existing MySQL server..."
-        az mysql flexible-server delete \
-          --resource-group game-analytics-rg \
-          --name $MYSQL_SERVER_NAME \
-          --yes
-
-        echo "Waiting for server deletion to complete..."
-        while az mysql flexible-server show --resource-group game-analytics-rg --name $MYSQL_SERVER_NAME &>/dev/null; do
-          echo "Still waiting for deletion..."
-          sleep 30
-        done
-      else
-        echo "MySQL server does not exist, proceeding with creation..."
-      fi
-
-    # Register the Microsoft.DBforMySQL resource provider
-    - |
-      echo "Registering MySQL provider..."
-      az provider register --namespace Microsoft.DBforMySQL
-
-    # Wait for registration to complete
-    - |
-      echo "Waiting for provider registration..."
-      az provider show -n Microsoft.DBforMySQL --query registrationState -o tsv
-      while [ "$(az provider show -n Microsoft.DBforMySQL --query registrationState -o tsv)" != "Registered" ]; do
-        echo "Still waiting for provider registration..."
-        sleep 10
-      done
-
-    # Create Azure Database for MySQL
-    - |
-      az mysql flexible-server create \
-        --resource-group game-analytics-rg \
-        --name $MYSQL_SERVER_NAME \
-        --location eastus2 \
-        --admin-user $DB_USERNAME \
-        --admin-password "$DB_ROOT_PASSWORD" \
-        --tier Burstable \
-        --sku-name Standard_B1ms \
-        --storage-size 20 \
-        --database-name platform_analytics \
-        --version 8.0.21 \
-        --yes
-
-    # Configure firewall rules
-    - |
-      az mysql flexible-server firewall-rule create \
-        --resource-group game-analytics-rg \
-        --name $MYSQL_SERVER_NAME \
-        --rule-name allAzureIPs \
-        --start-ip-address 0.0.0.0 \
-        --end-ip-address 255.255.255.255
-
-    # Run database migrations
-    - |
-      MYSQL_HOST=$(az mysql flexible-server show \
-        --resource-group game-analytics-rg \
-        --name $MYSQL_SERVER_NAME \
-        --query "fullyQualifiedDomainName" -o tsv)
-
-      echo "MySQL Host: $MYSQL_HOST"
-      # Import schema and data
-      mysql -h $MYSQL_HOST -u $DB_USERNAME -p"$DB_ROOT_PASSWORD" platform_analytics < ./game_analytics_docker/platform_analytics_dump.sql
+#migrate_database:
+#  stage: migrate
+#  image: ubuntu:20.04
+#  variables:
+#    DEBIAN_FRONTEND: noninteractive
+#  script:
+#    # Install required packages
+#    - |
+#      apt-get update && apt-get install -y \
+#        ca-certificates \
+#        curl \
+#        apt-transport-https \
+#        lsb-release \
+#        gnupg \
+#        mysql-client
+#
+#    # Install Azure CLI
+#    - |
+#      curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
+#      echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/azure-cli.list
+#      apt-get update && apt-get install -y azure-cli
+#
+#    # Azure Login
+#    - |
+#      az login --service-principal \
+#        -u "$AZURE_SP_ID" \
+#        -p "$AZURE_SP_PASSWORD" \
+#        --tenant "$AZURE_TENANT_ID"
+#
+#    # Delete existing MySQL server if it exists
+#    - |
+#      echo "Checking if MySQL server exists..."
+#      if az mysql flexible-server show --resource-group game-analytics-rg --name $MYSQL_SERVER_NAME &>/dev/null; then
+#        echo "Deleting existing MySQL server..."
+#        az mysql flexible-server delete \
+#          --resource-group game-analytics-rg \
+#          --name $MYSQL_SERVER_NAME \
+#          --yes
+#
+#        echo "Waiting for server deletion to complete..."
+#        while az mysql flexible-server show --resource-group game-analytics-rg --name $MYSQL_SERVER_NAME &>/dev/null; do
+#          echo "Still waiting for deletion..."
+#          sleep 30
+#        done
+#      else
+#        echo "MySQL server does not exist, proceeding with creation..."
+#      fi
+#
+#    # Register the Microsoft.DBforMySQL resource provider
+#    - |
+#      echo "Registering MySQL provider..."
+#      az provider register --namespace Microsoft.DBforMySQL
+#
+#    # Wait for registration to complete
+#    - |
+#      echo "Waiting for provider registration..."
+#      az provider show -n Microsoft.DBforMySQL --query registrationState -o tsv
+#      while [ "$(az provider show -n Microsoft.DBforMySQL --query registrationState -o tsv)" != "Registered" ]; do
+#        echo "Still waiting for provider registration..."
+#        sleep 10
+#      done
+#
+#    # Create Azure Database for MySQL
+#    - |
+#      az mysql flexible-server create \
+#        --resource-group game-analytics-rg \
+#        --name $MYSQL_SERVER_NAME \
+#        --location eastus2 \
+#        --admin-user $DB_USERNAME \
+#        --admin-password "$DB_ROOT_PASSWORD" \
+#        --tier Burstable \
+#        --sku-name Standard_B1ms \
+#        --storage-size 20 \
+#        --database-name platform_analytics \
+#        --version 8.0.21 \
+#        --yes
+#
+#    # Configure firewall rules
+#    - |
+#      az mysql flexible-server firewall-rule create \
+#        --resource-group game-analytics-rg \
+#        --name $MYSQL_SERVER_NAME \
+#        --rule-name allAzureIPs \
+#        --start-ip-address 0.0.0.0 \
+#        --end-ip-address 255.255.255.255
+#
+#    # Run database migrations
+#    - |
+#      MYSQL_HOST=$(az mysql flexible-server show \
+#        --resource-group game-analytics-rg \
+#        --name $MYSQL_SERVER_NAME \
+#        --query "fullyQualifiedDomainName" -o tsv)
+#
+#      echo "MySQL Host: $MYSQL_HOST"
+#      # Import schema and data
+#      mysql -h $MYSQL_HOST -u $DB_USERNAME -p"$DB_ROOT_PASSWORD" platform_analytics < ./game_analytics_docker/platform_analytics_dump.sql
 
 deploy:
   stage: deploy

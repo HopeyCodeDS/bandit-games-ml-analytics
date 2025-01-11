@@ -110,7 +110,7 @@ class RabbitMQConnection:
             self.channel.exchange_declare(
                 exchange=exchange_name,
                 exchange_type=exchange_type,
-                durable=False
+                durable=True
             )
             logger.info(f"Successfully declared exchange: {exchange_name}")
         except pika.exceptions.ChannelClosedByBroker as e:
@@ -124,7 +124,7 @@ class RabbitMQConnection:
                     self.channel.exchange_declare(
                         exchange=exchange_name,
                         exchange_type=exchange_type,
-                        durable=False
+                        durable=True
                     )
                     logger.info(f"Successfully recreated exchange: {exchange_name}")
                 except Exception as inner_e:
