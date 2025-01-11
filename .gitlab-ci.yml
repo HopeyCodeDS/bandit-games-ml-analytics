@@ -226,7 +226,7 @@ deploy:
         exit 1
       fi
 
-      az containerapp update \
+      az containerapp create \
         --name game-analytics-consumer \
         --resource-group game-analytics-rg \
         --image $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA \
