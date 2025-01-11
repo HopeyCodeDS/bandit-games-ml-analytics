@@ -229,6 +229,7 @@ deploy:
       az containerapp create \
         --name game-analytics-consumer \
         --resource-group game-analytics-rg \
+        --environment game-analytics-env \
         --image $ANALYTICS_CONSUMER_IMAGE:$CI_COMMIT_SHA \
         --env-vars \
           DB_USER=$DB_USERNAME \
