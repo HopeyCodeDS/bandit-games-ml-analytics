@@ -9,6 +9,8 @@ from typing import Dict, Any
 import mysql.connector
 import pika
 from dotenv import load_dotenv
+import backoff
+from pika.exceptions import StreamLostError, AMQPConnectionError
 
 # Load environment variables
 load_dotenv()
@@ -101,8 +103,31 @@ class RabbitMQConnection:
         self.port = int(os.getenv('RABBITMQ_PORT', '5672'))
         self.username = os.getenv('RABBITMQ_USERNAME', 'guest')
         self.password = os.getenv('RABBITMQ_PASSWORD', 'guest')
+        self.connection_parameters = None
 
         logger.info(f"RabbitMQ Configuration - Host: {self.host}, Port: {self.port}, Username: {self.username}")
+
+    def _create_connection_parameters(self):
+        """Create connection parameters with robust settings"""
+        if not self.username or not self.password:
+            raise ValueError("RabbitMQ credentials not properly configured!")
+
+        credentials = pika.PlainCredentials(
+            username=self.username,
+            password=self.password
+        )
+
+        return pika.ConnectionParameters(
+            host=self.host,
+            port=self.port,
+            credentials=credentials,
+            heartbeat=60,  # 60 second heartbeat
+            blocked_connection_timeout=300,
+            connection_attempts=3,
+            retry_delay=5,
+            socket_timeout=10,
+            stack_timeout=15
+        )
 
     def _safe_declare_exchange(self, exchange_name: str, exchange_type: str):
         """Safely declare an exchange, handling existing exchanges."""
@@ -150,30 +175,27 @@ class RabbitMQConnection:
                     logger.error(f"Failed to recreate queue {queue_name}: {str(inner_e)}")
                     raise
 
+    @backoff.on_exception(backoff.expo,
+                          (AMQPConnectionError, StreamLostError),
+                          max_tries=5,
+                          max_time=300)
+
     def connect(self):
+        """Connect to RabbitMQ with exponential backoff retry"""
         try:
             logger.info(f"Attempting to connect to RabbitMQ at {self.host}:{self.port}")
 
-            if not self.username or not self.password:
-                raise ValueError("RabbitMQ credentials not properly configured!")
+            if self.connection and not self.connection.is_closed:
+                logger.info("Closing existing connection before reconnecting...")
+                self.connection.close()
 
-            credentials = pika.PlainCredentials(
-                username=self.username,
-                password=self.password
-            )
-
-            parameters = pika.ConnectionParameters(
-                host=self.host,
-                port=self.port,
-                credentials=credentials,
-                heartbeat=600,
-                blocked_connection_timeout=300,
-                connection_attempts=3,
-                retry_delay=5
-            )
-
-            self.connection = pika.BlockingConnection(parameters)
+            self.connection_parameters = self._create_connection_parameters()
+            self.connection = pika.BlockingConnection(self.connection_parameters)
             self.channel = self.connection.channel()
+
+            # Set QoS
+            self.channel.basic_qos(prefetch_count=1)
+
             logger.info("Successfully connected to RabbitMQ")
 
             # Safely declare exchanges
@@ -212,9 +234,13 @@ class RabbitMQConnection:
             raise
 
     def close(self):
-        if self.connection and not self.connection.is_closed:
-            self.connection.close()
-            logger.info("RabbitMQ connection closed")
+        """Safely close the RabbitMQ connection"""
+        try:
+            if self.connection and not self.connection.is_closed:
+                self.connection.close()
+                logger.info("RabbitMQ connection closed")
+        except Exception as e:
+            logger.error(f"Error closing RabbitMQ connection: {str(e)}")
 
 
 
