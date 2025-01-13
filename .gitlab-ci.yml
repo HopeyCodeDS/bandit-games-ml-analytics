@@ -175,48 +175,48 @@ deploy:
         --resource-group game-analytics-rg \
         --location westeurope
 
-#    # Deploy Stats API Container App
-#    - |
-#      az containerapp create \
-#        --resource-group game-analytics-rg \
-#        --name game-analytics-stats-api \
-#        --environment game-analytics-env \
-#        --image $STATS_API_IMAGE:$CI_COMMIT_SHA \
-#        --ingress external \
-#        --target-port 8001 \
-#        --env-vars \
-#          DB_USER=$DB_USERNAME \
-#          DB_PASSWORD=$DB_ROOT_PASSWORD \
-#          DB_HOST=$MYSQL_HOST \
-#          DB_PORT=3306 \
-#          DB_NAME=platform_analytics \
-#          DB_SSL_MODE=require \
-#          DB_SSL_CA=/etc/ssl/certs/ca-certificates.crt \
-#          RABBITMQ_HOST=48.209.190.184 \
-#          RABBITMQ_PORT=5672 \
-#          RABBITMQ_USERNAME=myuser \
-#          ALLOWED_ORIGINS="https://mango-sky-053dae803.4.azurestaticapps.net,http://localhost:3000,http://localhost:5173" \
-#        --min-replicas 1 \
-#        --max-replicas 10
+    # Deploy Stats API Container App
+    - |
+      az containerapp create \
+        --resource-group game-analytics-rg \
+        --name game-analytics-stats-api \
+        --environment game-analytics-env \
+        --image $STATS_API_IMAGE:$CI_COMMIT_SHA \
+        --ingress external \
+        --target-port 8001 \
+        --env-vars \
+          DB_USER=$DB_USERNAME \
+          DB_PASSWORD=$DB_ROOT_PASSWORD \
+          DB_HOST=$MYSQL_HOST \
+          DB_PORT=3306 \
+          DB_NAME=platform_analytics \
+          DB_SSL_MODE=require \
+          DB_SSL_CA=/etc/ssl/certs/ca-certificates.crt \
+          RABBITMQ_HOST=48.209.190.184 \
+          RABBITMQ_PORT=5672 \
+          RABBITMQ_USERNAME=myuser \
+          ALLOWED_ORIGINS="https://mango-sky-053dae803.4.azurestaticapps.net,http://localhost:3000,http://localhost:5173" \
+        --min-replicas 1 \
+        --max-replicas 10
 
-#    # Deploy Prediction API Container App
-#    - |
-#      az containerapp create \
-#        --resource-group game-analytics-rg \
-#        --name game-analytics-prediction \
-#        --environment game-analytics-env \
-#        --image $PREDICTION_IMAGE:$CI_COMMIT_SHA \
-#        --ingress external \
-#        --target-port 8002 \
-#        --env-vars \
-#          DB_USER=$DB_USERNAME \
-#          DB_PASSWORD=$DB_ROOT_PASSWORD \
-#          DB_HOST=$MYSQL_HOST \
-#          DB_PORT=3306 \
-#          DB_NAME=platform_analytics \
-#          ALLOWED_ORIGINS="https://mango-sky-053dae803.4.azurestaticapps.net" \
-#        --min-replicas 1 \
-#        --max-replicas 10
+    # Deploy Prediction API Container App
+    - |
+      az containerapp create \
+        --resource-group game-analytics-rg \
+        --name game-analytics-prediction \
+        --environment game-analytics-env \
+        --image $PREDICTION_IMAGE:$CI_COMMIT_SHA \
+        --ingress external \
+        --target-port 8002 \
+        --env-vars \
+          DB_USER=$DB_USERNAME \
+          DB_PASSWORD=$DB_ROOT_PASSWORD \
+          DB_HOST=$MYSQL_HOST \
+          DB_PORT=3306 \
+          DB_NAME=platform_analytics \
+          ALLOWED_ORIGINS="https://mango-sky-053dae803.4.azurestaticapps.net" \
+        --min-replicas 1 \
+        --max-replicas 10
 
     # Deploy Analytics Consumer Container App
     - |

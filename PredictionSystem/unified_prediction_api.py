@@ -12,14 +12,12 @@ app = FastAPI(title="Player Analytics API",
 
 # CORS configuration
 origins = [
-    "http://localhost",
-    "http://localhost:8080",
-    "http://localhost:3000",
     "http://localhost:5173",
     "https://localhost:5173",
     "https://mango-sky-053dae803.4.azurestaticapps.net",
     "https://mango-sky-053dae803.4.azurestaticapps.net/"
 ]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -114,6 +112,7 @@ def safe_transform(encoder, series):
             transformed.iloc[idx] = unknown_value
 
     return transformed
+
 
 def get_churn_prediction(data: pd.DataFrame) -> dict:
     """Get churn prediction using only required features"""

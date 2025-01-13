@@ -19,7 +19,7 @@ DB_PORT = os.getenv('DB_PORT', '3306')
 DB_NAME = 'platform_analytics'
 SSL_CA = os.getenv('SSL_CA', '/etc/ssl/certs/ca-certificates.crt')
 
-# Build database URL with SSL configuration
+# Build database URL with SSL configuration(remove the SSL configuration when running the api locally)
 DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?ssl_ca={SSL_CA}&ssl_verify_cert=true"
 
 # Create engine
@@ -276,7 +276,7 @@ async def get_top_players_by_game(
             JOIN players p ON pgs.player_id = p.player_id
             JOIN games g ON pgs.game_id = g.game_id
             WHERE g.name = :game_name
-            ORDER BY pgs.win_ratio DESC, pgs.total_games_played DESC
+            ORDER BY pgs.total_games_played DESC, pgs.win_ratio DESC
             LIMIT :limit
         """)
 
@@ -306,22 +306,40 @@ async def get_top_three_players_per_game(db: Session = Depends(get_db)):
                     pgs.total_games_played,
                     pgs.total_wins,
                     pgs.total_losses,
-                    pgs.total_moves,
-                    pgs.total_time_played_minutes,
                     pgs.win_ratio,
-                    TIMESTAMPDIFF(YEAR, p.birthdate, CURRENT_DATE) as age,
-                    p.gender,
-                    p.country,
+                    -- Calculate weighted score for ranking
+                    (
+                        (pgs.win_ratio * 0.40) +  -- 40% weight to win ratio
+                        (LEAST(100, (pgs.total_games_played / 2)) * 0.25) +  -- 25% weight to games played (capped at 100)
+                        (CASE  -- 20% weight to recent performance
+                            WHEN DATEDIFF(CURRENT_TIMESTAMP, pgs.last_played) < 30 THEN 100
+                            WHEN DATEDIFF(CURRENT_TIMESTAMP, pgs.last_played) < 60 THEN 75
+                            WHEN DATEDIFF(CURRENT_TIMESTAMP, pgs.last_played) < 90 THEN 50
+                            ELSE 25
+                        END * 0.20) +
+                        (LEAST(100, (pgs.total_time_played_minutes / 60)) * 0.15)  -- 15% weight to time invested
+                    ) as player_score,
                     ROW_NUMBER() OVER (
                         PARTITION BY g.game_id 
                         ORDER BY 
-                            pgs.win_ratio DESC, 
-                            pgs.total_games_played DESC
+                            (
+                                (pgs.win_ratio * 0.40) +
+                                (LEAST(100, (pgs.total_games_played / 2)) * 0.25) +
+                                (CASE 
+                                    WHEN DATEDIFF(CURRENT_TIMESTAMP, pgs.last_played) < 30 THEN 100
+                                    WHEN DATEDIFF(CURRENT_TIMESTAMP, pgs.last_played) < 60 THEN 75
+                                    WHEN DATEDIFF(CURRENT_TIMESTAMP, pgs.last_played) < 90 THEN 50
+                                    ELSE 25
+                                END * 0.20) +
+                                (LEAST(100, (pgs.total_time_played_minutes / 60)) * 0.15)
+                            ) DESC
                     ) as player_rank
                 FROM player_game_stats pgs
                 JOIN players p ON pgs.player_id = p.player_id
                 JOIN games g ON pgs.game_id = g.game_id
-                WHERE pgs.total_games_played > 0  -- Only include players who have played games
+                WHERE 
+                    pgs.total_games_played >= 10  -- Minimum games threshold
+                    AND DATEDIFF(CURRENT_TIMESTAMP, pgs.last_played) <= 90  -- Active in last 90 days
             )
             SELECT 
                 player_name,
@@ -329,7 +347,8 @@ async def get_top_three_players_per_game(db: Session = Depends(get_db)):
                 total_games_played,
                 total_wins,
                 total_losses,
-                win_ratio,
+                ROUND(win_ratio, 2) as win_ratio,
+                ROUND(player_score, 2) as player_score,
                 player_rank
             FROM RankedPlayers
             WHERE player_rank <= 3
