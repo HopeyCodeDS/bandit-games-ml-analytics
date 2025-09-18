@@ -10,8 +10,8 @@ variables:
   ANALYTICS_CONSUMER_IMAGE: ${DOCKER_HUB_USER}/analytics-consumer
   DB_ROOT_PASSWORD: root
   MYSQL_SERVER_NAME: game-analytics-mysql  # Azure MySQL server name
-  DB_USERNAME: azureuser
-  RABBIT_PASSWORD: mypassword
+  DB_USERNAME: your-username
+  RABBIT_PASSWORD: your-password
 
 stages:
   - build
